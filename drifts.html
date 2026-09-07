@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>RIVLUM — Drift Gallery 🌊</title>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.gallery {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+.drift-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: 0 4px 15px var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  transition: transform 0.2s;
+  border-top: 4px solid var(--dusty-blue);
+}
+.drift-card:nth-child(2n) { border-top-color: var(--terracotta); transform: rotate(0.3deg); }
+.drift-card:nth-child(3n) { border-top-color: var(--sage); transform: rotate(-0.3deg); }
+.drift-card:hover { transform: translateY(-3px) rotate(0deg); }
+.drift-img-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  border: 3px solid white;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+.drift-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.drift-date {
+  font-size: 0.7rem;
+  color: var(--text-light);
+  font-weight: 600;
+}
+.drift-details {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+.drift-details em {
+  color: var(--terracotta-dark);
+  font-weight: 600;
+}
+.drift-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.dr-btn {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--f);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.dr-btn:active { transform: scale(0.95); }
+.dr-dl {
+  background: var(--sage);
+  color: white;
+}
+.dr-del {
+  background: var(--cream-deep);
+  color: var(--text-soft);
+  border: 2px solid var(--cream-deep);
+}
+.dr-del:hover { border-color: var(--terracotta); color: var(--terracotta-dark); }
+.empty-state {
+  text-align: center;
+  grid-column: 1/-1;
+  padding: 4rem 2rem;
+  color: var(--text-soft);
+}
+.empty-state .big-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+.empty-state h3 {
+  font-family: var(--f-hand);
+  font-size: 1.8rem;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.empty-state p {
+  font-size: 0.9rem;
+  max-width: 320px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+.empty-cta {
+  display: inline-block;
+  margin-top: 1.2rem;
+  background: var(--terracotta);
+  color: white;
+  text-decoration: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 3px 0 var(--terracotta-dark);
+}
+.drift-quote {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  padding: 0 1rem;
+  text-align: center;
+}
+.drift-quote p {
+  font-family: var(--f-hand);
+  font-size: 1.5rem;
+  color: var(--sage-dark);
+  line-height: 1.5;
+}
+.drift-quote .attr {
+  font-family: var(--f);
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 0.3rem;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div class="wrap">
+  <h1 class="page-title">Drift Gallery 🌊</h1>
+  <p class="page-sub">your beautiful accidental discoveries</p>
+</div>
+
+<div class="drift-quote">
+  <p>"The best edits are the ones you didn't plan."</p>
+  <div class="attr">— the RIVLUM philosophy</div>
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<div style="height:3rem"></div>
+
+<div class="pixel"><div class="pixel-eye"></div><div class="pixel-eye"></div></div>
+
+<nav class="nav">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a href="challenge.html"><span>✨</span>Edit</a>
+  <a href="free-edit.html"><span>📸</span>Free</a>
+  <a href="constellation.html"><span>🌌</span>Sky</a>
+  <a href="about.html"><span>💛</span>About</a>
+</nav>
+
+<script>
+var savedTheme = localStorage.getItem('rivlum_theme');
+if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
+
+var drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+var container = document.getElementById('gallery');
+var photos = {
+  dream: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500&q=80',
+  golden: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=500&q=80',
+  lonely: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=500&q=80',
+  power: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80',
+  vintage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&q=80',
+  storm: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=500&q=80'
+};
+var defaultPhoto = 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=500&q=80';
+
+function render() {
+  container.innerHTML = '';
+  if (drifts.length === 0) {
+    container.innerHTML = '<div class="empty-state"><span class="big-icon">🍃</span><h3>The river is calm.</h3><p>You haven\'t made any drifts yet. Head to a challenge, push the sliders further than feels comfortable, and let the universe take control.</p><a href="challenge.html" class="empty-cta">Start a Challenge ✨</a></div>';
+    return;
+  }
+  drifts.forEach(function(d, index) {
+    var filterString = '';
+    Object.keys(d.filters).forEach(function(k) {
+      var v = d.filters[k];
+      if (k === 'hue-rotate') filterString += 'hue-rotate(' + v + 'deg) ';
+      else if (k === 'blur') filterString += 'blur(' + v + 'px) ';
+      else filterString += k + '(' + v + '%) ';
+    });
+    var date = new Date(d.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    var card = document.createElement('div');
+    card.className = 'drift-card';
+    card.innerHTML = '<div class="drift-img-wrap"><img src="' + (photos[d.challenge] || defaultPhoto) + '" style="filter:' + filterString + '" alt="drift edit"/></div><div class="drift-date">🌊 Discovered on ' + date + '</div><p class="drift-details">A creative leap during the <em>' + d.challenge + '</em> challenge. Your settings broke away from the map — and found something beautiful.</p><div class="drift-actions"><button class="dr-btn dr-dl" onclick="downloadDrift(' + index + ')">⬇ Save</button><button class="dr-btn dr-del" onclick="deleteDrift(' + index + ')">✕ Remove</button></div>';
+    container.appendChild(card);
+  });
+}
+
+function downloadDrift(index) {
+  var d = drifts[index];
+  var img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = photos[d.challenge] || defaultPhoto;
+  img.onload = function() {
+    var c = document.createElement('canvas');
+    c.width = img.naturalWidth;
+    c.height = img.naturalHeight;
+    var ctx = c.getContext('2d');
+    var filterString = '';
+    Object.keys(d.filters).forEach(function(k) {
+      var v = d.filters[k];
+      if (k === 'hue-rotate') filterString += 'hue-rotate(' + v + 'deg) ';
+      else if (k === 'blur') filterString += 'blur(' + v + 'px) ';
+      else filterString += k + '(' + v + '%) ';
+    });
+    ctx.filter = filterString;
+    ctx.drawImage(img, 0, 0);
+    var a = document.createElement('a');
+    a.download = 'rivlum-drift-' + (index + 1) + '.png';
+    a.href = c.toDataURL();
+    a.click();
+  };
+}
+
+function deleteDrift(index) {
+  if (confirm('Return this star to the universe?')) {
+    drifts.splice(index, 1);
+    localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
+    render();
+  }
+}
+
+render();
+</script>
+</body>
+</html>

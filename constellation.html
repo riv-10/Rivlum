@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>RIVLUM — Your Sky 🌌</title>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.sky-canvas {
+  width: 100%;
+  height: 240px;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  background: linear-gradient(180deg, var(--dusty-blue-light) 0%, var(--terracotta-light) 60%, var(--butter-light) 100%);
+  box-shadow: 0 4px 20px var(--shadow);
+  border: 5px solid white;
+  position: relative;
+  overflow: hidden;
+}
+.sky-canvas canvas { width: 100%; height: 100%; }
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.stat-box {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 3px 15px var(--shadow);
+  min-width: 90px;
+}
+.stat-num {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--terracotta-dark);
+}
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+.const-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.const-card {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.2rem;
+  box-shadow: 0 3px 15px var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 5px solid var(--sage);
+}
+.const-card:nth-child(2n) { border-left-color: var(--terracotta); }
+.const-card:nth-child(3n) { border-left-color: var(--dusty-blue); }
+.const-card h3 { font-size: 0.95rem; margin-bottom: 0.15rem; }
+.const-card p { font-size: 0.72rem; color: var(--text-soft); }
+.const-right { display: flex; align-items: center; gap: 0.6rem; }
+.const-bar { width: 80px; height: 8px; background: var(--cream-deep); border-radius: 4px; overflow: hidden; }
+.const-fill { height: 100%; border-radius: 4px; background: var(--sage); transition: width 0.5s ease; }
+.const-pct { font-size: 0.72rem; font-weight: 700; color: var(--sage-dark); min-width: 32px; text-align: right; }
+.pixel-card {
+  background: var(--terracotta-light);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  margin-top: 1.5rem;
+  border: 2px dashed var(--terracotta);
+}
+.pixel-big {
+  width: 75px;
+  height: 75px;
+  background: var(--terracotta);
+  border-radius: 50% 50% 50% 25%;
+  margin: 0 auto 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px var(--shadow-hover);
+  animation: pixelBounce 3s ease-in-out infinite;
+  border: 3px solid white;
+}
+.pixel-big .eye {
+  width: 9px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+}
+.pixel-card h3 { font-size: 1.05rem; margin-bottom: 0.2rem; }
+.pixel-card p { font-size: 0.82rem; color: var(--text-soft); }
+.drift-link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--terracotta-dark);
+  text-decoration: underline;
+  font-weight: 700;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div class="wrap">
+  <h1 class="page-title">Your Sky 🌌</h1>
+  <p class="page-sub">every edit lights a star. watch your river of light grow.</p>
+
+  <div class="sky-canvas">
+    <canvas id="skyCanvas"></canvas>
+  </div>
+
+  <div class="stats">
+    <div class="stat-box">
+      <div class="stat-num" id="starCount">0</div>
+      <div class="stat-label">Stars ✨</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="driftCount">0</div>
+      <div class="stat-label">Drifts 🌊</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="dayCount">1</div>
+      <div class="stat-label">Days 📅</div>
+    </div>
+  </div>
+
+  <div class="const-list" id="constList"></div>
+
+  <div class="pixel-card">
+    <div class="pixel-big"><div class="eye"></div><div class="eye"></div></div>
+    <h3 id="pixelName">Pixel</h3>
+    <p id="pixelDesc">a tiny dot of light. just getting started on the river.</p>
+    <a href="drifts.html" class="drift-link">View Your Drift Gallery 🌊 →</a>
+  </div>
+</div>
+
+<div class="pixel"><div class="pixel-eye"></div><div class="pixel-eye"></div></div>
+
+<nav class="nav">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a href="challenge.html"><span>✨</span>Edit</a>
+  <a href="free-edit.html"><span>📸</span>Free</a>
+  <a href="constellation.html" class="active"><span>🌌</span>Sky</a>
+  <a href="about.html"><span>💛</span>About</a>
+</nav>
+
+<script>
+var savedTheme = localStorage.getItem('rivlum_theme');
+if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
+
+var consts=[
+{name:'The Horizon',desc:'light & exposure',icon:'🌅',total:5,keys:['dream_1','golden_1','horizon_2','horizon_3','horizon_4']},
+{name:'The Prism',desc:'color & mood',icon:'🎨',total:5,keys:['vintage_1','prism_2','prism_3','prism_4','prism_5']},
+{name:'The Frame',desc:'composition',icon:'📐',total:4,keys:['power_1','frame_2','frame_3','frame_4']},
+{name:'The Mask',desc:'storytelling',icon:'🎭',total:4,keys:['lonely_1','storm_1','mask_3','mask_4']},
+{name:'The Current',desc:'creative tools',icon:'⚡',total:6,keys:['current_1','current_2','current_3','current_4','current_5','current_6']},
+{name:'The Deep',desc:'advanced',icon:'🌊',total:6,keys:['deep_1','deep_2','deep_3','deep_4','deep_5','deep_6']}
+];
+var stars=JSON.parse(localStorage.getItem('rivlum_stars')||'[]');
+var drifts=JSON.parse(localStorage.getItem('rivlum_drifts')||'[]');
+var born=localStorage.getItem('rivlum_born');
+var days=born?Math.max(1,Math.ceil((Date.now()-parseInt(born))/86400000)):1;
+document.getElementById('starCount').textContent=stars.length;
+document.getElementById('driftCount').textContent=drifts.length;
+document.getElementById('dayCount').textContent=days;
+
+var list=document.getElementById('constList');
+consts.forEach(function(c){
+var done=c.keys.filter(function(k){return stars.includes(k)}).length;
+var pct=Math.round(done/c.total*100);
+var d=document.createElement('div');d.className='const-card';
+d.innerHTML='<div><h3>'+c.icon+' '+c.name+'</h3><p>'+c.desc+' · '+done+'/'+c.total+'</p></div><div class="const-right"><div class="const-bar"><div class="const-fill" style="width:'+pct+'%"></div></div><span class="const-pct">'+pct+'%</span></div>';
+list.appendChild(d)});
+
+var pN=document.getElementById('pixelName'),pD=document.getElementById('pixelDesc');
+if(stars.length>=30){pN.textContent='Pixel the Star ⭐';pD.textContent='pixel has become a star itself, glowing bright in your sky!'}
+else if(stars.length>=15){pN.textContent='Pixel the Glowing ✨';pD.textContent='pixel has a soft glow aura and leaves tiny star trails behind.'}
+else if(stars.length>=5){pN.textContent='Pixel the Curious 👀';pD.textContent='two eyes now! pixel is watching your edits with excitement.'}
+else if(stars.length>=1){pN.textContent='Pixel the Blob 🫧';pD.textContent='a small round blob with one eye. curious about your first edit.'}
+
+var cv=document.getElementById('skyCanvas');
+var ctx=cv.getContext('2d');
+function resize(){cv.width=cv.parentElement.offsetWidth;cv.height=cv.parentElement.offsetHeight}
+resize();window.addEventListener('resize',resize);
+var pts=[];
+var numStars=Math.max(25,stars.length*8+20);
+var colors=['#E9967A','#A8C4A2','#F5D97C','#A8C0D6','#FFFFFF'];
+for(var i=0;i<numStars;i++){
+pts.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*2.5+1,s:Math.random()*.015+.005,o:Math.random(),c:colors[Math.floor(Math.random()*colors.length)]})}
+function draw(){
+ctx.clearRect(0,0,cv.width,cv.height);
+pts.forEach(function(p){
+p.o+=p.s;if(p.o>1)p.s=-Math.abs(p.s);if(p.o<.3)p.s=Math.abs(p.s);
+ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fillStyle=p.c;ctx.globalAlpha=p.o;ctx.fill();
+ctx.globalAlpha=p.o*0.3;ctx.beginPath();ctx.arc(p.x,p.y,p.r*3,0,Math.PI*2);ctx.fill()});
+ctx.globalAlpha=1;
+requestAnimationFrame(draw)}
+draw();
+</script>
+</body>
+</html>

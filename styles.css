@@ -1,0 +1,451 @@
+/* ========================================
+   RIVLUM — Warm Meadow Theme
+   "Cozy sketchbook, not spaceship"
+   Made with love by Ritvija 💛
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Caveat:wght@400;600;700&display=swap');
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* --- MEADOW THEME (default) --- */
+:root {
+  --cream: #FBF6EE;
+  --cream-deep: #F5EDDE;
+  --card: #FFFFFF;
+  --sage: #A8C4A2;
+  --sage-light: #E8F0E4;
+  --sage-dark: #6B9464;
+  --terracotta: #E9967A;
+  --terracotta-light: #FBE5DC;
+  --terracotta-dark: #C77860;
+  --dusty-blue: #A8C0D6;
+  --dusty-blue-light: #E4EDF5;
+  --dusty-blue-dark: #6B8BAB;
+  --butter: #F5D97C;
+  --butter-light: #FFF5D9;
+  --pink-accent: #F0B8C4;
+  --text: #3A3530;
+  --text-soft: #7A6E63;
+  --text-light: #B5A99B;
+  --shadow: rgba(58, 53, 48, 0.08);
+  --shadow-hover: rgba(58, 53, 48, 0.15);
+  --f: 'Outfit', sans-serif;
+  --f-hand: 'Caveat', cursive;
+  --radius: 22px;
+  --radius-sm: 14px;
+}
+
+/* --- OCEAN THEME --- */
+body.theme-ocean {
+  --cream: #EEF4F8;
+  --cream-deep: #DDE9F0;
+  --sage: #8FB8CC;
+  --sage-light: #DCE9F0;
+  --sage-dark: #4A7B96;
+  --terracotta: #7BA5C0;
+  --terracotta-light: #D5E4EE;
+  --dusty-blue: #A8C6DA;
+  --butter: #C8D9E5;
+  --text: #2C3E50;
+  --text-soft: #5D7488;
+}
+
+/* --- SUNSET THEME --- */
+body.theme-sunset {
+  --cream: #FFF3E8;
+  --cream-deep: #FFE4CC;
+  --sage: #F5A97F;
+  --sage-light: #FFE0CC;
+  --sage-dark: #D67B4E;
+  --terracotta: #E9967A;
+  --terracotta-light: #FBE5DC;
+  --dusty-blue: #F0B8C4;
+  --butter: #FFD48A;
+  --pink-accent: #E8809B;
+  --text: #4A2F1F;
+  --text-soft: #8A5F4A;
+}
+
+/* --- MIDNIGHT THEME --- */
+body.theme-midnight {
+  --cream: #1E1E2E;
+  --cream-deep: #16162A;
+  --card: #2A2A3E;
+  --sage: #7C9885;
+  --sage-light: #3A4A42;
+  --sage-dark: #A0BEA8;
+  --terracotta: #D08770;
+  --terracotta-light: #4A3830;
+  --dusty-blue: #7B8FAC;
+  --butter: #E5C07B;
+  --text: #E8E4D8;
+  --text-soft: #B0A898;
+  --text-light: #706858;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-hover: rgba(0, 0, 0, 0.5);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--f);
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 5.5rem;
+  line-height: 1.6;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* --- SOFT BACKGROUND SHAPES --- */
+.bg-blobs {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.35;
+  animation: blobFloat 18s ease-in-out infinite alternate;
+}
+
+.blob-1 { width: 320px; height: 320px; background: var(--sage); top: -60px; left: -60px; }
+.blob-2 { width: 280px; height: 280px; background: var(--terracotta); top: 35%; right: -90px; animation-delay: -6s; }
+.blob-3 { width: 220px; height: 220px; background: var(--butter); bottom: 8%; left: 15%; animation-delay: -12s; }
+
+@keyframes blobFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, -30px) scale(1.1); }
+}
+
+/* --- TYPOGRAPHY --- */
+h1, h2, h3 {
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.hand {
+  font-family: var(--f-hand);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.page-title {
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  text-align: center;
+  margin-bottom: 0.4rem;
+}
+
+.page-sub {
+  font-size: 0.95rem;
+  color: var(--text-soft);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-family: var(--f-hand);
+  font-size: 1.3rem;
+}
+
+/* --- CARDS (slight rotation for handmade feel) --- */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px var(--shadow);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 12px;
+  background: var(--butter);
+  border-radius: 3px;
+  box-shadow: 0 2px 4px var(--shadow);
+  opacity: 0.7;
+}
+
+/* --- BUTTONS --- */
+.btn {
+  display: inline-block;
+  padding: 0.85rem 1.8rem;
+  font-family: var(--f);
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  color: var(--text);
+}
+
+.btn:active { transform: scale(0.95); }
+
+.btn-primary {
+  background: var(--sage);
+  color: white;
+  box-shadow: 0 4px 0 var(--sage-dark), 0 6px 15px var(--shadow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--sage-dark), 0 8px 20px var(--shadow-hover);
+}
+
+.btn-secondary {
+  background: var(--card);
+  color: var(--text);
+  border: 2px solid var(--sage);
+  box-shadow: 0 3px 0 var(--sage-dark);
+}
+
+.btn-warm {
+  background: var(--terracotta);
+  color: white;
+  box-shadow: 0 4px 0 var(--terracotta-dark), 0 6px 15px var(--shadow);
+}
+
+.btn-warm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--terracotta-dark), 0 8px 20px var(--shadow-hover);
+}
+
+.btn-small {
+  padding: 0.55rem 1.1rem;
+  font-size: 0.82rem;
+}
+
+/* --- SLIDERS (chunky, playful) --- */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--cream-deep);
+  outline: none;
+  border: 2px solid var(--sage-light);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  border: 4px solid white;
+  cursor: grab;
+  box-shadow: 0 3px 8px var(--shadow);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  border: 4px solid white;
+  cursor: grab;
+  box-shadow: 0 3px 8px var(--shadow);
+}
+
+/* --- BOTTOM NAV --- */
+.nav {
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 100%;
+  background: var(--card);
+  border-top: 3px solid var(--sage-light);
+  display: flex;
+  justify-content: space-around;
+  padding: 0.6rem 0 0.8rem;
+  z-index: 100;
+  box-shadow: 0 -4px 20px var(--shadow);
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--text-light);
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.nav a span {
+  font-size: 1.35rem;
+}
+
+.nav a.active, .nav a:hover {
+  color: var(--sage-dark);
+  background: var(--sage-light);
+}
+
+/* --- PIXEL MASCOT --- */
+.pixel {
+  position: fixed;
+  bottom: 5.8rem;
+  right: 1.2rem;
+  width: 52px;
+  height: 52px;
+  background: var(--terracotta);
+  border-radius: 50% 50% 50% 25%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow: 0 4px 15px var(--shadow-hover);
+  animation: pixelBounce 3s ease-in-out infinite;
+  border: 3px solid white;
+}
+
+.pixel-eye {
+  width: 6px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+
+@keyframes pixelBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(4deg); }
+  75% { transform: translateY(-4px) rotate(-3deg); }
+}
+
+/* --- TAGS --- */
+.tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.3rem 0.7rem;
+  border-radius: 50px;
+}
+
+.tag-sage { background: var(--sage-light); color: var(--sage-dark); }
+.tag-terra { background: var(--terracotta-light); color: var(--terracotta-dark); }
+.tag-blue { background: var(--dusty-blue-light); color: var(--dusty-blue-dark); }
+.tag-butter { background: var(--butter-light); color: #A67C00; }
+
+/* --- PHOTO FRAMES (like polaroids) --- */
+.photo-frame {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 25px var(--shadow);
+  border: 6px solid white;
+  background: white;
+  transform: rotate(-0.5deg);
+}
+
+.photo-frame img {
+  width: 100%;
+  display: block;
+  transition: filter 0.15s ease;
+  border-radius: 4px;
+}
+
+/* --- LAYOUT --- */
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+/* --- HOW-IT-WORKS EXPANDABLES --- */
+.how-card {
+  background: var(--butter-light);
+  border: 2px dashed var(--butter);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem;
+  margin-top: 0.5rem;
+  display: none;
+}
+
+.how-card.open { display: block; }
+
+.how-card p {
+  font-size: 0.8rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.how-toggle {
+  font-size: 0.75rem;
+  color: var(--sage-dark);
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 700;
+  margin-top: 0.4rem;
+  display: inline-block;
+}
+
+/* --- THEME PICKER --- */
+.theme-picker {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.8rem;
+}
+
+.theme-dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: transform 0.2s;
+}
+
+.theme-dot:hover { transform: scale(1.1); }
+.theme-dot.active { border-color: var(--text); transform: scale(1.15); }
+
+.dot-meadow { background: linear-gradient(135deg, #A8C4A2, #F5D97C); }
+.dot-ocean { background: linear-gradient(135deg, #8FB8CC, #A8C6DA); }
+.dot-sunset { background: linear-gradient(135deg, #F5A97F, #E9967A); }
+.dot-midnight { background: linear-gradient(135deg, #2A2A3E, #7C9885); }
+
+/* --- REDUCED MOTION --- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrap { padding: 1rem 0.8rem; }
+  .card { padding: 1.2rem; }
+}

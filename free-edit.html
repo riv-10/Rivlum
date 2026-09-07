@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>RIVLUM — Free Edit 📸</title>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.upload-zone {
+  max-width: 500px;
+  margin: 1.5rem auto;
+  padding: 3.5rem 1.5rem;
+  border: 3px dashed var(--sage);
+  border-radius: var(--radius);
+  text-align: center;
+  cursor: pointer;
+  background: var(--card);
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+  transform: rotate(-0.5deg);
+}
+.upload-zone:hover {
+  border-color: var(--terracotta);
+  background: var(--terracotta-light);
+  transform: rotate(0deg) scale(1.02);
+}
+.upload-zone.hidden { display: none; }
+.upload-zone .big-icon {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 0.8rem;
+}
+.upload-zone h3 {
+  font-family: var(--f-hand);
+  font-size: 1.6rem;
+  color: var(--sage-dark);
+  margin-bottom: 0.5rem;
+}
+.upload-zone p {
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+.upload-zone input { display: none; }
+.editor {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: none;
+  position: relative;
+  z-index: 1;
+}
+.editor.show { display: block; }
+.photo-wrap { margin-bottom: 1.2rem; }
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 1rem 0;
+}
+.slider-card {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1.1rem;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+.slider-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+.slider-name { font-size: 0.9rem; font-weight: 700; }
+.slider-val {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  background: var(--terracotta);
+  padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+}
+.actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+.actions .btn {
+  flex: 1;
+  min-width: 100px;
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 0.7rem;
+}
+.mood-quick {
+  background: var(--butter-light);
+  border: 2px dashed var(--butter);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.mood-quick h4 {
+  font-family: var(--f-hand);
+  font-size: 1.2rem;
+  color: #A67C00;
+  margin-bottom: 0.6rem;
+  text-align: center;
+}
+.mood-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.mq-btn {
+  background: white;
+  border: 2px solid var(--butter);
+  border-radius: 50px;
+  padding: 0.4rem 0.9rem;
+  font-family: var(--f);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mq-btn:hover, .mq-btn.active {
+  background: var(--butter);
+  transform: translateY(-2px);
+}
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div class="wrap">
+  <h1 class="page-title">Your Photo, Your River 🌊</h1>
+  <p class="page-sub">upload anything. edit however you want. keep it forever.</p>
+</div>
+
+<div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+  <span class="big-icon">📸</span>
+  <h3>tap here to pick a photo!</h3>
+  <p>from your camera roll · your gallery · anywhere on your device</p>
+  <input type="file" id="fileInput" accept="image/*"/>
+</div>
+
+<div class="editor" id="editorArea">
+
+  <div class="photo-wrap">
+    <div class="photo-frame">
+      <img id="photo" src="" alt="your photo"/>
+    </div>
+  </div>
+
+  <div class="mood-quick">
+    <h4>✨ one-tap moods</h4>
+    <div class="mood-buttons">
+      <button class="mq-btn" onclick="applyMood('none')">Original</button>
+      <button class="mq-btn" onclick="applyMood('golden')">🌅 Golden</button>
+      <button class="mq-btn" onclick="applyMood('dream')">☁️ Dream</button>
+      <button class="mq-btn" onclick="applyMood('storm')">⛈️ Storm</button>
+      <button class="mq-btn" onclick="applyMood('vintage')">📼 Vintage</button>
+      <button class="mq-btn" onclick="applyMood('electric')">⚡ Electric</button>
+    </div>
+  </div>
+
+  <div class="slider-group" id="sliders"></div>
+
+  <div class="actions">
+    <button class="btn btn-secondary btn-small" onclick="newPhoto()">🔄 New Photo</button>
+    <button class="btn btn-secondary btn-small" onclick="resetAll()">↺ Reset</button>
+    <button class="btn btn-warm btn-small" onclick="downloadEdit()">⬇ Save</button>
+  </div>
+</div>
+
+<div class="pixel"><div class="pixel-eye"></div><div class="pixel-eye"></div></div>
+
+<nav class="nav">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a href="challenge.html"><span>✨</span>Edit</a>
+  <a href="free-edit.html" class="active"><span>📸</span>Free</a>
+  <a href="constellation.html"><span>🌌</span>Sky</a>
+  <a href="about.html"><span>💛</span>About</a>
+</nav>
+
+<script>
+var savedTheme = localStorage.getItem('rivlum_theme');
+if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
+
+var tools=[
+{id:'brightness',name:'Brightness ☀️',min:30,max:200,val:100,unit:'%'},
+{id:'contrast',name:'Contrast 🎭',min:50,max:200,val:100,unit:'%'},
+{id:'saturate',name:'Color Pop 🌈',min:0,max:300,val:100,unit:'%'},
+{id:'hue-rotate',name:'Hue Shift 🎡',min:0,max:360,val:0,unit:'°'},
+{id:'blur',name:'Softness ☁️',min:0,max:8,val:0,unit:'px'},
+{id:'sepia',name:'Warmth 🕯️',min:0,max:100,val:0,unit:'%'},
+{id:'grayscale',name:'B&W 🖤',min:0,max:100,val:0,unit:'%'}
+];
+var box=document.getElementById('sliders');
+tools.forEach(function(t){
+var r=document.createElement('div');r.className='slider-card';
+r.innerHTML='<div class="slider-top"><span class="slider-name">'+t.name+'</span><span class="slider-val" id="v-'+t.id+'">'+t.val+t.unit+'</span></div><input type="range" min="'+t.min+'" max="'+t.max+'" value="'+t.val+'" id="s-'+t.id+'" oninput="update()"/>';
+box.appendChild(r)});
+
+document.getElementById('fileInput').addEventListener('change',function(e){
+var f=e.target.files[0];if(!f)return;
+var r=new FileReader();
+r.onload=function(ev){document.getElementById('photo').src=ev.target.result;document.getElementById('uploadZone').classList.add('hidden');document.getElementById('editorArea').classList.add('show');resetAll()};
+r.readAsDataURL(f)});
+
+var moods={
+none:{brightness:100,contrast:100,saturate:100,'hue-rotate':0,blur:0,sepia:0,grayscale:0},
+golden:{brightness:110,contrast:90,saturate:120,'hue-rotate':0,blur:0,sepia:45,grayscale:0},
+dream:{brightness:105,contrast:80,saturate:150,'hue-rotate':0,blur:1.5,sepia:0,grayscale:0},
+storm:{brightness:80,contrast:150,saturate:30,'hue-rotate':0,blur:0,sepia:10,grayscale:40},
+vintage:{brightness:95,contrast:85,saturate:80,'hue-rotate':0,blur:0,sepia:40,grayscale:15},
+electric:{brightness:100,contrast:120,saturate:220,'hue-rotate':270,blur:0,sepia:0,grayscale:0}
+};
+
+function applyMood(name){
+document.querySelectorAll('.mq-btn').forEach(function(b){b.classList.remove('active')});
+event.target.classList.add('active');
+var m=moods[name];
+tools.forEach(function(t){document.getElementById('s-'+t.id).value=m[t.id]});
+update()}
+
+function getF(){var f='';tools.forEach(function(t){var v=parseFloat(document.getElementById('s-'+t.id).value);document.getElementById('v-'+t.id).textContent=v+t.unit;if(t.id==='hue-rotate')f+='hue-rotate('+v+'deg) ';else if(t.id==='blur')f+='blur('+v+'px) ';else f+=t.id+'('+v+'%) '});return f}
+function update(){document.getElementById('photo').style.filter=getF()}
+function resetAll(){tools.forEach(function(t){document.getElementById('s-'+t.id).value=t.val});update()}
+function newPhoto(){document.getElementById('uploadZone').classList.remove('hidden');document.getElementById('editorArea').classList.remove('show')}
+function downloadEdit(){var img=document.getElementById('photo');var c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;var ctx=c.getContext('2d');ctx.filter=getF();ctx.drawImage(img,0,0);var a=document.createElement('a');a.download='rivlum-edit.png';a.href=c.toDataURL();a.click()}
+</script>
+</body>
+</html>

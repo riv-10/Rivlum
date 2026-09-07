@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>RIVLUM — Edit ✨</title>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.ch-header {
+  text-align: center;
+  padding: 1.5rem 1rem 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+.ch-header h1 {
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+.ch-header p {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  font-family: var(--f-hand);
+  font-size: 1.15rem;
+}
+.editor {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.photo-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.photo-actions .btn { font-size: 0.75rem; padding: 0.5rem 1rem; }
+.upload-hidden { display: none; }
+.photo-wrap {
+  position: relative;
+  margin-bottom: 1.2rem;
+}
+.compare-btn {
+  position: absolute;
+  top: 15px; right: 15px;
+  background: white;
+  border: 2px solid var(--sage);
+  border-radius: 50px;
+  padding: 0.4rem 0.8rem;
+  font-family: var(--f);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 1rem 0;
+}
+.slider-card {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1.1rem;
+  box-shadow: 0 2px 10px var(--shadow);
+}
+.slider-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+.slider-name { font-size: 0.9rem; font-weight: 700; }
+.slider-val {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  background: var(--terracotta);
+  padding: 0.2rem 0.6rem;
+  border-radius: 50px;
+}
+.actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+.actions .btn {
+  flex: 1;
+  min-width: 100px;
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 0.7rem;
+}
+.feedback {
+  background: var(--dusty-blue-light);
+  border-left: 5px solid var(--dusty-blue);
+  border-radius: var(--radius-sm);
+  padding: 1.2rem;
+  margin: 1rem 0;
+  display: none;
+}
+.feedback.show { display: block; }
+.feedback h3 { font-size: 1rem; color: var(--dusty-blue-dark); margin-bottom: 0.5rem; }
+.feedback p { font-size: 0.85rem; color: var(--text); line-height: 1.6; }
+.drift-badge {
+  display: inline-block;
+  background: var(--sage);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.3rem 0.7rem;
+  border-radius: 50px;
+  margin-top: 0.6rem;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div class="ch-header">
+  <h1 id="chTitle">"Make this feel like a dream" ☁️</h1>
+  <p id="chSub">drag the sliders. there's no wrong answer.</p>
+</div>
+
+<div class="editor">
+  <div class="photo-actions">
+    <button class="btn btn-secondary" onclick="document.getElementById('fileIn').click()">📸 Use My Photo</button>
+    <button class="btn btn-secondary" onclick="loadDefault()">🖼 Use Rivlum's Photo</button>
+    <input type="file" id="fileIn" accept="image/*" class="upload-hidden"/>
+  </div>
+
+  <div class="photo-wrap">
+    <div class="photo-frame">
+      <img id="photo" src="" alt="edit me"/>
+    </div>
+    <button class="compare-btn" id="compareBtn">👁 Compare</button>
+  </div>
+
+  <div class="slider-group" id="sliders"></div>
+
+  <div class="actions">
+    <button class="btn btn-secondary btn-small" onclick="resetAll()">↺ Reset</button>
+    <button class="btn btn-primary btn-small" onclick="checkDrift()">🌊 Check Drift</button>
+    <button class="btn btn-warm btn-small" onclick="downloadEdit()">⬇ Save</button>
+  </div>
+
+  <div class="feedback" id="feedback">
+    <h3 id="fbTitle"></h3>
+    <p id="fbText"></p>
+  </div>
+</div>
+
+<div class="pixel"><div class="pixel-eye"></div><div class="pixel-eye"></div></div>
+
+<nav class="nav">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a href="challenge.html" class="active"><span>✨</span>Edit</a>
+  <a href="free-edit.html"><span>📸</span>Free</a>
+  <a href="constellation.html"><span>🌌</span>Sky</a>
+  <a href="about.html"><span>💛</span>About</a>
+</nav>
+
+<script>
+// Apply theme
+var savedTheme = localStorage.getItem('rivlum_theme');
+if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
+
+// Challenge data
+var challenges = {
+  dream: {title:'"Make this feel like a dream" ☁️', photo:'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=700&q=80', ref:{brightness:105,contrast:80,saturate:150,'hue-rotate':0,blur:1.5,sepia:0,grayscale:0}, key:'dream_1'},
+  golden: {title:'"Turn day into golden hour" 🌅', photo:'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80', ref:{brightness:110,contrast:90,saturate:120,'hue-rotate':0,blur:0,sepia:45,grayscale:0}, key:'golden_1'},
+  lonely: {title:'"What color is loneliness?" 🌙', photo:'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=700&q=80', ref:{brightness:75,contrast:140,saturate:70,'hue-rotate':190,blur:0,sepia:0,grayscale:20}, key:'lonely_1'},
+  power: {title:'"Make them look powerful" ⚡', photo:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700&q=80', ref:{brightness:95,contrast:150,saturate:110,'hue-rotate':0,blur:0,sepia:0,grayscale:0}, key:'power_1'},
+  vintage: {title:'"Turn this into an old photo" 📼', photo:'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=700&q=80', ref:{brightness:95,contrast:85,saturate:80,'hue-rotate':0,blur:0,sepia:40,grayscale:15}, key:'vintage_1'},
+  storm: {title:'"Make it feel like a storm" ⛈️', photo:'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=700&q=80', ref:{brightness:80,contrast:150,saturate:30,'hue-rotate':0,blur:0,sepia:10,grayscale:40}, key:'storm_1'}
+};
+
+var params = new URLSearchParams(window.location.search);
+var type = params.get('type') || 'dream';
+var currentCh = challenges[type] || challenges.dream;
+
+document.getElementById('chTitle').textContent = currentCh.title;
+
+var tools=[
+{id:'brightness',name:'Brightness ☀️',min:30,max:200,val:100,unit:'%',info:'Like a dimmer switch for your photo. Too dark = lose detail. Too bright = everything turns white. Find the sweet spot.'},
+{id:'contrast',name:'Contrast 🎭',min:50,max:200,val:100,unit:'%',info:'High contrast = dramatic movie poster. Low contrast = soft dreamy cloud. Both can be beautiful.'},
+{id:'saturate',name:'Color Pop 🌈',min:0,max:300,val:100,unit:'%',info:'0% = black and white. 200% = candy land. Most photos look great around 110-130%.'},
+{id:'hue-rotate',name:'Hue Shift 🎡',min:0,max:360,val:0,unit:'°',info:'Spins every color around the wheel. Try 180° to flip warm oranges into cool blues.'},
+{id:'blur',name:'Softness ☁️',min:0,max:8,val:0,unit:'px',info:'A tiny bit of blur = dreamy. Too much = looks like your camera was dirty.'},
+{id:'sepia',name:'Warmth 🕯️',min:0,max:100,val:0,unit:'%',info:'Adds cozy golden glow. Like the photo was taken during sunset on old film.'},
+{id:'grayscale',name:'B&W 🖤',min:0,max:100,val:0,unit:'%',info:'Removes color. Makes people focus on light, shadow, and feelings.'}
+];
+
+var box=document.getElementById('sliders');
+tools.forEach(function(t){
+var d=document.createElement('div');d.className='slider-card';
+d.innerHTML='<div class="slider-top"><span class="slider-name">'+t.name+'</span><span class="slider-val" id="v-'+t.id+'">'+t.val+t.unit+'</span></div><span class="how-toggle" onclick="this.nextElementSibling.classList.toggle(\'open\')">how does this work? 🤔</span><div class="how-card"><p>'+t.info+'</p></div><input type="range" min="'+t.min+'" max="'+t.max+'" value="'+t.val+'" id="s-'+t.id+'" oninput="update()"/>';
+box.appendChild(d)});
+
+function loadDefault(){document.getElementById('photo').src=currentCh.photo;resetAll()}
+loadDefault();
+
+document.getElementById('fileIn').addEventListener('change',function(e){
+var f=e.target.files[0];if(!f)return;
+var r=new FileReader();
+r.onload=function(ev){document.getElementById('photo').src=ev.target.result;resetAll()};
+r.readAsDataURL(f)});
+
+function getF(){var f='';tools.forEach(function(t){var v=parseFloat(document.getElementById('s-'+t.id).value);document.getElementById('v-'+t.id).textContent=v+t.unit;if(t.id==='hue-rotate')f+='hue-rotate('+v+'deg) ';else if(t.id==='blur')f+='blur('+v+'px) ';else f+=t.id+'('+v+'%) '});return f}
+function update(){document.getElementById('photo').style.filter=getF()}
+function resetAll(){tools.forEach(function(t){document.getElementById('s-'+t.id).value=t.val});update();document.getElementById('feedback').classList.remove('show')}
+
+function checkDrift(){
+var ds=0;tools.forEach(function(t){var v=parseFloat(document.getElementById('s-'+t.id).value);ds+=Math.abs(v-currentCh.ref[t.id])/(t.max-t.min)});
+var fb=document.getElementById('feedback'),ti=document.getElementById('fbTitle'),tx=document.getElementById('fbText');
+if(ds>1.2){ti.textContent='🌊 Drift Detected!';tx.innerHTML='You went somewhere the reference didn\'t — and that\'s the cool part. Your version is uniquely yours. You stopped following and started feeling. That\'s how style is born. <span class="drift-badge">Drift saved ✨</span>';saveDrift()}
+else if(ds>0.5){ti.textContent='✨ Nice Balance';tx.textContent='You\'re close to the reference but with your own touch. That\'s a real creative choice.'}
+else{ti.textContent='🎯 Right on Track';tx.textContent='Your edit matches the reference closely. You nailed the technique! Now try pushing one slider way further. See what happens when you let yourself drift.'}
+fb.classList.add('show');
+var stars=JSON.parse(localStorage.getItem('rivlum_stars')||'[]');if(!stars.includes(currentCh.key)){stars.push(currentCh.key);localStorage.setItem('rivlum_stars',JSON.stringify(stars))}}
+
+function saveDrift(){var dr=JSON.parse(localStorage.getItem('rivlum_drifts')||'[]');var v={};tools.forEach(function(t){v[t.id]=document.getElementById('s-'+t.id).value});dr.push({challenge:type,filters:v,date:Date.now()});localStorage.setItem('rivlum_drifts',JSON.stringify(dr))}
+
+function downloadEdit(){var img=document.getElementById('photo');var c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;var ctx=c.getContext('2d');ctx.filter=getF();ctx.drawImage(img,0,0);var a=document.createElement('a');a.download='rivlum-edit.png';a.href=c.toDataURL();a.click()}
+
+var showing=false;
+document.getElementById('compareBtn').addEventListener('click',function(){
+showing=!showing;
+if(showing){var r=currentCh.ref;document.getElementById('photo').style.filter='brightness('+r.brightness+'%) contrast('+r.contrast+'%) saturate('+r.saturate+'%) hue-rotate('+r['hue-rotate']+'deg) blur('+r.blur+'px) sepia('+r.sepia+'%) grayscale('+r.grayscale+'%)'}
+else{update()}
+this.textContent=showing?'👁 Your Edit':'👁 Compare'})
+</script>
+</body>
+</html>
