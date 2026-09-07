@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>RIVLUM — Eye Trainer 👁</title>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.compare-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.slider-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 25px var(--shadow);
+  border: 6px solid white;
+  touch-action: none;
+  transform: rotate(-0.3deg);
+}
+.before-img, .after-img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+.before-img img, .after-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.after-img { z-index: 2; width: 50%; }
+.handle {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 4px;
+  background: white;
+  z-index: 3;
+  cursor: ew-resize;
+  transform: translateX(-50%);
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+.handle-dot {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 40px; height: 40px;
+  background: white;
+  border: 3px solid var(--terracotta);
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: var(--terracotta-dark);
+  font-weight: 800;
+  box-shadow: 0 3px 10px var(--shadow);
+}
+.labels {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.8rem;
+  z-index: 4;
+  pointer-events: none;
+}
+.lbl {
+  background: rgba(255,255,255,0.9);
+  color: var(--text);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 6px var(--shadow);
+}
+.switcher {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+}
+.sw-btn {
+  flex: 1;
+  background: var(--card);
+  border: 2px solid var(--cream-deep);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem;
+  font-family: var(--f);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sw-btn.active {
+  background: var(--terracotta-light);
+  border-color: var(--terracotta);
+  color: var(--terracotta-dark);
+}
+.lesson {
+  background: var(--sage-light);
+  border-left: 5px solid var(--sage);
+  border-radius: var(--radius-sm);
+  padding: 1.2rem;
+  margin-top: 1.2rem;
+}
+.lesson h3 {
+  font-family: var(--f-hand);
+  font-size: 1.3rem;
+  color: var(--sage-dark);
+  margin-bottom: 0.4rem;
+}
+.lesson p {
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.7;
+}
+.layers-box {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin-top: 1rem;
+  box-shadow: 0 3px 15px var(--shadow);
+}
+.layers-box h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.layer-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--cream-deep);
+  font-size: 0.8rem;
+}
+.layer-item:last-child { border: none; }
+.layer-num {
+  width: 24px; height: 24px;
+  background: var(--terracotta-light);
+  color: var(--terracotta-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.layer-text { color: var(--text); }
+.layer-text strong { color: var(--terracotta-dark); }
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<div class="wrap">
+  <h1 class="page-title">Eye Trainer 👁</h1>
+  <p class="page-sub">drag the slider to see how pros transform raw photos.</p>
+</div>
+
+<div class="compare-wrap">
+  <div class="slider-box" id="sliderBox">
+    <div class="before-img">
+      <img id="imgBefore" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80"/>
+    </div>
+    <div class="after-img" id="afterWrap">
+      <img id="imgAfter" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80" style="filter:brightness(115%) sepia(25%) saturate(135%) contrast(90%)"/>
+    </div>
+    <div class="handle" id="handle">
+      <div class="handle-dot">↔</div>
+    </div>
+    <div class="labels">
+      <span class="lbl">✨ Edited</span>
+      <span class="lbl">📷 Raw</span>
+    </div>
+  </div>
+
+  <div class="switcher">
+    <button class="sw-btn active" onclick="changeSet(0,this)">🌅 Sunset Forest</button>
+    <button class="sw-btn" onclick="changeSet(1,this)">🏙 Quiet Street</button>
+    <button class="sw-btn" onclick="changeSet(2,this)">🌊 Ocean Mist</button>
+  </div>
+
+  <div class="lesson">
+    <h3 id="lessonTitle">What happened here?</h3>
+    <p id="lessonText">Look at the trees. In the raw version they look dark and heavy. The editor added warmth (sepia) to make the sunset glow wrap around the branches, reduced contrast to reveal misty details, and gave the shadows an orange splash.</p>
+  </div>
+
+  <div class="layers-box">
+    <h3>🧅 The Edit Layers</h3>
+    <p style="font-size:0.75rem;color:var(--text-soft);margin-bottom:0.6rem">Every great edit is just a stack of small decisions. Here's the recipe:</p>
+    <div id="layersList">
+      <div class="layer-item"><span class="layer-num">1</span><span class="layer-text"><strong>Brightness +15%</strong> — lifted the overall light</span></div>
+      <div class="layer-item"><span class="layer-num">2</span><span class="layer-text"><strong>Contrast -10%</strong> — softened the shadows</span></div>
+      <div class="layer-item"><span class="layer-num">3</span><span class="layer-text"><strong>Saturation +35%</strong> — made colors pop</span></div>
+      <div class="layer-item"><span class="layer-num">4</span><span class="layer-text"><strong>Warmth +25%</strong> — added golden sunset glow</span></div>
+    </div>
+  </div>
+</div>
+
+<div style="height:2rem"></div>
+
+<div class="pixel"><div class="pixel-eye"></div><div class="pixel-eye"></div></div>
+
+<nav class="nav">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a href="challenge.html"><span>✨</span>Edit</a>
+  <a href="free-edit.html"><span>📸</span>Free</a>
+  <a href="constellation.html"><span>🌌</span>Sky</a>
+  <a href="about.html"><span>💛</span>About</a>
+</nav>
+
+<script>
+var savedTheme = localStorage.getItem('rivlum_theme');
+if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
+
+var sets=[
+{title:'Sunset Forest',text:'Look at the trees. In the raw version they look dark and heavy. The editor added warmth (sepia) to make the sunset glow wrap around the branches, reduced contrast to reveal misty details, and gave the shadows an orange splash.',raw:'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80',filt:'brightness(115%) sepia(25%) saturate(135%) contrast(90%)',layers:['<strong>Brightness +15%</strong> — lifted the overall light','<strong>Contrast -10%</strong> — softened the shadows','<strong>Saturation +35%</strong> — made colors pop','<strong>Warmth +25%</strong> — added golden sunset glow']},
+{title:'Quiet Street',text:'Notice the buildings and the blue hour sky. The original looks dry and grey. The editor boosted saturation to pull out warm colors, lowered brightness to make it feel like midnight, and applied a cool tint shift to paint everything blue.',raw:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80',filt:'brightness(80%) saturate(150%) hue-rotate(200deg)',layers:['<strong>Brightness -20%</strong> — darkened for nighttime feel','<strong>Saturation +50%</strong> — pulled out hidden colors','<strong>Hue Shift 200°</strong> — painted everything cool blue']},
+{title:'Ocean Mist',text:'The raw photo is sharp and harsh. The editor softened it with a tiny blur, lifted the shadows to reveal details in the rocks, and added a cool desaturated tone to make it feel like a quiet morning by the sea.',raw:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&q=80',filt:'brightness(105%) contrast(85%) saturate(80%) blur(0.8px) hue-rotate(10deg)',layers:['<strong>Brightness +5%</strong> — gentle lift','<strong>Contrast -15%</strong> — softened everything','<strong>Saturation -20%</strong> — muted for calm','<strong>Soft Blur 0.8px</strong> — added misty dreaminess']}
+];
+function changeSet(idx,btn){
+document.querySelectorAll('.sw-btn').forEach(function(x){x.classList.remove('active')});
+btn.classList.add('active');
+var s=sets[idx];
+document.getElementById('imgBefore').src=s.raw;
+document.getElementById('imgAfter').src=s.raw;
+document.getElementById('imgAfter').style.filter=s.filt;
+document.getElementById('lessonTitle').textContent='What happened in '+s.title+'?';
+document.getElementById('lessonText').textContent=s.text;
+var ll=document.getElementById('layersList');ll.innerHTML='';
+s.layers.forEach(function(l,i){
+var d=document.createElement('div');d.className='layer-item';
+d.innerHTML='<span class="layer-num">'+(i+1)+'</span><span class="layer-text">'+l+'</span>';
+ll.appendChild(d)})}
+
+var box=document.getElementById('sliderBox');
+var after=document.getElementById('afterWrap');
+var handle=document.getElementById('handle');
+var dragging=false;
+function setPos(x){var r=box.getBoundingClientRect();var p=Math.max(0,Math.min(1,(x-r.left)/r.width));after.style.width=(p*100)+'%';handle.style.left=(p*100)+'%'}
+box.addEventListener('mousedown',function(e){dragging=true;setPos(e.clientX)});
+window.addEventListener('mousemove',function(e){if(dragging)setPos(e.clientX)});
+window.addEventListener('mouseup',function(){dragging=false});
+box.addEventListener('touchstart',function(e){dragging=true;setPos(e.touches[0].clientX)});
+window.addEventListener('touchmove',function(e){if(dragging)setPos(e.touches[0].clientX)});
+window.addEventListener('touchend',function(){dragging=false});
+</script>
+</body>
+</html>
