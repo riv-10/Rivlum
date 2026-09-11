@@ -107,6 +107,42 @@
   text-decoration: underline;
   font-weight: 700;
 }
+
+.expand-panel {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.8rem;
+  box-shadow: 0 3px 15px var(--shadow);
+  border-left: 4px solid var(--butter);
+  animation: slideDown 0.3s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.expand-panel h4 {
+  font-family: var(--f-hand);
+  font-size: 1.2rem;
+  color: var(--terracotta-dark);
+  margin-bottom: 0.6rem;
+}
+.expand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--cream-deep);
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+.expand-row:last-child { border: none; }
+.expand-row:hover { color: var(--sage-dark); }
+.expand-row.done { color: var(--sage-dark); }
+.expand-check { font-size: 1rem; }
 </style>
 </head>
 <body>
@@ -165,12 +201,48 @@ var savedTheme = localStorage.getItem('rivlum_theme');
 if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
 
 var consts=[
-{name:'The Horizon',desc:'light & exposure',icon:'🌅',total:5,keys:['dream_1','golden_1','horizon_2','horizon_3','horizon_4']},
-{name:'The Prism',desc:'color & mood',icon:'🎨',total:5,keys:['vintage_1','prism_2','prism_3','prism_4','prism_5']},
-{name:'The Frame',desc:'composition',icon:'📐',total:4,keys:['power_1','frame_2','frame_3','frame_4']},
-{name:'The Mask',desc:'storytelling',icon:'🎭',total:4,keys:['lonely_1','storm_1','mask_3','mask_4']},
-{name:'The Current',desc:'creative tools',icon:'⚡',total:6,keys:['current_1','current_2','current_3','current_4','current_5','current_6']},
-{name:'The Deep',desc:'advanced',icon:'🌊',total:6,keys:['deep_1','deep_2','deep_3','deep_4','deep_5','deep_6']}
+{name:'The Horizon',desc:'light & exposure',icon:'🌅',total:5,keys:['dream_1','golden_1','horizon_2','horizon_3','horizon_4'],challenges:[
+  {name:'Make it feel like a dream',link:'challenge.html?type=dream',done:'dream_1'},
+  {name:'Turn day into golden hour',link:'challenge.html?type=golden',done:'golden_1'},
+  {name:'Brighten the shadows',link:'challenge.html?type=dream',done:'horizon_2'},
+  {name:'Flatten the light',link:'challenge.html?type=golden',done:'horizon_3'},
+  {name:'Create a silhouette',link:'challenge.html?type=storm',done:'horizon_4'}
+]},
+{name:'The Prism',desc:'color & mood',icon:'🎨',total:5,keys:['vintage_1','prism_2','prism_3','prism_4','prism_5'],challenges:[
+  {name:'Turn this into an old photo',link:'challenge.html?type=vintage',done:'vintage_1'},
+  {name:'Make it feel like candy',link:'challenge.html?type=dream',done:'prism_2'},
+  {name:'Remove all color',link:'challenge.html?type=storm',done:'prism_3'},
+  {name:'Shift the mood to blue',link:'challenge.html?type=lonely',done:'prism_4'},
+  {name:'Create a sunset from noon',link:'challenge.html?type=golden',done:'prism_5'}
+]},
+{name:'The Frame',desc:'composition',icon:'📐',total:4,keys:['power_1','frame_2','frame_3','frame_4'],challenges:[
+  {name:'Make them look powerful',link:'challenge.html?type=power',done:'power_1'},
+  {name:'Crop to the subject',link:'challenge.html?type=power',done:'frame_2'},
+  {name:'Use rule of thirds',link:'challenge.html?type=lonely',done:'frame_3'},
+  {name:'Find the leading line',link:'challenge.html?type=golden',done:'frame_4'}
+]},
+{name:'The Mask',desc:'storytelling',icon:'🎭',total:4,keys:['lonely_1','storm_1','mask_3','mask_4'],challenges:[
+  {name:'What color is loneliness?',link:'challenge.html?type=lonely',done:'lonely_1'},
+  {name:'Make it feel like a storm',link:'challenge.html?type=storm',done:'storm_1'},
+  {name:'Tell a happy story',link:'challenge.html?type=golden',done:'mask_3'},
+  {name:'Tell a scary story',link:'challenge.html?type=storm',done:'mask_4'}
+]},
+{name:'The Current',desc:'creative tools',icon:'⚡',total:6,keys:['current_1','current_2','current_3','current_4','current_5','current_6'],challenges:[
+  {name:'Add text to a photo',link:'free-edit.html',done:'current_1'},
+  {name:'Try double exposure',link:'free-edit.html',done:'current_2'},
+  {name:'Use color splash',link:'free-edit.html',done:'current_3'},
+  {name:'Paint with light',link:'free-edit.html',done:'current_4'},
+  {name:'Create a vignette',link:'free-edit.html',done:'current_5'},
+  {name:'Add film grain',link:'free-edit.html',done:'current_6'}
+]},
+{name:'The Deep',desc:'advanced',icon:'🌊',total:6,keys:['deep_1','deep_2','deep_3','deep_4','deep_5','deep_6'],challenges:[
+  {name:'Master split toning',link:'challenge.html?type=lonely',done:'deep_1'},
+  {name:'Selective edit a face',link:'free-edit.html',done:'deep_2'},
+  {name:'Match a movie still',link:'compare.html',done:'deep_3'},
+  {name:'Create a mood preset',link:'moods.html',done:'deep_4'},
+  {name:'Edit a portrait',link:'challenge.html?type=power',done:'deep_5'},
+  {name:'The final drift',link:'challenge.html?type=dream',done:'deep_6'}
+]}
 ];
 var stars=JSON.parse(localStorage.getItem('rivlum_stars')||'[]');
 var drifts=JSON.parse(localStorage.getItem('rivlum_drifts')||'[]');
@@ -181,11 +253,29 @@ document.getElementById('driftCount').textContent=drifts.length;
 document.getElementById('dayCount').textContent=days;
 
 var list=document.getElementById('constList');
-consts.forEach(function(c){
+consts.forEach(function(c,idx){
 var done=c.keys.filter(function(k){return stars.includes(k)}).length;
 var pct=Math.round(done/c.total*100);
 var d=document.createElement('div');d.className='const-card';
+d.style.cursor='pointer';
 d.innerHTML='<div><h3>'+c.icon+' '+c.name+'</h3><p>'+c.desc+' · '+done+'/'+c.total+'</p></div><div class="const-right"><div class="const-bar"><div class="const-fill" style="width:'+pct+'%"></div></div><span class="const-pct">'+pct+'%</span></div>';
+
+// Click to expand challenges
+d.addEventListener('click',function(){
+var existing=document.getElementById('expand-'+idx);
+if(existing){existing.remove();return}
+var panel=document.createElement('div');
+panel.id='expand-'+idx;
+panel.className='expand-panel';
+panel.innerHTML='<h4>'+c.icon+' '+c.name+' Challenges</h4>';
+c.challenges.forEach(function(ch){
+var isDone=stars.includes(ch.done);
+var row=document.createElement('a');
+row.href=ch.link;
+row.className='expand-row'+(isDone?' done':'');
+row.innerHTML='<span class="expand-check">'+(isDone?'⭐':'○')+'</span><span>'+ch.name+'</span>';
+panel.appendChild(row)});
+d.after(panel)});
 list.appendChild(d)});
 
 var pN=document.getElementById('pixelName'),pD=document.getElementById('pixelDesc');
