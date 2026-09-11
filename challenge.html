@@ -23,13 +23,18 @@
   color: var(--text-soft);
   font-family: var(--f-hand);
 }
+
+/* --- THE RESPONSIVE EDITOR CONTAINER --- */
 .editor {
   position: relative;
   z-index: 1;
-  max-width: 640px;
+  max-width: 1000px; /* Expanded to allow side-by-side on desktop */
   margin: 0 auto;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
 }
+
 .photo-actions {
   display: flex;
   gap: 0.6rem;
@@ -39,18 +44,39 @@
 }
 .photo-actions .btn { font-size: 0.75rem; padding: 0.5rem 1rem; }
 .upload-hidden { display: none; }
+
+/* --- STICKY PHOTO WRAP --- */
 .photo-wrap {
   position: sticky;
-  top: 10px;
+  top: 0;
   z-index: 50;
-  margin-bottom: 1.2rem;
   background: var(--cream);
-  padding: 8px 0;
-  border-radius: var(--radius);
+  padding: 10px 0;
+  width: 100%;
+  transition: background 0.4s ease;
 }
+
+.photo-frame {
+  max-height: 35vh; /* Prevents photo from taking over the whole mobile screen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 6px solid white;
+  border-radius: 8px;
+  box-shadow: 0 6px 25px var(--shadow);
+  overflow: hidden;
+}
+
+.photo-frame img {
+  max-height: 35vh;
+  width: 100%;
+  object-fit: contain; /* Keeps original aspect ratio without cropping */
+}
+
 .compare-btn {
   position: absolute;
-  top: 20px; right: 20px;
+  top: 20px; right: 15px;
   background: white;
   border: 2px solid var(--sage);
   border-radius: 50px;
@@ -63,6 +89,8 @@
   z-index: 5;
   box-shadow: 0 2px 8px var(--shadow);
 }
+
+/* --- SLIDERS & ACTIONS --- */
 .slider-group {
   display: flex;
   flex-direction: column;
@@ -123,6 +151,43 @@
   padding: 0.3rem 0.7rem;
   border-radius: 50px;
   margin-top: 0.6rem;
+}
+
+/* ========================================
+   💻 DESKTOP LAYOUT (Widescreens)
+   ======================================== */
+@media (min-width: 768px) {
+  .editor {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr; /* Photo on left (wider), sliders on right */
+    gap: 2rem;
+    align-items: start;
+    padding: 2rem 1rem;
+  }
+
+  .photo-wrap {
+    position: sticky;
+    top: 20px; /* Sticks to the top left of the screen */
+    z-index: 50;
+    background: transparent;
+    padding: 0;
+  }
+
+  .photo-frame {
+    max-height: 60vh; /* Larger photo on desktop */
+  }
+
+  .photo-frame img {
+    max-height: 60vh;
+  }
+
+  .compare-btn {
+    top: 15px; right: 15px;
+  }
+
+  .slider-group {
+    margin-top: 0; /* Align perfectly with top of photo */
+  }
 }
 </style>
 </head>
