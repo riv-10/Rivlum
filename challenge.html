@@ -19,10 +19,9 @@
   margin-bottom: 0.3rem;
 }
 .ch-header p {
-  font-size: 0.85rem;
+  font-size: 1.15rem;
   color: var(--text-soft);
   font-family: var(--f-hand);
-  font-size: 1.15rem;
 }
 .editor {
   position: relative;
@@ -41,12 +40,17 @@
 .photo-actions .btn { font-size: 0.75rem; padding: 0.5rem 1rem; }
 .upload-hidden { display: none; }
 .photo-wrap {
-  position: relative;
+  position: sticky;
+  top: 10px;
+  z-index: 50;
   margin-bottom: 1.2rem;
+  background: var(--cream);
+  padding: 8px 0;
+  border-radius: var(--radius);
 }
 .compare-btn {
   position: absolute;
-  top: 15px; right: 15px;
+  top: 20px; right: 20px;
   background: white;
   border: 2px solid var(--sage);
   border-radius: 50px;
