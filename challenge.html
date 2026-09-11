@@ -8,18 +8,18 @@
 <style>
 .ch-header {
   text-align: center;
-  padding: 1.5rem 1rem 0.5rem;
+  padding: 1.2rem 1rem 0.3rem;
   position: relative;
   z-index: 1;
 }
 .ch-header h1 {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-style: italic;
   color: var(--text);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
 }
 .ch-header p {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: var(--text-soft);
   font-family: var(--f-hand);
 }
@@ -28,129 +28,130 @@
 .editor {
   position: relative;
   z-index: 1;
-  max-width: 1000px; /* Expanded to allow side-by-side on desktop */
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.5rem 1rem 1rem;
   display: flex;
   flex-direction: column;
 }
 
 .photo-actions {
   display: flex;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
   flex-wrap: wrap;
   justify-content: center;
 }
-.photo-actions .btn { font-size: 0.75rem; padding: 0.5rem 1rem; }
+.photo-actions .btn { font-size: 0.72rem; padding: 0.4rem 0.8rem; }
 .upload-hidden { display: none; }
 
-/* --- STICKY PHOTO WRAP --- */
+/* --- STICKY PANEL (Locks Photo + Buttons at top) --- */
 .photo-wrap {
   position: sticky;
   top: 0;
   z-index: 50;
   background: var(--cream);
-  padding: 10px 0;
+  padding: 5px 0 10px;
   width: 100%;
-  transition: background 0.4s ease;
 }
 
 .photo-frame {
-  max-height: 35vh; /* Prevents photo from taking over the whole mobile screen */
+  height: 25vh; /* Fixed height on mobile so it never takes up too much screen */
   display: flex;
   align-items: center;
   justify-content: center;
   background: white;
-  border: 6px solid white;
+  border: 4px solid white;
   border-radius: 8px;
-  box-shadow: 0 6px 25px var(--shadow);
+  box-shadow: 0 4px 15px var(--shadow);
   overflow: hidden;
+  position: relative;
 }
 
 .photo-frame img {
-  max-height: 35vh;
+  height: 100%;
   width: 100%;
-  object-fit: contain; /* Keeps original aspect ratio without cropping */
+  object-fit: contain; /* Keeps original aspect ratio perfectly */
 }
 
 .compare-btn {
   position: absolute;
-  top: 20px; right: 15px;
-  background: white;
+  top: 12px; right: 12px;
+  background: rgba(255,255,255,0.9);
   border: 2px solid var(--sage);
   border-radius: 50px;
-  padding: 0.4rem 0.8rem;
+  padding: 0.3rem 0.6rem;
   font-family: var(--f);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--text);
   cursor: pointer;
   z-index: 5;
-  box-shadow: 0 2px 8px var(--shadow);
+  box-shadow: 0 2px 6px var(--shadow);
 }
 
-/* --- SLIDERS & ACTIONS --- */
+/* --- STICKY ACTIONS BAR (Just below photo) --- */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  width: 100%;
+}
+.actions .btn {
+  flex: 1;
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 0.6rem;
+}
+
+/* --- SLIDERS (Scroll smoothly underneath) --- */
 .slider-group {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
-  margin: 1rem 0;
+  gap: 0.6rem;
+  margin: 0.5rem 0 1.5rem;
 }
 .slider-card {
   background: var(--card);
   border-radius: var(--radius-sm);
-  padding: 0.9rem 1.1rem;
-  box-shadow: 0 2px 10px var(--shadow);
+  padding: 0.8rem 1rem;
+  box-shadow: 0 2px 8px var(--shadow);
 }
 .slider-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
 }
-.slider-name { font-size: 0.9rem; font-weight: 700; }
+.slider-name { font-size: 0.85rem; font-weight: 700; }
 .slider-val {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: white;
   background: var(--terracotta);
-  padding: 0.2rem 0.6rem;
+  padding: 0.15rem 0.5rem;
   border-radius: 50px;
-}
-.actions {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  margin: 1rem 0;
-}
-.actions .btn {
-  flex: 1;
-  min-width: 100px;
-  text-align: center;
-  font-size: 0.85rem;
-  padding: 0.7rem;
 }
 .feedback {
   background: var(--dusty-blue-light);
   border-left: 5px solid var(--dusty-blue);
   border-radius: var(--radius-sm);
-  padding: 1.2rem;
+  padding: 1rem;
   margin: 1rem 0;
   display: none;
 }
 .feedback.show { display: block; }
-.feedback h3 { font-size: 1rem; color: var(--dusty-blue-dark); margin-bottom: 0.5rem; }
-.feedback p { font-size: 0.85rem; color: var(--text); line-height: 1.6; }
+.feedback h3 { font-size: 0.95rem; color: var(--dusty-blue-dark); margin-bottom: 0.4rem; }
+.feedback p { font-size: 0.8rem; color: var(--text); line-height: 1.5; }
 .drift-badge {
   display: inline-block;
   background: var(--sage);
   color: white;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  padding: 0.3rem 0.7rem;
+  padding: 0.25rem 0.6rem;
   border-radius: 50px;
-  margin-top: 0.6rem;
+  margin-top: 0.5rem;
 }
 
 /* ========================================
@@ -159,34 +160,26 @@
 @media (min-width: 768px) {
   .editor {
     display: grid;
-    grid-template-columns: 1.2fr 1fr; /* Photo on left (wider), sliders on right */
+    grid-template-columns: 1.2fr 1fr;
     gap: 2rem;
     align-items: start;
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
 
   .photo-wrap {
     position: sticky;
-    top: 20px; /* Sticks to the top left of the screen */
+    top: 20px;
     z-index: 50;
     background: transparent;
     padding: 0;
   }
 
   .photo-frame {
-    max-height: 60vh; /* Larger photo on desktop */
-  }
-
-  .photo-frame img {
-    max-height: 60vh;
-  }
-
-  .compare-btn {
-    top: 15px; right: 15px;
+    height: 50vh; /* Bigger on desktop */
   }
 
   .slider-group {
-    margin-top: 0; /* Align perfectly with top of photo */
+    margin-top: 0;
   }
 }
 </style>
@@ -205,30 +198,35 @@
 </div>
 
 <div class="editor">
-  <div class="photo-actions">
-    <button class="btn btn-secondary" onclick="document.getElementById('fileIn').click()">📸 Use My Photo</button>
-    <button class="btn btn-secondary" onclick="loadDefault()">🖼 Use Rivlum's Photo</button>
-    <input type="file" id="fileIn" accept="image/*" class="upload-hidden"/>
-  </div>
-
+  <!-- STICKY TOP WRAP -->
   <div class="photo-wrap">
+    <div class="photo-actions">
+      <button class="btn btn-secondary" onclick="document.getElementById('fileIn').click()">📸 Use My Photo</button>
+      <button class="btn btn-secondary" onclick="loadDefault()">🖼 Use Default Photo</button>
+      <input type="file" id="fileIn" accept="image/*" class="upload-hidden"/>
+    </div>
+
     <div class="photo-frame">
       <img id="photo" src="" alt="edit me"/>
+      <button class="compare-btn" id="compareBtn">👁 Compare</button>
     </div>
-    <button class="compare-btn" id="compareBtn">👁 Compare</button>
+
+    <!-- Pinned Buttons directly below photo -->
+    <div class="actions">
+      <button class="btn btn-secondary btn-small" onclick="resetAll()">↺ Reset</button>
+      <button class="btn btn-primary btn-small" onclick="checkDrift()">🌊 Check Drift</button>
+      <button class="btn btn-warm btn-small" onclick="downloadEdit()">⬇ Save</button>
+    </div>
   </div>
 
-  <div class="slider-group" id="sliders"></div>
+  <!-- SCROLLING BOTTOM WRAP -->
+  <div class="sliders-container">
+    <div class="slider-group" id="sliders"></div>
 
-  <div class="actions">
-    <button class="btn btn-secondary btn-small" onclick="resetAll()">↺ Reset</button>
-    <button class="btn btn-primary btn-small" onclick="checkDrift()">🌊 Check Drift</button>
-    <button class="btn btn-warm btn-small" onclick="downloadEdit()">⬇ Save</button>
-  </div>
-
-  <div class="feedback" id="feedback">
-    <h3 id="fbTitle"></h3>
-    <p id="fbText"></p>
+    <div class="feedback" id="feedback">
+      <h3 id="fbTitle"></h3>
+      <p id="fbText"></p>
+    </div>
   </div>
 </div>
 
@@ -243,11 +241,9 @@
 </nav>
 
 <script>
-// Apply theme
 var savedTheme = localStorage.getItem('rivlum_theme');
 if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
 
-// Challenge data
 var challenges = {
   dream: {title:'"Make this feel like a dream" ☁️', photo:'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=700&q=80', ref:{brightness:105,contrast:80,saturate:150,'hue-rotate':0,blur:1.5,sepia:0,grayscale:0}, key:'dream_1'},
   golden: {title:'"Turn day into golden hour" 🌅', photo:'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80', ref:{brightness:110,contrast:90,saturate:120,'hue-rotate':0,blur:0,sepia:45,grayscale:0}, key:'golden_1'},
@@ -295,7 +291,7 @@ function resetAll(){tools.forEach(function(t){document.getElementById('s-'+t.id)
 function checkDrift(){
 var ds=0;tools.forEach(function(t){var v=parseFloat(document.getElementById('s-'+t.id).value);ds+=Math.abs(v-currentCh.ref[t.id])/(t.max-t.min)});
 var fb=document.getElementById('feedback'),ti=document.getElementById('fbTitle'),tx=document.getElementById('fbText');
-if(ds>1.2){ti.textContent='🌊 Drift Detected!';tx.innerHTML='You went somewhere the reference didn\'t — and that\'s the cool part. Your version is uniquely yours. You stopped following and started feeling. That\'s how style is born. <span class="drift-badge">Drift saved ✨</span>';saveDrift()}
+if(ds>1.2){ti.textContent='🌊 Drift Detected!';tx.innerHTML='You went somewhere the reference didn\'t — and that\'s the cool part. Your version is uniquely yours. You stopped following and started feeling. <span class="drift-badge">Drift saved ✨</span>';saveDrift()}
 else if(ds>0.5){ti.textContent='✨ Nice Balance';tx.textContent='You\'re close to the reference but with your own touch. That\'s a real creative choice.'}
 else{ti.textContent='🎯 Right on Track';tx.textContent='Your edit matches the reference closely. You nailed the technique! Now try pushing one slider way further. See what happens when you let yourself drift.'}
 fb.classList.add('show');
