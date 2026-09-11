@@ -89,7 +89,6 @@
 }
 .ch-card:nth-child(2n) { border-top-color: var(--terracotta); transform: rotate(0.5deg); }
 .ch-card:nth-child(3n) { border-top-color: var(--dusty-blue); transform: rotate(-0.5deg); }
-.ch-card:nth-child(4n) { border-top-color: var(--butter); }
 .ch-card:hover {
   transform: translateY(-4px) rotate(0deg);
   box-shadow: 0 10px 30px var(--shadow-hover);
@@ -325,11 +324,9 @@
 </div>
 
 <script>
-// Apply saved theme
 var savedTheme = localStorage.getItem('rivlum_theme');
 if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
 
-// Ritual
 if(localStorage.getItem('rivlum_born')){document.getElementById('ritual').remove()}
 else{
 var m="every great editor started with one click ✨",t=document.getElementById('rtxt'),i=0;
