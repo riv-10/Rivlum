@@ -305,5 +305,179 @@ if(showing){var r=currentCh.ref;document.getElementById('photo').style.filter='b
 else{update()}
 this.textContent=showing?'👁 Your Edit':'👁 Compare'})
 </script>
+  <script>
+// ==========================================
+// RIVLUM SESSION 1 ENGINE: UNDO/REDO & EXPORT
+// ==========================================
+
+let historyStack = [];
+let historyIndex = -1;
+const MAX_HISTORY = 20;
+let isRestoringHistory = false;
+
+// Gather all slider tool IDs
+const sliderIds = ['exposure', 'contrast', 'highlights', 'shadows', 'temp', 'tint', 'saturation', 'vibrance', 'clarity', 'vignette'];
+
+// Save state to stack whenever a slider finishes changing
+document.querySelectorAll('input[type="range"]').forEach(slider => {
+  slider.addEventListener('change', () => {
+    saveState();
+  });
+});
+
+function getSlidersState() {
+  let state = {};
+  sliderIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) state[id] = el.value;
+  });
+  return state;
+}
+
+function saveState() {
+  if (isRestoringHistory) return;
+  
+  const currentState = getSlidersState();
+  
+  // If we undid and then changed something, slice off forward history
+  if (historyIndex < historyStack.length - 1) {
+    historyStack = historyStack.slice(0, historyIndex + 1);
+  }
+  
+  historyStack.push(currentState);
+  if (historyStack.length > MAX_HISTORY) historyStack.shift();
+  historyIndex = historyStack.length - 1;
+  
+  updateUndoRedoUI();
+}
+
+function undoEdit() {
+  if (historyIndex > 0) {
+    historyIndex--;
+    applyState(historyStack[historyIndex]);
+  }
+}
+
+function redoEdit() {
+  if (historyIndex < historyStack.length - 1) {
+    historyIndex++;
+    applyState(historyStack[historyIndex]);
+  }
+}
+
+function applyState(state) {
+  isRestoringHistory = true;
+  Object.keys(state).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.value = state[id];
+      // Trigger live input event to render changes to canvas
+      el.dispatchEvent(new Event('input'));
+    }
+  });
+  isRestoringHistory = false;
+  updateUndoRedoUI();
+}
+
+function updateUndoRedoUI() {
+  const undoBtn = document.getElementById('undoBtn');
+  const redoBtn = document.getElementById('redoBtn');
+  if (undoBtn) undoBtn.disabled = historyIndex <= 0;
+  if (redoBtn) redoBtn.disabled = historyIndex >= historyStack.length - 1;
+}
+
+// Initial state save on load
+window.addEventListener('load', () => {
+  setTimeout(saveState, 300);
+});
+
+// Reset Handler Integration
+function resetSliders() {
+  sliderIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.value = el.getAttribute('data-default') || 0;
+      el.dispatchEvent(new Event('input'));
+    }
+  });
+  saveState();
+}
+
+// ==========================================
+// WATERMARKED EXPORT & SHARE ENGINE
+// ==========================================
+
+function exportWatermarkedImage() {
+  const mainCanvas = document.getElementById('editorCanvas'); // Ensure your canvas id is editorCanvas
+  if (!mainCanvas) return alert("Photo not ready yet!");
+
+  // Create off-screen canvas for high-quality export stamp
+  const exportCanvas = document.createElement('canvas');
+  const ctx = exportCanvas.getContext('2d');
+  
+  exportCanvas.width = mainCanvas.width;
+  exportCanvas.height = mainCanvas.height;
+
+  // Draw rendered photo
+  ctx.drawImage(mainCanvas, 0, 0);
+
+  // Calculate watermark scaling based on photo resolution
+  const fontSize = Math.max(16, Math.round(exportCanvas.width * 0.035));
+  const padding = Math.round(fontSize * 0.8);
+
+  // Draw semi-transparent pill container background at bottom right
+  ctx.save();
+  ctx.font = `bold ${fontSize}px 'Atkinson Hyperlegible', sans-serif`;
+  const text = "✨ Made with RIVLUM";
+  const textWidth = ctx.measureText(text).width;
+  
+  const boxWidth = textWidth + padding * 2;
+  const boxHeight = fontSize + padding;
+  const boxX = exportCanvas.width - boxWidth - padding;
+  const boxY = exportCanvas.height - boxHeight - padding;
+
+  ctx.fillStyle = "rgba(45, 49, 46, 0.65)"; // Charcoal transparent pill
+  ctx.beginPath();
+  if (ctx.roundRect) {
+    ctx.roundRect(boxX, boxY, boxWidth, boxHeight, 8);
+  } else {
+    ctx.rect(boxX, boxY, boxWidth, boxHeight);
+  }
+  ctx.fill();
+
+  // Draw white text
+  ctx.fillStyle = "#FFFFFF";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, boxX + padding, boxY + boxHeight / 2);
+  ctx.restore();
+
+  // Trigger download link
+  const link = document.createElement('a');
+  link.download = `rivlum-edit-${Date.now()}.png`;
+  link.href = exportCanvas.toDataURL('image/png');
+  link.click();
+}
+
+// Native Web Share / WhatsApp Trigger
+async function shareEdit() {
+  const shareData = {
+    title: 'RIVLUM — Creative Playground',
+    text: 'Check out this photo edit I made on RIVLUM! Try it out (no sign-up needed):',
+    url: window.location.href
+  };
+
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      console.log('Share dismissed');
+    }
+  } else {
+    // WhatsApp Fallback
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareData.text + ' ' + shareData.url)}`;
+    window.open(waUrl, '_blank');
+  }
+}
+</script>
 </body>
 </html>
