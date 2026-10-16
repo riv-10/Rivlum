@@ -187,63 +187,68 @@ var photos = {
 };
 var defaultPhoto = 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=500&q=80';
 
-function render() {
-  container.innerHTML = '';
+<script>
+// ==========================================
+// RIVLUM SESSION 2: SMART DRIFT GALLERY LOADER
+// ==========================================
+
+function renderDriftGallery() {
+  const gallery = document.getElementById('driftGallery'); // ensure your container has this ID
+  if (!gallery) return;
+  
+  const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+  
   if (drifts.length === 0) {
-    container.innerHTML = '<div class="empty-state"><span class="big-icon">🍃</span><h3>The river is calm.</h3><p>You haven\'t made any drifts yet. Head to a challenge, push the sliders further than feels comfortable, and let the universe take control.</p><a href="challenge.html" class="empty-cta">Start a Challenge ✨</a></div>';
+    gallery.innerHTML = `
+      <div style="text-align:center; padding:40px 20px; color:#6E7570;">
+        <p style="font-size:1.1rem;">✨ Your Drift gallery is empty!</p>
+        <p>Edit a photo and hit <strong>Save</strong> to collect your first Drift.</p>
+        <a href="free-edit.html" style="display:inline-block; margin-top:12px; padding:8px 18px; background:#5B8266; color:#fff; border-radius:8px; text-decoration:none;">📸 Start Editing</a>
+      </div>`;
     return;
   }
-  drifts.forEach(function(d, index) {
-    var filterString = '';
-    Object.keys(d.filters).forEach(function(k) {
-      var v = d.filters[k];
-      if (k === 'hue-rotate') filterString += 'hue-rotate(' + v + 'deg) ';
-      else if (k === 'blur') filterString += 'blur(' + v + 'px) ';
-      else filterString += k + '(' + v + '%) ';
-    });
-    var date = new Date(d.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-    var card = document.createElement('div');
-    card.className = 'drift-card';
-    card.innerHTML = '<div class="drift-img-wrap"><img src="' + (photos[d.challenge] || defaultPhoto) + '" style="filter:' + filterString + '" alt="drift edit"/></div><div class="drift-date">🌊 Discovered on ' + date + '</div><p class="drift-details">A creative leap during the <em>' + d.challenge + '</em> challenge. Your settings broke away from the map — and found something beautiful.</p><div class="drift-actions"><button class="dr-btn dr-dl" onclick="downloadDrift(' + index + ')">⬇ Save</button><button class="dr-btn dr-del" onclick="deleteDrift(' + index + ')">✕ Remove</button></div>';
-    container.appendChild(card);
-  });
+  
+  gallery.innerHTML = drifts.map((drift, index) => `
+    <div class="drift-card" style="background:#FFFFFF; border:1px solid #EAE4DC; border-radius:12px; padding:12px; margin:10px 0; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <strong style="color:#5B8266;">Drift #${index + 1}</strong>
+        <small style="color:#6E7570;">${new Date(drift.date || Date.now()).toLocaleDateString()}</small>
+      </div>
+      ${drift.image ? `<img src="${drift.image}" style="width:100%; border-radius:8px; margin-bottom:10px;" alt="Saved Drift">` : ''}
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button onclick="reEditDrift(${index})" style="flex:1; padding:7px; background:#5B8266; color:#fff; border:none; border-radius:7px; cursor:pointer; font-size:0.85rem;">🎨 Re-Edit</button>
+        <button onclick="downloadDrift(${index})" style="flex:1; padding:7px; background:#F2C94C; color:#2D312E; border:none; border-radius:7px; cursor:pointer; font-size:0.85rem;">💾 Download</button>
+        <button onclick="deleteDrift(${index})" style="padding:7px 10px; background:#f5f5f5; color:#D97D54; border:1px solid #D97D54; border-radius:7px; cursor:pointer; font-size:0.85rem;">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function reEditDrift(index) {
+  const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+  if (!drifts[index]) return;
+  localStorage.setItem('rivlum_restore', JSON.stringify(drifts[index]));
+  window.location.href = 'free-edit.html?restore=1';
 }
 
 function downloadDrift(index) {
-  var d = drifts[index];
-  var img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.src = photos[d.challenge] || defaultPhoto;
-  img.onload = function() {
-    var c = document.createElement('canvas');
-    c.width = img.naturalWidth;
-    c.height = img.naturalHeight;
-    var ctx = c.getContext('2d');
-    var filterString = '';
-    Object.keys(d.filters).forEach(function(k) {
-      var v = d.filters[k];
-      if (k === 'hue-rotate') filterString += 'hue-rotate(' + v + 'deg) ';
-      else if (k === 'blur') filterString += 'blur(' + v + 'px) ';
-      else filterString += k + '(' + v + '%) ';
-    });
-    ctx.filter = filterString;
-    ctx.drawImage(img, 0, 0);
-    var a = document.createElement('a');
-    a.download = 'rivlum-drift-' + (index + 1) + '.png';
-    a.href = c.toDataURL();
-    a.click();
-  };
+  const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+  if (!drifts[index] || !drifts[index].image) return alert("No image data saved for this drift.");
+  const link = document.createElement('a');
+  link.download = `rivlum-drift-${index + 1}.png`;
+  link.href = drifts[index].image;
+  link.click();
 }
 
 function deleteDrift(index) {
-  if (confirm('Return this star to the universe?')) {
-    drifts.splice(index, 1);
-    localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
-    render();
-  }
+  if (!confirm("Delete this Drift forever?")) return;
+  const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+  drifts.splice(index, 1);
+  localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
+  renderDriftGallery();
 }
 
-render();
+window.addEventListener('load', renderDriftGallery);
 </script>
 </body>
 </html>
