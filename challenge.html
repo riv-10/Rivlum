@@ -100,6 +100,45 @@
   <button id="shareBtn" class="btn btn-secondary" onclick="shareEdit()" style="padding: 6px 12px; font-size: 0.85rem;">📱 Share</button>
 </div>
 }
+  <!-- TEXT OVERLAY PANEL -->
+<div class="text-overlay-panel" style="background: #FFFFFF; border: 1px solid #EAE4DC; border-radius: 10px; padding: 10px; margin: 8px 0; font-size: 0.85rem;">
+  <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+    <strong style="color: #5B8266;">✍️ Add Text</strong>
+    <button onclick="toggleTextPanel()" style="margin-left:auto; background:none; border:none; cursor:pointer; font-size:1rem;">▾</button>
+  </div>
+  <div id="textPanelBody" style="display:none;">
+    <input type="text" id="overlayText" placeholder="Type your caption..." maxlength="50" 
+      style="width:100%; padding:6px 8px; border:1px solid #EAE4DC; border-radius:6px; margin-bottom:6px; font-family: inherit;">
+    
+    <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px;">
+      <label style="font-size:0.8rem;">Size:
+        <select id="textSize" style="padding:3px 6px; border-radius:5px; border:1px solid #EAE4DC;">
+          <option value="24">Small</option>
+          <option value="40" selected>Medium</option>
+          <option value="60">Large</option>
+          <option value="90">Banner</option>
+        </select>
+      </label>
+      <label style="font-size:0.8rem;">Position:
+        <select id="textPos" style="padding:3px 6px; border-radius:5px; border:1px solid #EAE4DC;">
+          <option value="top">Top</option>
+          <option value="center" selected>Center</option>
+          <option value="bottom">Bottom</option>
+        </select>
+      </label>
+    </div>
+    
+    <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+      <span style="font-size:0.8rem;">Color:</span>
+      <button class="colorChip" data-color="#FFFFFF" style="background:#fff; border:2px solid #ccc; width:22px; height:22px; border-radius:50%; cursor:pointer;"></button>
+      <button class="colorChip" data-color="#2D312E" style="background:#2D312E; border:2px solid transparent; width:22px; height:22px; border-radius:50%; cursor:pointer;"></button>
+      <button class="colorChip" data-color="#F2C94C" style="background:#F2C94C; border:2px solid transparent; width:22px; height:22px; border-radius:50%; cursor:pointer;"></button>
+      <button class="colorChip" data-color="#5B8266" style="background:#5B8266; border:2px solid transparent; width:22px; height:22px; border-radius:50%; cursor:pointer;"></button>
+      <button class="colorChip" data-color="#D97D54" style="background:#D97D54; border:2px solid transparent; width:22px; height:22px; border-radius:50%; cursor:pointer;"></button>
+      <button onclick="clearOverlayText()" style="margin-left:auto; background:#f5f5f5; border:1px solid #ddd; padding:3px 8px; border-radius:5px; font-size:0.75rem; cursor:pointer;">Clear</button>
+    </div>
+  </div>
+</div>
 
 /* --- SLIDERS (Scroll smoothly underneath) --- */
 .slider-group {
