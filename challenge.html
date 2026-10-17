@@ -53,13 +53,36 @@
 
     <div class="action-bar">
       <button id="undoBtn" class="btn" onclick="undoEdit()" disabled>↺ Undo</button>
-      <button id="redoBtn" class="btn" onclick="redoEdit()" disabled>↻ Redo</button>
+      <button id="redoBtn" class="btn" onclick="redoEdit()" disabled>↻ Redo</button> 
+      <button class="btn" onclick="rotateCanvas()">🔄 Rotate 90°</button>
+<button class="btn" onclick="toggleStickerPanel()">😍 Add Sticker</button>
       <button class="btn" onclick="resetSliders()">Reset</button>
       <button class="btn btn-accent" onclick="checkDrift()">✨ Check Drift</button>
       <button class="btn btn-primary" onclick="saveDrift()">💾 Save</button>
       <button class="btn" onclick="exportWatermarkedImage()">⬇ Download</button>
       <button class="btn" onclick="shareEdit()">📱 Share</button>
     </div>
+
+    <!-- STICKER / EMOJI PANEL -->
+<div id="stickerPanel" class="text-overlay-panel" style="display:none; background:#fff; border:1px solid #EAE4DC; border-radius:10px; padding:10px; margin:8px 0; font-size:0.85rem;">
+  <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+    <strong style="color:#5B8266;">😍 Pick a Sticker</strong>
+    <button onclick="toggleStickerPanel()" style="margin-left:auto; background:none; border:none; cursor:pointer; font-size:1rem;">✕</button>
+  </div>
+  <div style="display:flex; gap:10px; font-size:1.5rem; flex-wrap:wrap;">
+    <span onclick="addSticker('⭐')" style="cursor:pointer;">⭐</span>
+    <span onclick="addSticker('🌅')" style="cursor:pointer;">🌅</span>
+    <span onclick="addSticker('🌿')" style="cursor:pointer;">🌿</span>
+    <span onclick="addSticker('⚡')" style="cursor:pointer;">⚡</span>
+    <span onclick="addSticker('🕶️')" style="cursor:pointer;">🕶️</span>
+    <span onclick="addSticker('☁️')" style="cursor:pointer;">☁️</span>
+    <span onclick="addSticker('🔥')" style="cursor:pointer;">🔥</span>
+    <span onclick="addSticker('🎨')" style="cursor:pointer;">🎨</span>
+  </div>
+  <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
+    <button onclick="clearStickers()" style="background:#f5f5f5; border:1px solid #ddd; padding:4px 10px; border-radius:5px; font-size:0.75rem; cursor:pointer;">Clear Stickers</button>
+  </div>
+</div>
 
     <!-- Text Overlay Panel -->
     <div class="text-overlay-panel">
@@ -345,6 +368,55 @@ async function shareEdit() {
   const data = { title:'RIVLUM', text:'Check out this photo I edited on RIVLUM! Try it:', url: window.location.origin };
   if (navigator.share) { try { await navigator.share(data); } catch(e){} }
   else window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(data.text + ' ' + data.url)}`, '_blank');
+}
+  // ==========================================
+// RIVLUM SESSION 3: ROTATION & STICKER ENGINE
+// ==========================================
+
+let rotationAngle = 0; // 0, 90, 180, 270 degrees
+let activeStickers = [];
+
+function rotateCanvas() {
+  rotationAngle = (rotationAngle + 90) % 360;
+  renderImage();
+  if (typeof saveState === 'function') saveState();
+}
+
+function toggleStickerPanel() {
+  const panel = document.getElementById('stickerPanel');
+  panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';
+}
+
+function addSticker(emoji) {
+  activeStickers.push({
+    emoji: emoji,
+    x: canvas.width / 2 + (Math.random() * 40 - 20),
+    y: canvas.height / 2 + (Math.random() * 40 - 20),
+    size: Math.max(32, Math.round(canvas.width * 0.08))
+  });
+  renderImage();
+  if (typeof saveState === 'function') saveState();
+}
+
+function clearStickers() {
+  activeStickers = [];
+  renderImage();
+  if (typeof saveState === 'function') saveState();
+}
+
+// Render Rotation & Stickers (Call this inside your main renderImage function)
+function applyRotationAndStickers(ctx, canvas, img) {
+  // Draw active stickers
+  if (activeStickers.length > 0) {
+    ctx.save();
+    activeStickers.forEach(st => {
+      ctx.font = `${st.size}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(st.emoji, st.x, st.y);
+    });
+    ctx.restore();
+  }
 }
 </script>
 </body>
