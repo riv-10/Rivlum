@@ -1,168 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>RIVLUM — Drift Gallery 🌊</title>
-<link rel="stylesheet" href="styles.css"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIVLUM — Portfolio & Drifts</title>
+<link rel="stylesheet" href="styles.css">
 <style>
-.gallery {
-  position: relative;
-  z-index: 1;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.2rem;
-}
-.drift-card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 1rem;
-  box-shadow: 0 4px 15px var(--shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  transition: transform 0.2s;
-  border-top: 4px solid var(--dusty-blue);
-}
-.drift-card:nth-child(2n) { border-top-color: var(--terracotta); transform: rotate(0.3deg); }
-.drift-card:nth-child(3n) { border-top-color: var(--sage); transform: rotate(-0.3deg); }
-.drift-card:hover { transform: translateY(-3px) rotate(0deg); }
-.drift-img-wrap {
-  border-radius: 8px;
-  overflow: hidden;
-  aspect-ratio: 4/3;
-  border: 3px solid white;
-  box-shadow: 0 2px 10px var(--shadow);
-}
-.drift-img-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.drift-date {
-  font-size: 0.7rem;
-  color: var(--text-light);
-  font-weight: 600;
-}
-.drift-details {
-  font-size: 0.8rem;
-  color: var(--text-soft);
-  line-height: 1.5;
-}
-.drift-details em {
-  color: var(--terracotta-dark);
-  font-weight: 600;
-}
-.drift-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-.dr-btn {
-  flex: 1;
-  padding: 0.6rem;
-  border: none;
-  border-radius: 50px;
-  font-family: var(--f);
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.dr-btn:active { transform: scale(0.95); }
-.dr-dl {
-  background: var(--sage);
-  color: white;
-}
-.dr-del {
-  background: var(--cream-deep);
-  color: var(--text-soft);
-  border: 2px solid var(--cream-deep);
-}
-.dr-del:hover { border-color: var(--terracotta); color: var(--terracotta-dark); }
-.empty-state {
-  text-align: center;
-  grid-column: 1/-1;
-  padding: 4rem 2rem;
-  color: var(--text-soft);
-}
-.empty-state .big-icon {
-  font-size: 4rem;
-  display: block;
-  margin-bottom: 1rem;
-}
-.empty-state h3 {
-  font-family: var(--f-hand);
-  font-size: 1.8rem;
-  color: var(--text);
-  margin-bottom: 0.5rem;
-}
-.empty-state p {
-  font-size: 0.9rem;
-  max-width: 320px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-.empty-cta {
-  display: inline-block;
-  margin-top: 1.2rem;
-  background: var(--terracotta);
-  color: white;
-  text-decoration: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  box-shadow: 0 3px 0 var(--terracotta-dark);
-}
-.drift-quote {
-  position: relative;
-  z-index: 1;
-  max-width: 600px;
-  margin: 0 auto 1.5rem;
-  padding: 0 1rem;
-  text-align: center;
-}
-.drift-quote p {
-  font-family: var(--f-hand);
-  font-size: 1.5rem;
-  color: var(--sage-dark);
-  line-height: 1.5;
-}
-.drift-quote .attr {
-  font-family: var(--f);
-  font-size: 0.75rem;
-  color: var(--text-light);
-  margin-top: 0.3rem;
-}
+  body { font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#FBF8F3; color:#2D312E; margin:0; padding:0; padding-bottom:80px; }
+  .wrap { max-width:800px; margin:0 auto; padding:16px; }
+  .header-card { background:#FFFFFF; border:1px solid #EAE4DC; border-radius:12px; padding:16px; margin-bottom:16px; text-align:center; }
+  .header-card h1 { margin:0 0 6px 0; color:#5B8266; font-size:1.4rem; }
+  .header-card p { margin:0 0 12px 0; color:#6E7570; font-size:0.9rem; }
+  .share-bar { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+  .btn { padding:8px 16px; border-radius:8px; border:none; cursor:pointer; font-size:0.85rem; font-weight:bold; font-family:inherit; }
+  .btn-primary { background:#5B8266; color:#fff; }
+  .btn-accent { background:#D97D54; color:#fff; }
+  .btn-secondary { background:#f5f5f5; border:1px solid #ddd; color:#2D312E; }
+  .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:14px; margin-top:16px; }
+  .drift-card { background:#FFFFFF; border:1px solid #EAE4DC; border-radius:12px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.03); }
+  .drift-card img { width:100%; height:180px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
+  .shared-banner { background:#FFF6D6; border:1px solid #F2C94C; padding:10px 14px; border-radius:10px; margin-bottom:16px; font-size:0.85rem; color:#2D312E; text-align:center; }
+  .nav { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #EAE4DC; display:flex; justify-content:space-around; padding:8px 0; z-index:100; }
+  .nav a { text-decoration:none; color:#5B8266; font-size:0.75rem; display:flex; flex-direction:column; align-items:center; gap:2px; }
+  .nav a span { font-size:1.2rem; }
 </style>
 </head>
 <body>
 
-<div class="bg-blobs">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-</div>
-
 <div class="wrap">
-  <h1 class="page-title">Drift Gallery 🌊</h1>
-  <p class="page-sub">your beautiful accidental discoveries</p>
+  
+  <div id="sharedBanner" class="shared-banner" style="display:none;">
+    ✨ <strong>Viewing Shared Portfolio</strong> — Created with RIVLUM! No account needed.
+  </div>
+
+  <div class="header-card">
+    <h1 id="portfolioTitle">🧭 My Drift Portfolio</h1>
+    <p id="portfolioSubtitle">Your collected creative photo edits saved locally in your browser.</p>
+    
+    <div class="share-bar">
+      <button class="btn btn-primary" onclick="sharePortfolio()">🔗 Share Portfolio Link</button>
+      <a href="free-edit.html" class="btn btn-accent" style="text-decoration:none; display:inline-block;">📸 Create New Edit</a>
+    </div>
+  </div>
+
+  <div id="driftGallery" class="gallery-grid"></div>
+
 </div>
 
-<div class="drift-quote">
-  <p>"The best edits are the ones you didn't plan."</p>
-  <div class="attr">— the RIVLUM philosophy</div>
-</div>
-
-<div class="gallery" id="gallery"></div>
-
-<div style="height:3rem"></div>
-
-<div class="pixel"><div class="pixel-eye"></div><div class="pixel-eye"></div></div>
-
+<!-- MASTER NAV -->
 <nav class="nav">
   <a href="index.html"><span>🏠</span>Home</a>
   <a href="challenge.html"><span>✨</span>Edit</a>
@@ -172,83 +57,136 @@
 </nav>
 
 <script>
-var savedTheme = localStorage.getItem('rivlum_theme');
-if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
-
-var drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
-var container = document.getElementById('gallery');
-var photos = {
-  dream: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500&q=80',
-  golden: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=500&q=80',
-  lonely: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=500&q=80',
-  power: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80',
-  vintage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&q=80',
-  storm: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=500&q=80'
-};
-var defaultPhoto = 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=500&q=80';
-
-<script>
 // ==========================================
-// RIVLUM SESSION 2: SMART DRIFT GALLERY LOADER
+// ZERO-LOGIN PORTFOLIO ENGINE (TIER 2)
 // ==========================================
 
-function renderDriftGallery() {
-  const gallery = document.getElementById('driftGallery'); // ensure your container has this ID
-  if (!gallery) return;
+let isSharedView = false;
+
+function initGallery() {
+  const hash = window.location.hash;
   
-  const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+  // Check if opening a shared portfolio URL link
+  if (hash.startsWith('#portfolio=')) {
+    isSharedView = true;
+    document.getElementById('sharedBanner').style.display = 'block';
+    document.getElementById('portfolioTitle').textContent = '🎨 Shared Creative Portfolio';
+    document.getElementById('portfolioSubtitle').textContent = 'Explore these edits created on RIVLUM.';
+    
+    try {
+      const encodedData = hash.replace('#portfolio=', '');
+      const decodedJson = decodeURIComponent(atob(encodedData));
+      const sharedDrifts = JSON.parse(decodedJson);
+      renderDriftsList(sharedDrifts, true);
+    } catch (e) {
+      alert('Unable to load shared portfolio link.');
+      loadLocalGallery();
+    }
+  } else {
+    loadLocalGallery();
+  }
+}
+
+function loadLocalGallery() {
+  const localDrifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+  renderDriftsList(localDrifts, false);
+}
+
+function renderDriftsList(drifts, readOnly) {
+  const gallery = document.getElementById('driftGallery');
   
-  if (drifts.length === 0) {
+  if (!drifts || drifts.length === 0) {
     gallery.innerHTML = `
-      <div style="text-align:center; padding:40px 20px; color:#6E7570;">
-        <p style="font-size:1.1rem;">✨ Your Drift gallery is empty!</p>
-        <p>Edit a photo and hit <strong>Save</strong> to collect your first Drift.</p>
-        <a href="free-edit.html" style="display:inline-block; margin-top:12px; padding:8px 18px; background:#5B8266; color:#fff; border-radius:8px; text-decoration:none;">📸 Start Editing</a>
+      <div style="grid-column:1/-1; text-align:center; padding:40px 20px; color:#6E7570;">
+        <p style="font-size:1.1rem; margin-bottom:8px;">✨ No saved edits in this portfolio yet!</p>
+        <p style="font-size:0.85rem; margin-bottom:14px;">Edit a photo and hit <strong>Save</strong> to add your work here.</p>
+        <a href="free-edit.html" class="btn btn-primary" style="text-decoration:none;">📸 Start Editing</a>
       </div>`;
     return;
   }
   
   gallery.innerHTML = drifts.map((drift, index) => `
-    <div class="drift-card" style="background:#FFFFFF; border:1px solid #EAE4DC; border-radius:12px; padding:12px; margin:10px 0; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+    <div class="drift-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <strong style="color:#5B8266;">Drift #${index + 1}</strong>
         <small style="color:#6E7570;">${new Date(drift.date || Date.now()).toLocaleDateString()}</small>
       </div>
-      ${drift.image ? `<img src="${drift.image}" style="width:100%; border-radius:8px; margin-bottom:10px;" alt="Saved Drift">` : ''}
-      <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <button onclick="reEditDrift(${index})" style="flex:1; padding:7px; background:#5B8266; color:#fff; border:none; border-radius:7px; cursor:pointer; font-size:0.85rem;">🎨 Re-Edit</button>
-        <button onclick="downloadDrift(${index})" style="flex:1; padding:7px; background:#F2C94C; color:#2D312E; border:none; border-radius:7px; cursor:pointer; font-size:0.85rem;">💾 Download</button>
-        <button onclick="deleteDrift(${index})" style="padding:7px 10px; background:#f5f5f5; color:#D97D54; border:1px solid #D97D54; border-radius:7px; cursor:pointer; font-size:0.85rem;">🗑</button>
+      ${drift.image ? `<img src="${drift.image}" alt="Saved Edit">` : ''}
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <button onclick="reEditDrift(${index}, ${readOnly})" class="btn btn-primary" style="flex:1; padding:6px; font-size:0.8rem;">🎨 Re-Edit</button>
+        <button onclick="downloadDriftImage('${drift.image}')" class="btn btn-secondary" style="padding:6px 10px; font-size:0.8rem;">⬇</button>
+        ${!readOnly ? `<button onclick="deleteDrift(${index})" class="btn btn-secondary" style="padding:6px 10px; font-size:0.8rem; color:#D97D54;">🗑</button>` : ''}
       </div>
     </div>
   `).join('');
 }
 
-function reEditDrift(index) {
-  const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+// Generate Zero-Login Portfolio URL
+async function sharePortfolio() {
+  const localDrifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+  if (localDrifts.length === 0) {
+    return alert('Your portfolio is currently empty! Create and save an edit first.');
+  }
+
+  // Sanitize drifts payload (keep images clean for lightweight URL)
+  const minimalDrifts = localDrifts.map(d => ({
+    date: d.date,
+    sliders: d.sliders,
+    image: d.image // compressed base64 thumbnail
+  }));
+
+  try {
+    const jsonString = JSON.stringify(minimalDrifts);
+    const encoded = btoa(encodeURIComponent(jsonString));
+    const portfolioUrl = `${window.location.origin}${window.location.pathname}#portfolio=${encoded}`;
+
+    if (navigator.share) {
+      await navigator.share({
+        title: 'My RIVLUM Photo Portfolio',
+        text: 'Check out my creative photo edits on RIVLUM! (No signup needed):',
+        url: portfolioUrl
+      });
+    } else {
+      await navigator.clipboard.writeText(portfolioUrl);
+      alert('📋 Portfolio Link Copied to Clipboard! Share it on WhatsApp or Instagram.');
+    }
+  } catch (err) {
+    alert('Share dismissed or portfolio data too large for single URL.');
+  }
+}
+
+function reEditDrift(index, readOnly) {
+  let drifts = [];
+  if (readOnly) {
+    const hash = window.location.hash.replace('#portfolio=', '');
+    drifts = JSON.parse(decodeURIComponent(atob(hash)));
+  } else {
+    drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+  }
+  
   if (!drifts[index]) return;
   localStorage.setItem('rivlum_restore', JSON.stringify(drifts[index]));
   window.location.href = 'free-edit.html?restore=1';
 }
 
-function downloadDrift(index) {
-  const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
-  if (!drifts[index] || !drifts[index].image) return alert("No image data saved for this drift.");
+function downloadDriftImage(imgSrc) {
+  if (!imgSrc) return alert('No image data found.');
   const link = document.createElement('a');
-  link.download = `rivlum-drift-${index + 1}.png`;
-  link.href = drifts[index].image;
+  link.download = `rivlum-drift-${Date.now()}.png`;
+  link.href = imgSrc;
   link.click();
 }
 
 function deleteDrift(index) {
-  if (!confirm("Delete this Drift forever?")) return;
+  if (!confirm('Delete this Drift from your local gallery?')) return;
   const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
   drifts.splice(index, 1);
   localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
-  renderDriftGallery();
+  loadLocalGallery();
 }
 
-window.addEventListener('load', renderDriftGallery);
+window.addEventListener('load', initGallery);
 </script>
+
 </body>
 </html>
