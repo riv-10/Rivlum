@@ -208,6 +208,8 @@ function renderImage() {
     ctx.fillStyle = grad;
     ctx.fillRect(0,0,canvas.width,canvas.height);
   }
+  applyRotationAndStickers(ctx, canvas, currentImage);
+
   drawTextOverlayOnCanvas(ctx, canvas);
 }
 
