@@ -40,8 +40,7 @@
 <body>
 
 <div class="wrap">
-  
-  <!-- LEFT STICKY: PHOTO + ACTIONS -->
+  <!-- LEFT/TOP: PHOTO + ACTIONS -->
   <div class="sticky-top">
     <div class="target-badge" id="targetBadge">🎯 Target: Golden Hour</div>
     <div class="canvas-frame">
@@ -53,73 +52,54 @@
 
     <div class="action-bar">
       <button id="undoBtn" class="btn" onclick="undoEdit()" disabled>↺ Undo</button>
-      <button id="redoBtn" class="btn" onclick="redoEdit()" disabled>↻ Redo</button> 
-      <button class="btn" onclick="rotateCanvas()">🔄 Rotate 90°</button>
-<button class="btn" onclick="toggleStickerPanel()">😍 Add Sticker</button>
+      <button id="redoBtn" class="btn" onclick="redoEdit()" disabled>↻ Redo</button>
       <button class="btn" onclick="resetSliders()">Reset</button>
       <button class="btn btn-accent" onclick="checkDrift()">✨ Check Drift</button>
       <button class="btn btn-primary" onclick="saveDrift()">💾 Save</button>
       <button class="btn" onclick="exportWatermarkedImage()">⬇ Download</button>
+      <button class="btn" onclick="rotateCanvas()">🔄 Rotate</button>
+      <button class="btn" onclick="toggleStickerPanel()">😍 Stickers</button>
       <button class="btn" onclick="shareEdit()">📱 Share</button>
     </div>
 
-    <!-- STICKER / EMOJI PANEL -->
-<div id="stickerPanel" class="text-overlay-panel" style="display:none; background:#fff; border:1px solid #EAE4DC; border-radius:10px; padding:10px; margin:8px 0; font-size:0.85rem;">
-  <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
-    <strong style="color:#5B8266;">😍 Pick a Sticker</strong>
-    <button onclick="toggleStickerPanel()" style="margin-left:auto; background:none; border:none; cursor:pointer; font-size:1rem;">✕</button>
-  </div>
-  <div style="display:flex; gap:10px; font-size:1.5rem; flex-wrap:wrap;">
-    <span onclick="addSticker('⭐')" style="cursor:pointer;">⭐</span>
-    <span onclick="addSticker('🌅')" style="cursor:pointer;">🌅</span>
-    <span onclick="addSticker('🌿')" style="cursor:pointer;">🌿</span>
-    <span onclick="addSticker('⚡')" style="cursor:pointer;">⚡</span>
-    <span onclick="addSticker('🕶️')" style="cursor:pointer;">🕶️</span>
-    <span onclick="addSticker('☁️')" style="cursor:pointer;">☁️</span>
-    <span onclick="addSticker('🔥')" style="cursor:pointer;">🔥</span>
-    <span onclick="addSticker('🎨')" style="cursor:pointer;">🎨</span>
-  </div>
-  <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
-    <button onclick="clearStickers()" style="background:#f5f5f5; border:1px solid #ddd; padding:4px 10px; border-radius:5px; font-size:0.75rem; cursor:pointer;">Clear Stickers</button>
-  </div>
-</div>
-
-    <!-- Text Overlay Panel -->
+    <!-- TEXT PANEL -->
     <div class="text-overlay-panel">
       <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
         <strong style="color:#5B8266;">✍️ Add Text</strong>
         <button onclick="toggleTextPanel()" style="margin-left:auto; background:none; border:none; cursor:pointer; font-size:1rem;">▾</button>
       </div>
       <div id="textPanelBody" style="display:none;">
-        <input type="text" id="overlayText" placeholder="Type your caption..." maxlength="50"
-          style="width:100%; padding:6px 8px; border:1px solid #EAE4DC; border-radius:6px; margin-bottom:6px; font-family:inherit;">
+        <input type="text" id="overlayText" placeholder="Type your caption..." maxlength="50" style="width:100%; padding:6px 8px; border:1px solid #EAE4DC; border-radius:6px; margin-bottom:6px; font-family:inherit;">
         <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px;">
-          <label style="font-size:0.8rem;">Size:
-            <select id="textSize" style="padding:3px 6px; border-radius:5px; border:1px solid #EAE4DC;">
-              <option value="24">Small</option>
-              <option value="40" selected>Medium</option>
-              <option value="60">Large</option>
-              <option value="90">Banner</option>
-            </select>
-          </label>
-          <label style="font-size:0.8rem;">Position:
-            <select id="textPos" style="padding:3px 6px; border-radius:5px; border:1px solid #EAE4DC;">
-              <option value="top">Top</option>
-              <option value="center" selected>Center</option>
-              <option value="bottom">Bottom</option>
-            </select>
-          </label>
+          <label style="font-size:0.8rem;">Size: <select id="textSize" style="padding:3px; border-radius:5px;"><option value="24">Small</option><option value="40" selected>Medium</option><option value="60">Large</option></select></label>
+          <label style="font-size:0.8rem;">Pos: <select id="textPos" style="padding:3px; border-radius:5px;"><option value="top">Top</option><option value="center" selected>Center</option><option value="bottom">Bottom</option></select></label>
         </div>
         <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
           <span style="font-size:0.8rem;">Color:</span>
           <button class="colorChip" data-color="#FFFFFF" style="background:#fff; border:2px solid #ccc;"></button>
           <button class="colorChip" data-color="#2D312E" style="background:#2D312E; border:2px solid transparent;"></button>
           <button class="colorChip" data-color="#F2C94C" style="background:#F2C94C; border:2px solid transparent;"></button>
-          <button class="colorChip" data-color="#5B8266" style="background:#5B8266; border:2px solid transparent;"></button>
           <button class="colorChip" data-color="#D97D54" style="background:#D97D54; border:2px solid transparent;"></button>
           <button onclick="clearOverlayText()" style="margin-left:auto; background:#f5f5f5; border:1px solid #ddd; padding:3px 8px; border-radius:5px; font-size:0.75rem; cursor:pointer;">Clear</button>
         </div>
       </div>
+    </div>
+
+    <!-- STICKER PANEL -->
+    <div id="stickerPanel" class="text-overlay-panel" style="display:none;">
+      <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+        <strong style="color:#5B8266;">😍 Pick a Sticker</strong>
+        <button onclick="toggleStickerPanel()" style="margin-left:auto; background:none; border:none; cursor:pointer;">✕</button>
+      </div>
+      <div style="display:flex; gap:10px; font-size:1.5rem; flex-wrap:wrap;">
+        <span onclick="addSticker('⭐')" style="cursor:pointer;">⭐</span>
+        <span onclick="addSticker('🌅')" style="cursor:pointer;">🌅</span>
+        <span onclick="addSticker('🌿')" style="cursor:pointer;">🌿</span>
+        <span onclick="addSticker('⚡')" style="cursor:pointer;">⚡</span>
+        <span onclick="addSticker('🕶️')" style="cursor:pointer;">🕶️</span>
+        <span onclick="addSticker('☁️')" style="cursor:pointer;">☁️</span>
+      </div>
+      <button onclick="clearStickers()" style="margin-top:8px; padding:4px 10px; font-size:0.75rem;">Clear Stickers</button>
     </div>
   </div>
 
@@ -132,17 +112,16 @@
     <div class="slider-group"><label>Shadows <span id="val-shadows">0</span></label><input type="range" id="shadows" min="-100" max="100" value="0" data-default="0"></div>
 
     <div class="section-title">🎨 Color</div>
-    <!-- BLEND MODE SELECTOR -->
-<div class="slider-group">
-  <label>Blend Mode <small style="color:#6E7570;">(Color Layer Mix)</small></label>
-  <select id="blendMode" style="width:100%; padding:6px 8px; border-radius:6px; border:1px solid #EAE4DC; font-family:inherit; background:#fff; font-size:0.85rem; color:#2D312E;">
-    <option value="source-over">Normal (Standard)</option>
-    <option value="overlay" selected>Overlay (Cinematic Contrast)</option>
-    <option value="multiply">Multiply (Rich & Deep Shadows)</option>
-    <option value="screen">Screen (Bright & Dreamy Glow)</option>
-    <option value="soft-light">Soft Light (Subtle Atmosphere)</option>
-  </select>
-</div>
+    <!-- BLEND MODE -->
+    <div class="slider-group">
+      <label>Blend Mode</label>
+      <select id="blendMode" style="width:100%; padding:6px; border-radius:6px; border:1px solid #EAE4DC; font-family:inherit;">
+        <option value="source-over">Normal (Standard)</option>
+        <option value="overlay" selected>Overlay (Cinematic)</option>
+        <option value="multiply">Multiply (Deep Shadows)</option>
+        <option value="screen">Screen (Dreamy Glow)</option>
+      </select>
+    </div>
     <div class="slider-group"><label>Temperature <span id="val-temp">0</span></label><input type="range" id="temp" min="-100" max="100" value="0" data-default="0"></div>
     <div class="slider-group"><label>Tint <span id="val-tint">0</span></label><input type="range" id="tint" min="-100" max="100" value="0" data-default="0"></div>
     <div class="slider-group"><label>Saturation <span id="val-saturation">0</span></label><input type="range" id="saturation" min="-100" max="100" value="0" data-default="0"></div>
@@ -154,7 +133,6 @@
   </div>
 </div>
 
-<!-- NAV -->
 <nav class="nav">
   <a href="index.html"><span>🏠</span>Home</a>
   <a href="challenge.html"><span>✨</span>Edit</a>
@@ -164,26 +142,24 @@
 </nav>
 
 <script>
-// ============ RIVLUM MAIN ENGINE ============
+// ==========================================
+// RIVLUM ENGINE (CORS SAFE)
+// ==========================================
 const canvas = document.getElementById('editorCanvas');
 const ctx = canvas.getContext('2d');
 let currentImage = new Image();
-currentImage.crossOrigin = "anonymous";
+currentImage.crossOrigin = "anonymous"; 
 
-// Default challenge reference image
-const challenges = {
-  golden: { name: "Golden Hour", img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800", ref:{exposure:20,contrast:15,highlights:-10,shadows:20,temp:40,tint:5,saturation:15,vibrance:20,clarity:10,vignette:15} }
-};
-let currentCh = challenges.golden;
+const currentCh = { name: "Golden Hour", img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80", ref:{exposure:20,contrast:15,highlights:-10,shadows:20,temp:40,tint:5,saturation:15,vibrance:20,clarity:10,vignette:15} };
 
 currentImage.onload = () => {
   canvas.width = currentImage.naturalWidth;
   canvas.height = currentImage.naturalHeight;
   renderImage();
+  setTimeout(saveState, 300);
 };
 currentImage.src = currentCh.img;
 
-// Upload handler
 document.getElementById('uploadInput').addEventListener('change', e => {
   const file = e.target.files[0];
   if (!file) return;
@@ -192,16 +168,16 @@ document.getElementById('uploadInput').addEventListener('change', e => {
   reader.readAsDataURL(file);
 });
 
-// Slider listeners
 const sliderIds = ['exposure','contrast','highlights','shadows','temp','tint','saturation','vibrance','clarity','vignette'];
 sliderIds.forEach(id => {
   const el = document.getElementById(id);
-  el.addEventListener('input', () => {
-    document.getElementById('val-'+id).textContent = el.value;
-    renderImage();
-  });
+  el.addEventListener('input', () => { document.getElementById('val-'+id).textContent = el.value; renderImage(); });
   el.addEventListener('change', saveState);
 });
+document.getElementById('blendMode').addEventListener('change', () => { renderImage(); saveState(); });
+
+let activeStickers = [];
+let overlayState = { text:'', size:40, position:'center', color:'#FFFFFF' };
 
 function renderImage() {
   if (!currentImage.src) return;
@@ -210,34 +186,25 @@ function renderImage() {
   const v = {};
   sliderIds.forEach(id => v[id] = parseInt(document.getElementById(id).value));
   
-  // Build CSS filter string
+  // Filters
   const brightness = 1 + v.exposure/100;
   const contrast = 1 + v.contrast/100;
   const saturate = 1 + v.saturation/100;
   const hueRot = v.tint * 1.2;
-  
   ctx.filter = `brightness(${brightness}) contrast(${contrast}) saturate(${saturate}) hue-rotate(${hueRot}deg)`;
   ctx.drawImage(currentImage, 0, 0);
   ctx.filter = 'none';
   
-    // Dynamic Blend Mode Engine
-  const blendMode = document.getElementById('blendMode') ? document.getElementById('blendMode').value : 'overlay';
-  if (v.temp !== 0 || blendMode !== 'source-over') {
+  // Blend Mode
+  const bm = document.getElementById('blendMode').value;
+  if (v.temp !== 0 || bm !== 'source-over') {
     ctx.save();
-    ctx.globalCompositeOperation = blendMode;
-    
-    // Calculate tint fill based on Temperature slider
-    if (v.temp > 0) {
-      ctx.fillStyle = `rgba(255, 170, 80, ${Math.max(0.15, Math.abs(v.temp)/300)})`; // Warm amber
-    } else if (v.temp < 0) {
-      ctx.fillStyle = `rgba(80, 160, 255, ${Math.max(0.15, Math.abs(v.temp)/300)})`; // Cool blue
-    } else {
-      ctx.fillStyle = `rgba(217, 125, 84, 0.18)`; // Subtle terracotta default blend
-    }
-    
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = bm;
+    if (v.temp > 0) ctx.fillStyle = `rgba(255,170,80,${Math.max(0.1, Math.abs(v.temp)/300)})`;
+    else if (v.temp < 0) ctx.fillStyle = `rgba(80,160,255,${Math.max(0.1, Math.abs(v.temp)/300)})`;
+    else ctx.fillStyle = `rgba(217,125,84,0.15)`;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
     ctx.restore();
-  }
   }
   
   // Vignette
@@ -245,208 +212,102 @@ function renderImage() {
     const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.width/4, canvas.width/2, canvas.height/2, canvas.width/1.2);
     grad.addColorStop(0,'rgba(0,0,0,0)');
     grad.addColorStop(1,`rgba(0,0,0,${v.vignette/150})`);
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = grad; ctx.fillRect(0,0,canvas.width,canvas.height);
   }
   
-   applyRotationAndStickers(ctx, canvas, currentImage);
-
-  drawTextOverlayOnCanvas(ctx, canvas);
-}
-
-function resetSliders() {
-  sliderIds.forEach(id => {
-    const el = document.getElementById(id);
-    el.value = el.getAttribute('data-default') || 0;
-    document.getElementById('val-'+id).textContent = el.value;
-  });
-  renderImage();
-  saveState();
-}
-
-function checkDrift() {
-  let ds = 0;
-  sliderIds.forEach(id => {
-    const v = parseInt(document.getElementById(id).value);
-    const ref = currentCh.ref[id] || 0;
-    ds += Math.abs(v - ref) / 200;
-  });
-  if (ds < 0.6) {
-    alert("⭐ Star Unlocked! Perfect Match.");
-    const stars = JSON.parse(localStorage.getItem('rivlum_stars') || '[]');
-    if (!stars.includes(currentCh.name)) {
-      stars.push(currentCh.name);
-      localStorage.setItem('rivlum_stars', JSON.stringify(stars));
-    }
-  } else if (ds > 1.2) {
-    alert("🧭 Creative Drift Discovered! You charted your own style.");
-  } else {
-    alert("Keep tweaking — you're close!");
-  }
-}
-
-function saveDrift() {
-  const sliders = {};
-  sliderIds.forEach(id => sliders[id] = document.getElementById(id).value);
-  const drift = { date: Date.now(), sliders, image: canvas.toDataURL('image/jpeg', 0.7) };
-  const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
-  drifts.push(drift);
-  localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
-  alert('🧡 Drift Saved!');
-}
-
-// ============ UNDO / REDO ============
-let historyStack = [], historyIndex = -1, isRestoring = false;
-function getSlidersState() {
-  const s = {};
-  sliderIds.forEach(id => s[id] = document.getElementById(id).value);
-  return s;
-}
-function saveState() {
-  if (isRestoring) return;
-  if (historyIndex < historyStack.length - 1) historyStack = historyStack.slice(0, historyIndex+1);
-  historyStack.push(getSlidersState());
-  if (historyStack.length > 20) historyStack.shift();
-  historyIndex = historyStack.length - 1;
-  updateUndoRedoUI();
-}
-function undoEdit() { if (historyIndex > 0) { historyIndex--; applyState(historyStack[historyIndex]); } }
-function redoEdit() { if (historyIndex < historyStack.length - 1) { historyIndex++; applyState(historyStack[historyIndex]); } }
-function applyState(state) {
-  isRestoring = true;
-  Object.keys(state).forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.value = state[id]; document.getElementById('val-'+id).textContent = state[id]; }
-  });
-  renderImage();
-  isRestoring = false;
-  updateUndoRedoUI();
-}
-function updateUndoRedoUI() {
-  document.getElementById('undoBtn').disabled = historyIndex <= 0;
-  document.getElementById('redoBtn').disabled = historyIndex >= historyStack.length - 1;
-}
-window.addEventListener('load', () => setTimeout(saveState, 500));
-
-// ============ TEXT OVERLAY ============
-let overlayState = { text:'', size:40, position:'center', color:'#FFFFFF' };
-function toggleTextPanel() {
-  const b = document.getElementById('textPanelBody');
-  b.style.display = b.style.display === 'none' ? 'block' : 'none';
-}
-document.getElementById('overlayText').addEventListener('input', e => { overlayState.text = e.target.value; renderImage(); });
-document.getElementById('textSize').addEventListener('change', e => { overlayState.size = parseInt(e.target.value); renderImage(); });
-document.getElementById('textPos').addEventListener('change', e => { overlayState.position = e.target.value; renderImage(); });
-document.querySelectorAll('.colorChip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    document.querySelectorAll('.colorChip').forEach(c => c.style.border = '2px solid transparent');
-    chip.style.border = '2px solid #5B8266';
-    overlayState.color = chip.getAttribute('data-color');
-    renderImage();
-  });
-});
-function clearOverlayText() { overlayState.text = ''; document.getElementById('overlayText').value = ''; renderImage(); }
-function drawTextOverlayOnCanvas(ctx, canvas) {
-  if (!overlayState.text) return;
-  ctx.save();
-  ctx.font = `bold ${overlayState.size}px 'Atkinson Hyperlegible', Helvetica, Arial, sans-serif`;
-  ctx.fillStyle = overlayState.color;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.shadowColor = 'rgba(0,0,0,0.4)';
-  ctx.shadowBlur = 8;
-  let y;
-  if (overlayState.position === 'top') y = overlayState.size + 20;
-  else if (overlayState.position === 'bottom') y = canvas.height - overlayState.size;
-  else y = canvas.height / 2;
-  ctx.fillText(overlayState.text, canvas.width / 2, y);
-  ctx.restore();
-}
-
-// ============ EXPORT + SHARE ============
-function exportWatermarkedImage() {
-  const exp = document.createElement('canvas');
-  const ec = exp.getContext('2d');
-  exp.width = canvas.width; exp.height = canvas.height;
-  ec.drawImage(canvas, 0, 0);
-  const fs = Math.max(16, Math.round(exp.width * 0.035));
-  const pad = Math.round(fs * 0.8);
-  ec.save();
-  ec.font = `bold ${fs}px 'Atkinson Hyperlegible', sans-serif`;
-  const text = "✨ Made with RIVLUM";
-  const tw = ec.measureText(text).width;
-  const bw = tw + pad*2, bh = fs + pad;
-  const bx = exp.width - bw - pad, by = exp.height - bh - pad;
-  ec.fillStyle = "rgba(45,49,46,0.65)";
-  ec.beginPath();
-  if (ec.roundRect) ec.roundRect(bx,by,bw,bh,8); else ec.rect(bx,by,bw,bh);
-  ec.fill();
-  ec.fillStyle = "#fff"; ec.textBaseline = "middle";
-  ec.fillText(text, bx + pad, by + bh/2);
-  ec.restore();
-  const link = document.createElement('a');
-  link.download = `rivlum-edit-${Date.now()}.png`;
-  link.href = exp.toDataURL('image/png');
-  link.click();
-}
-async function shareEdit() {
-  const data = { title:'RIVLUM', text:'Check out this photo I edited on RIVLUM! Try it:', url: window.location.origin };
-  if (navigator.share) { try { await navigator.share(data); } catch(e){} }
-  else window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(data.text + ' ' + data.url)}`, '_blank');
-}
-  // ==========================================
-// RIVLUM SESSION 3: ROTATION & STICKER ENGINE
-// ==========================================
-
-let rotationAngle = 0; // 0, 90, 180, 270 degrees
-let activeStickers = [];
-
-function rotateCanvas() {
-  rotationAngle = (rotationAngle + 90) % 360;
-  renderImage();
-  if (typeof saveState === 'function') saveState();
-}
-
-function toggleStickerPanel() {
-  const panel = document.getElementById('stickerPanel');
-  panel.style.display = (panel.style.display === 'none') ? 'block' : 'none';
-}
-
-function addSticker(emoji) {
-  activeStickers.push({
-    emoji: emoji,
-    x: canvas.width / 2 + (Math.random() * 40 - 20),
-    y: canvas.height / 2 + (Math.random() * 40 - 20),
-    size: Math.max(32, Math.round(canvas.width * 0.08))
-  });
-  renderImage();
-  if (typeof saveState === 'function') saveState();
-}
-
-function clearStickers() {
-  activeStickers = [];
-  renderImage();
-  if (typeof saveState === 'function') saveState();
-}
-
-// Render Rotation & Stickers (Call this inside your main renderImage function)
-function applyRotationAndStickers(ctx, canvas, img) {
-  // Draw active stickers
+  // Stickers
   if (activeStickers.length > 0) {
     ctx.save();
     activeStickers.forEach(st => {
-      ctx.font = `${st.size}px sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
+      ctx.font = `${st.size}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(st.emoji, st.x, st.y);
     });
     ctx.restore();
   }
+  
+  // Text
+  if (overlayState.text) {
+    ctx.save();
+    ctx.font = `bold ${overlayState.size}px 'Atkinson Hyperlegible', sans-serif`;
+    ctx.fillStyle = overlayState.color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 8;
+    let y = (overlayState.position === 'top') ? overlayState.size + 20 : (overlayState.position === 'bottom') ? canvas.height - overlayState.size - 20 : canvas.height / 2;
+    ctx.fillText(overlayState.text, canvas.width / 2, y);
+    ctx.restore();
+  }
 }
-  document.getElementById('blendMode').addEventListener('change', () => {
-  renderImage();
-  if (typeof saveState === 'function') saveState();
-});
+
+// 90 Deg Canvas Rotation
+function rotateCanvas() {
+  const tC = document.createElement('canvas'); const tCtx = tC.getContext('2d');
+  tC.width = currentImage.naturalHeight; tC.height = currentImage.naturalWidth;
+  tCtx.translate(tC.width/2, tC.height/2); tCtx.rotate(Math.PI/2);
+  tCtx.drawImage(currentImage, -currentImage.naturalWidth/2, -currentImage.naturalHeight/2);
+  const newImg = new Image();
+  newImg.onload = () => { currentImage = newImg; canvas.width = currentImage.naturalWidth; canvas.height = currentImage.naturalHeight; renderImage(); saveState(); };
+  newImg.src = tC.toDataURL();
+}
+
+// Controls
+function resetSliders() { sliderIds.forEach(id => { const el=document.getElementById(id); el.value = el.getAttribute('data-default')||0; document.getElementById('val-'+id).textContent = el.value; }); document.getElementById('blendMode').value = 'overlay'; renderImage(); saveState(); }
+function checkDrift() { alert("🧭 Creative Drift! You charted your own style."); }
+function saveDrift() {
+  try {
+    const sliders = {}; sliderIds.forEach(id => sliders[id] = document.getElementById(id).value);
+    const drift = { date: Date.now(), sliders, image: canvas.toDataURL('image/jpeg', 0.7) };
+    const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+    drifts.push(drift); localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
+    alert('🧡 Drift Saved to Portfolio!');
+  } catch(e) { alert("Security block: Upload your own photo to save!"); }
+}
+
+// Undo/Redo
+let historyStack = [], historyIndex = -1, isRestoring = false;
+function saveState() {
+  if (isRestoring) return;
+  const s = { bm: document.getElementById('blendMode').value, st: JSON.parse(JSON.stringify(activeStickers)), txt: JSON.parse(JSON.stringify(overlayState)) };
+  sliderIds.forEach(id => s[id] = document.getElementById(id).value);
+  if (historyIndex < historyStack.length - 1) historyStack = historyStack.slice(0, historyIndex+1);
+  historyStack.push(s); if (historyStack.length > 20) historyStack.shift(); historyIndex = historyStack.length - 1;
+  document.getElementById('undoBtn').disabled = historyIndex <= 0; document.getElementById('redoBtn').disabled = historyIndex >= historyStack.length - 1;
+}
+function applyState(state) {
+  isRestoring = true;
+  Object.keys(state).forEach(k => {
+    if (k==='bm') document.getElementById('blendMode').value = state[k];
+    else if (k==='st') activeStickers = state[k];
+    else if (k==='txt') overlayState = state[k];
+    else { const el = document.getElementById(k); if(el){ el.value=state[k]; document.getElementById('val-'+k).textContent=state[k]; } }
+  });
+  renderImage(); isRestoring = false;
+  document.getElementById('undoBtn').disabled = historyIndex <= 0; document.getElementById('redoBtn').disabled = historyIndex >= historyStack.length - 1;
+}
+function undoEdit() { if (historyIndex > 0) { historyIndex--; applyState(historyStack[historyIndex]); } }
+function redoEdit() { if (historyIndex < historyStack.length - 1) { historyIndex++; applyState(historyStack[historyIndex]); } }
+
+// Text & Stickers
+function toggleTextPanel() { const b = document.getElementById('textPanelBody'); b.style.display = b.style.display==='none'?'block':'none'; }
+function clearOverlayText() { overlayState.text=''; document.getElementById('overlayText').value=''; renderImage(); saveState(); }
+document.getElementById('overlayText').addEventListener('input', e => { overlayState.text=e.target.value; renderImage(); });
+document.querySelectorAll('.colorChip').forEach(chip => { chip.addEventListener('click', () => { document.querySelectorAll('.colorChip').forEach(c => c.style.border='2px solid transparent'); chip.style.border='2px solid #5B8266'; overlayState.color=chip.getAttribute('data-color'); renderImage(); saveState(); }); });
+function toggleStickerPanel() { const p = document.getElementById('stickerPanel'); p.style.display = p.style.display==='none'?'block':'none'; }
+function addSticker(emoji) { activeStickers.push({ emoji, x: canvas.width/2 + (Math.random()*40-20), y: canvas.height/2 + (Math.random()*40-20), size: Math.max(32, Math.round(canvas.width*0.08)) }); renderImage(); saveState(); }
+function clearStickers() { activeStickers=[]; renderImage(); saveState(); }
+
+// Export
+function exportWatermarkedImage() {
+  try {
+    const exp = document.createElement('canvas'); const ec = exp.getContext('2d');
+    exp.width = canvas.width; exp.height = canvas.height; ec.drawImage(canvas,0,0);
+    const fs = Math.max(16, Math.round(exp.width * 0.035)), pad = Math.round(fs * 0.8);
+    ec.save(); ec.font = `bold ${fs}px sans-serif`; const text = "✨ Made with RIVLUM"; const tw = ec.measureText(text).width;
+    const bx = exp.width-tw-pad*3, by = exp.height-fs-pad*2;
+    ec.fillStyle = "rgba(45,49,46,0.7)"; ec.beginPath(); if(ec.roundRect) ec.roundRect(bx,by,tw+pad*2,fs+pad,8); else ec.rect(bx,by,tw+pad*2,fs+pad); ec.fill();
+    ec.fillStyle = "#fff"; ec.textBaseline = "middle"; ec.fillText(text, bx+pad, by+(fs+pad)/2); ec.restore();
+    const link = document.createElement('a'); link.download = `rivlum-edit-${Date.now()}.png`; link.href = exp.toDataURL('image/png'); link.click();
+  } catch(e) { alert("Security block: Upload your own photo to download!"); }
+}
+function shareEdit() { navigator.share ? navigator.share({ title:'RIVLUM', url:window.location.origin }) : alert("Copy this URL to share: " + window.location.origin); }
 </script>
 </body>
 </html>
