@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIVLUM — Co-Edit Rooms</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#FBF8F3; color:#2D312E; margin:0; padding:0; padding-bottom:80px; }
+  .wrap { max-width:900px; margin:0 auto; padding:12px; }
+  .room-header { background:#FFFFFF; border:1px solid #EAE4DC; border-radius:12px; padding:12px 16px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+  .room-badge { background:#FFF6D6; border:1px solid #F2C94C; color:#2D312E; padding:4px 10px; border-radius:20px; font-size:0.85rem; font-weight:bold; }
+  .sticky-top { position:sticky; top:0; background:#FBF8F3; z-index:50; padding:8px 0; border-bottom:1px solid #EAE4DC; }
+  .canvas-frame { width:100%; height:25vh; display:flex; align-items:center; justify-content:center; background:#fff; border-radius:12px; overflow:hidden; border:1px solid #EAE4DC; }
+  .canvas-frame canvas { max-width:100%; max-height:100%; object-fit:contain; }
+  .action-bar { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0; }
+  .btn { padding:6px 12px; border-radius:7px; border:1px solid #EAE4DC; background:#fff; cursor:pointer; font-size:0.85rem; font-family:inherit; }
+  .btn-primary { background:#5B8266; color:#fff; border:none; }
+  .btn-accent { background:#D97D54; color:#fff; border:none; }
+  .btn:disabled { opacity:0.4; cursor:not-allowed; }
+  .sliders-panel { padding:12px 0; }
+  .slider-group { margin-bottom:14px; }
+  .slider-group label { display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px; color:#2D312E; }
+  .slider-group input[type="range"] { width:100%; }
+  .section-title { font-weight:bold; color:#5B8266; font-size:0.9rem; margin:14px 0 8px; }
+  .text-overlay-panel { background:#fff; border:1px solid #EAE4DC; border-radius:10px; padding:10px; margin:8px 0; font-size:0.85rem; }
+  .colorChip { width:22px; height:22px; border-radius:50%; cursor:pointer; }
+  .upload-btn { display:inline-block; padding:7px 14px; background:#6C8EA4; color:#fff; border-radius:7px; cursor:pointer; margin-bottom:8px; font-size:0.85rem; }
+  input[type="file"] { display:none; }
+  
+  /* Modal Overlay for Room Join/Create */
+  .modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(45,49,46,0.7); z-index:200; display:flex; align-items:center; justify-content:center; padding:16px; }
+  .modal-card { background:#FFFFFF; border-radius:14px; max-width:400px; width:100%; padding:20px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.15); }
+  .modal-card h2 { margin-top:0; color:#5B8266; }
+  
+  @media (min-width:800px) {
+    .wrap { display:grid; grid-template-columns:1.2fr 1fr; gap:20px; max-width:1100px; }
+    .sticky-top { position:sticky; top:12px; height:fit-content; }
+    .canvas-frame { height:50vh; }
+    .sliders-panel { max-height:85vh; overflow-y:auto; padding-right:8px; }
+  }
+  .nav { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #EAE4DC; display:flex; justify-content:space-around; padding:8px 0; z-index:100; }
+  .nav a { text-decoration:none; color:#5B8266; font-size:0.75rem; display:flex; flex-direction:column; align-items:center; gap:2px; }
+  .nav a span { font-size:1.2rem; }
+</style>
+</head>
+<body>
+
+<!-- ROOM LOBBY MODAL (Shows if no room code in URL) -->
+<div id="roomModal" class="modal-overlay" style="display:none;">
+  <div class="modal-card">
+    <h2>🎮 RIVLUM Room</h2>
+    <p style="color:#6E7570; font-size:0.9rem;">Co-edit photos asynchronously with friends. No signups, zero servers.</p>
+    <button class="btn btn-primary" onclick="createFreshRoom()" style="width:100%; padding:10px; font-size:1rem; margin-bottom:10px;">✨ Create New Room</button>
+    <div style="margin:10px 0; color:#6E7570; font-size:0.8rem;">— OR —</div>
+    <input type="text" id="joinCodeInput" placeholder="Paste Room Link or Code..." style="width:90%; padding:8px; border:1px solid #EAE4DC; border-radius:6px; margin-bottom:8px; font-family:inherit;">
+    <button class="btn btn-accent" onclick="joinRoomFromInput()" style="width:100%; padding:8px;">🚀 Join Room</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- LEFT/TOP: PHOTO + ROOM ACTIONS -->
+  <div class="sticky-top">
+    <div class="room-header">
+      <div>
+        <span class="room-badge" id="roomCodeDisplay">⚡ Room #1001</span>
+        <small style="color:#6E7570; display:block; margin-top:2px;" id="roomAuthorText">Started by: You</small>
+      </div>
+      <button class="btn btn-accent" onclick="passCanvasToFriend()">⚡ Pass Canvas</button>
+    </div>
+
+    <div class="canvas-frame">
+      <canvas id="editorCanvas"></canvas>
+    </div>
+
+    <label for="uploadInput" class="upload-btn">📸 Change Room Base Photo</label>
+    <input type="file" id="uploadInput" accept="image/*">
+
+    <div class="action-bar">
+      <button id="undoBtn" class="btn" onclick="undoEdit()" disabled>↺ Undo</button>
+      <button id="redoBtn" class="btn" onclick="redoEdit()" disabled>↻ Redo</button>
+      <button class="btn" onclick="resetSliders()">Reset</button>
+      <button class="btn btn-primary" onclick="saveDrift()">💾 Save</button>
+      <button class="btn" onclick="exportWatermarkedImage()">⬇ Download</button>
+      <button class="btn" onclick="rotateCanvas()">🔄 Rotate</button>
+      <button class="btn" onclick="toggleStickerPanel()">😍 Stickers</button>
+    </div>
+
+    <!-- TEXT PANEL -->
+    <div class="text-overlay-panel">
+      <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+        <strong style="color:#5B8266;">✍️ Add Layer Text</strong>
+        <button onclick="toggleTextPanel()" style="margin-left:auto; background:none; border:none; cursor:pointer; font-size:1rem;">▾</button>
+      </div>
+      <div id="textPanelBody" style="display:none;">
+        <input type="text" id="overlayText" placeholder="Add your message to the edit..." maxlength="50" style="width:100%; padding:6px 8px; border:1px solid #EAE4DC; border-radius:6px; margin-bottom:6px; font-family:inherit;">
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px;">
+          <label style="font-size:0.8rem;">Size: <select id="textSize" style="padding:3px; border-radius:5px;"><option value="24">Small</option><option value="40" selected>Medium</option><option value="60">Large</option></select></label>
+          <label style="font-size:0.8rem;">Pos: <select id="textPos" style="padding:3px; border-radius:5px;"><option value="top">Top</option><option value="center" selected>Center</option><option value="bottom">Bottom</option></select></label>
+        </div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+          <span style="font-size:0.8rem;">Color:</span>
+          <button class="colorChip" data-color="#FFFFFF" style="background:#fff; border:2px solid #ccc;"></button>
+          <button class="colorChip" data-color="#2D312E" style="background:#2D312E; border:2px solid transparent;"></button>
+          <button class="colorChip" data-color="#F2C94C" style="background:#F2C94C; border:2px solid transparent;"></button>
+          <button class="colorChip" data-color="#D97D54" style="background:#D97D54; border:2px solid transparent;"></button>
+          <button onclick="clearOverlayText()" style="margin-left:auto; background:#f5f5f5; border:1px solid #ddd; padding:3px 8px; border-radius:5px; font-size:0.75rem; cursor:pointer;">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STICKER PANEL -->
+    <div id="stickerPanel" class="text-overlay-panel" style="display:none;">
+      <div style="display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+        <strong style="color:#5B8266;">😍 Stamp Room Sticker</strong>
+        <button onclick="toggleStickerPanel()" style="margin-left:auto; background:none; border:none; cursor:pointer;">✕</button>
+      </div>
+      <div style="display:flex; gap:10px; font-size:1.5rem; flex-wrap:wrap;">
+        <span onclick="addSticker('⭐')" style="cursor:pointer;">⭐</span>
+        <span onclick="addSticker('🌅')" style="cursor:pointer;">🌅</span>
+        <span onclick="addSticker('🌿')" style="cursor:pointer;">🌿</span>
+        <span onclick="addSticker('⚡')" style="cursor:pointer;">⚡</span>
+        <span onclick="addSticker('🕶️')" style="cursor:pointer;">🕶️</span>
+        <span onclick="addSticker('☁️')" style="cursor:pointer;">☁️</span>
+        <span onclick="addSticker('🔥')" style="cursor:pointer;">🔥</span>
+      </div>
+      <button onclick="clearStickers()" style="margin-top:8px; padding:4px 10px; font-size:0.75rem;">Clear Stickers</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: SLIDERS -->
+  <div class="sliders-panel">
+    <div class="section-title">☀️ Light Adjustments</div>
+    <div class="slider-group"><label>Exposure <span id="val-exposure">0</span></label><input type="range" id="exposure" min="-100" max="100" value="0" data-default="0"></div>
+    <div class="slider-group"><label>Contrast <span id="val-contrast">0</span></label><input type="range" id="contrast" min="-100" max="100" value="0" data-default="0"></div>
+    <div class="slider-group"><label>Highlights <span id="val-highlights">0</span></label><input type="range" id="highlights" min="-100" max="100" value="0" data-default="0"></div>
+    <div class="slider-group"><label>Shadows <span id="val-shadows">0</span></label><input type="range" id="shadows" min="-100" max="100" value="0" data-default="0"></div>
+
+    <div class="section-title">🎨 Color & Blend</div>
+    <div class="slider-group">
+      <label>Blend Mode</label>
+      <select id="blendMode" style="width:100%; padding:6px; border-radius:6px; border:1px solid #EAE4DC; font-family:inherit;">
+        <option value="source-over">Normal</option>
+        <option value="overlay" selected>Overlay</option>
+        <option value="multiply">Multiply</option>
+        <option value="screen">Screen</option>
+      </select>
+    </div>
+    <div class="slider-group"><label>Temperature <span id="val-temp">0</span></label><input type="range" id="temp" min="-100" max="100" value="0" data-default="0"></div>
+    <div class="slider-group"><label>Tint <span id="val-tint">0</span></label><input type="range" id="tint" min="-100" max="100" value="0" data-default="0"></div>
+    <div class="slider-group"><label>Saturation <span id="val-saturation">0</span></label><input type="range" id="saturation" min="-100" max="100" value="0" data-default="0"></div>
+    <div class="slider-group"><label>Vibrance <span id="val-vibrance">0</span></label><input type="range" id="vibrance" min="-100" max="100" value="0" data-default="0"></div>
+
+    <div class="section-title">✨ Atmosphere</div>
+    <div class="slider-group"><label>Clarity <span id="val-clarity">0</span></label><input type="range" id="clarity" min="-100" max="100" value="0" data-default="0"></div>
+    <div class="slider-group"><label>Vignette <span id="val-vignette">0</span></label><input type="range" id="vignette" min="0" max="100" value="0" data-default="0"></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="index.html"><span>🏠</span>Home</a>
+  <a href="challenge.html"><span>✨</span>Edit</a>
+  <a href="free-edit.html"><span>📸</span>Free</a>
+  <a href="constellation.html"><span>🌌</span>Sky</a>
+  <a href="about.html"><span>💛</span>About</a>
+</nav>
+
+<script>
+// ==========================================
+// RIVLUM ROOM ENGINE (ZERO-BACKEND MULTIPLAYER)
+// ==========================================
+
+const canvas = document.getElementById('editorCanvas');
+const ctx = canvas.getContext('2d');
+let currentImage = new Image();
+currentImage.crossOrigin = "anonymous";
+
+const defaultImgUrl = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80";
+
+let currentRoomCode = Math.floor(1000 + Math.random() * 9000);
+let activeStickers = [];
+let overlayState = { text:'', size:40, position:'center', color:'#FFFFFF' };
+const sliderIds = ['exposure','contrast','highlights','shadows','temp','tint','saturation','vibrance','clarity','vignette'];
+
+// Initialization
+window.addEventListener('load', () => {
+  const hash = window.location.hash;
+  if (hash.startsWith('#room=')) {
+    loadRoomFromHash(hash);
+  } else {
+    document.getElementById('roomModal').style.display = 'flex';
+    currentImage.src = defaultImgUrl;
+  }
+});
+
+currentImage.onload = () => {
+  canvas.width = currentImage.naturalWidth;
+  canvas.height = currentImage.naturalHeight;
+  renderImage();
+  setTimeout(saveState, 300);
+};
+
+function createFreshRoom() {
+  currentRoomCode = Math.floor(1000 + Math.random() * 9000);
+  document.getElementById('roomCodeDisplay').textContent = `⚡ Room #${currentRoomCode}`;
+  document.getElementById('roomAuthorText').textContent = 'Started by: You';
+  document.getElementById('roomModal').style.display = 'none';
+  if (!currentImage.src) currentImage.src = defaultImgUrl;
+}
+
+function joinRoomFromInput() {
+  const input = document.getElementById('joinCodeInput').value.trim();
+  if (!input) return alert('Please enter a room link or hash!');
+  if (input.includes('#room=')) {
+    window.location.hash = input.substring(input.indexOf('#room='));
+    loadRoomFromHash(window.location.hash);
+    document.getElementById('roomModal').style.display = 'none';
+  } else {
+    alert('Invalid room code link.');
+  }
+}
+
+function loadRoomFromHash(hash) {
+  try {
+    const rawPayload = hash.replace('#room=', '');
+    const decoded = JSON.parse(decodeURIComponent(atob(rawPayload)));
+    
+    currentRoomCode = decoded.code || 1001;
+    document.getElementById('roomCodeDisplay').textContent = `⚡ Room #${currentRoomCode}`;
+    document.getElementById('roomAuthorText').textContent = 'Collab Edit (Friend\'s Canvas)';
+    
+    if (decoded.sliders) {
+      Object.keys(decoded.sliders).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.value = decoded.sliders[id]; document.getElementById('val-'+id).textContent = decoded.sliders[id]; }
+      });
+    }
+    if (decoded.bm) document.getElementById('blendMode').value = decoded.bm;
+    if (decoded.st) activeStickers = decoded.st;
+    if (decoded.txt) overlayState = decoded.txt;
+    if (decoded.img) currentImage.src = decoded.img; else currentImage.src = defaultImgUrl;
+    
+    document.getElementById('roomModal').style.display = 'none';
+  } catch(e) {
+    alert('Unable to parse Room state link.');
+    createFreshRoom();
+  }
+}
+
+async function passCanvasToFriend() {
+  const sliders = {};
+  sliderIds.forEach(id => sliders[id] = document.getElementById(id).value);
+  
+  const roomPayload = {
+    code: currentRoomCode,
+    sliders: sliders,
+    bm: document.getElementById('blendMode').value,
+    st: activeStickers,
+    txt: overlayState,
+    img: canvas.toDataURL('image/jpeg', 0.6) // Compressed thumbnail state
+  };
+
+  try {
+    const encoded = btoa(encodeURIComponent(JSON.stringify(roomPayload)));
+    const roomUrl = `${window.location.origin}${window.location.pathname}#room=${encoded}`;
+
+    if (navigator.share) {
+      await navigator.share({
+        title: `RIVLUM Co-Edit Room #${currentRoomCode}`,
+        text: `Hey! Add your edit layer to our photo in Room #${currentRoomCode}:`,
+        url: roomUrl
+      });
+    } else {
+      await navigator.clipboard.writeText(roomUrl);
+      alert(`📋 Room #${currentRoomCode} Link Copied! Send it to your friend on WhatsApp.`);
+    }
+  } catch(e) {
+    alert('Room link generated! Copy the full browser URL to share.');
+  }
+}
+
+// Core Editing & Event Wireup
+sliderIds.forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => { document.getElementById('val-'+id).textContent = el.value; renderImage(); });
+  el.addEventListener('change', saveState);
+});
+document.getElementById('blendMode').addEventListener('change', () => { renderImage(); saveState(); });
+
+document.getElementById('uploadInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { currentImage.src = ev.target.result; };
+  reader.readAsDataURL(file);
+});
+
+function renderImage() {
+  if (!currentImage.src) return;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const v = {}; sliderIds.forEach(id => v[id] = parseInt(document.getElementById(id).value));
+  
+  const brightness = 1 + v.exposure/100; const contrast = 1 + v.contrast/100; const saturate = 1 + v.saturation/100; const hueRot = v.tint * 1.2;
+  ctx.filter = `brightness(${brightness}) contrast(${contrast}) saturate(${saturate}) hue-rotate(${hueRot}deg)`;
+  ctx.drawImage(currentImage, 0, 0); ctx.filter = 'none';
+  
+  const bm = document.getElementById('blendMode').value;
+  if (v.temp !== 0 || bm !== 'source-over') {
+    ctx.save(); ctx.globalCompositeOperation = bm;
+    if (v.temp > 0) ctx.fillStyle = `rgba(255,170,80,${Math.max(0.1, Math.abs(v.temp)/300)})`;
+    else if (v.temp < 0) ctx.fillStyle = `rgba(80,160,255,${Math.max(0.1, Math.abs(v.temp)/300)})`;
+    else ctx.fillStyle = `rgba(217,125,84,0.15)`;
+    ctx.fillRect(0,0,canvas.width,canvas.height); ctx.restore();
+  }
+  
+  if (v.vignette > 0) {
+    const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.width/4, canvas.width/2, canvas.height/2, canvas.width/1.2);
+    grad.addColorStop(0,'rgba(0,0,0,0)'); grad.addColorStop(1,`rgba(0,0,0,${v.vignette/150})`);
+    ctx.fillStyle = grad; ctx.fillRect(0,0,canvas.width,canvas.height);
+  }
+  
+  if (activeStickers.length > 0) {
+    ctx.save(); activeStickers.forEach(st => { ctx.font=`${st.size}px sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(st.emoji, st.x, st.y); }); ctx.restore();
+  }
+  
+  if (overlayState.text) {
+    ctx.save(); ctx.font = `bold ${overlayState.size}px 'Atkinson Hyperlegible', sans-serif`; ctx.fillStyle = overlayState.color; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.shadowColor='rgba(0,0,0,0.5)'; ctx.shadowBlur=8;
+    let y = (overlayState.position === 'top') ? overlayState.size+20 : (overlayState.position === 'bottom') ? canvas.height-overlayState.size-20 : canvas.height/2;
+    ctx.fillText(overlayState.text, canvas.width/2, y); ctx.restore();
+  }
+}
+
+function rotateCanvas() {
+  const tC = document.createElement('canvas'); const tCtx = tC.getContext('2d');
+  tC.width = currentImage.naturalHeight; tC.height = currentImage.naturalWidth;
+  tCtx.translate(tC.width/2, tC.height/2); tCtx.rotate(Math.PI/2);
+  tCtx.drawImage(currentImage, -currentImage.naturalWidth/2, -currentImage.naturalHeight/2);
+  const newImg = new Image();
+  newImg.onload = () => { currentImage = newImg; canvas.width = currentImage.naturalWidth; canvas.height = currentImage.naturalHeight; renderImage(); saveState(); };
+  newImg.src = tC.toDataURL();
+}
+
+function resetSliders() { sliderIds.forEach(id => { const el=document.getElementById(id); el.value=el.getAttribute('data-default')||0; document.getElementById('val-'+id).textContent=el.value; }); document.getElementById('blendMode').value='overlay'; renderImage(); saveState(); }
+
+function saveDrift() {
+  try {
+    const sliders = {}; sliderIds.forEach(id => sliders[id] = document.getElementById(id).value);
+    const drift = { date: Date.now(), sliders, image: canvas.toDataURL('image/jpeg', 0.7) };
+    const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+    drifts.push(drift); localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
+    alert('🧡 Room Edit Saved to Portfolio!');
+  } catch(e) { alert("Upload your own photo to save!"); }
+}
+
+// History
+let historyStack = [], historyIndex = -1, isRestoring = false;
+function saveState() {
+  if (isRestoring) return;
+  const s = { bm: document.getElementById('blendMode').value, st: JSON.parse(JSON.stringify(activeStickers)), txt: JSON.parse(JSON.stringify(overlayState)) };
+  sliderIds.forEach(id => s[id] = document.getElementById(id).value);
+  if (historyIndex < historyStack.length - 1) historyStack = historyStack.slice(0, historyIndex+1);
+  historyStack.push(s); if (historyStack.length > 20) historyStack.shift(); historyIndex = historyStack.length - 1;
+  document.getElementById('undoBtn').disabled = historyIndex <= 0; document.getElementById('redoBtn').disabled = historyIndex >= historyStack.length - 1;
+}
+function applyState(state) {
+  isRestoring = true;
+  Object.keys(state).forEach(k => {
+    if (k==='bm') document.getElementById('blendMode').value = state[k];
+    else if (k==='st') activeStickers = state[k];
+    else if (k==='txt') overlayState = state[k];
+    else { const el = document.getElementById(k); if(el){ el.value=state[k]; document.getElementById('val-'+k).textContent=state[k]; } }
+  });
+  renderImage(); isRestoring = false;
+  document.getElementById('undoBtn').disabled = historyIndex <= 0; document.getElementById('redoBtn').disabled = historyIndex >= historyStack.length - 1;
+}
+function undoEdit() { if (historyIndex > 0) { historyIndex--; applyState(historyStack[historyIndex]); } }
+function redoEdit() { if (historyIndex < historyStack.length - 1) { historyIndex++; applyState(historyStack[historyIndex]); } }
+
+// Text & Stickers
+function toggleTextPanel() { const b = document.getElementById('textPanelBody'); b.style.display = b.style.display==='none'?'block':'none'; }
+function clearOverlayText() { overlayState.text=''; document.getElementById('overlayText').value=''; renderImage(); saveState(); }
+document.getElementById('overlayText').addEventListener('input', e => { overlayState.text=e.target.value; renderImage(); });
+document.getElementById('textSize').addEventListener('change', e => { overlayState.size=parseInt(e.target.value); renderImage(); saveState(); });
+document.getElementById('textPos').addEventListener('change', e => { overlayState.position=e.target.value; renderImage(); saveState(); });
+document.querySelectorAll('.colorChip').forEach(chip => { chip.addEventListener('click', () => { document.querySelectorAll('.colorChip').forEach(c => c.style.border='2px solid transparent'); chip.style.border='2px solid #5B8266'; overlayState.color=chip.getAttribute('data-color'); renderImage(); saveState(); }); });
+function toggleStickerPanel() { const p = document.getElementById('stickerPanel'); p.style.display = p.style.display==='none'?'block':'none'; }
+function addSticker(emoji) { activeStickers.push({ emoji, x: canvas.width/2+(Math.random()*40-20), y: canvas.height/2+(Math.random()*40-20), size: Math.max(32, Math.round(canvas.width*0.08)) }); renderImage(); saveState(); }
+function clearStickers() { activeStickers=[]; renderImage(); saveState(); }
+
+function exportWatermarkedImage() {
+  try {
+    const exp = document.createElement('canvas'); const ec = exp.getContext('2d'); exp.width=canvas.width; exp.height=canvas.height; ec.drawImage(canvas,0,0);
+    const fs = Math.max(16, Math.round(exp.width*0.035)), pad = Math.round(fs*0.8);
+    ec.save(); ec.font = `bold ${fs}px sans-serif`; const text = "✨ Made in RIVLUM Room"; const tw = ec.measureText(text).width;
+    const bx = exp.width-tw-pad*3, by = exp.height-fs-pad*2;
+    ec.fillStyle = "rgba(45,49,46,0.7)"; ec.beginPath(); if(ec.roundRect) ec.roundRect(bx,by,tw+pad*2,fs+pad,8); else ec.rect(bx,by,tw+pad*2,fs+pad); ec.fill();
+    ec.fillStyle = "#fff"; ec.textBaseline = "middle"; ec.fillText(text, bx+pad, by+(fs+pad)/2); ec.restore();
+    const link = document.createElement('a'); link.download = `rivlum-room-${currentRoomCode}-${Date.now()}.png`; link.href = exp.toDataURL('image/png'); link.click();
+  } catch(e) { alert("Upload your own photo to download!"); }
+}
+</script>
+</body>
+</html>
