@@ -289,6 +289,8 @@ function redoEdit() { if (historyIndex < historyStack.length - 1) { historyIndex
 function toggleTextPanel() { const b = document.getElementById('textPanelBody'); b.style.display = b.style.display==='none'?'block':'none'; }
 function clearOverlayText() { overlayState.text=''; document.getElementById('overlayText').value=''; renderImage(); saveState(); }
 document.getElementById('overlayText').addEventListener('input', e => { overlayState.text=e.target.value; renderImage(); });
+  document.getElementById('textSize').addEventListener('change', e => { overlayState.size = parseInt(e.target.value); renderImage(); saveState(); });
+document.getElementById('textPos').addEventListener('change', e => { overlayState.position = e.target.value; renderImage(); saveState(); });
 document.querySelectorAll('.colorChip').forEach(chip => { chip.addEventListener('click', () => { document.querySelectorAll('.colorChip').forEach(c => c.style.border='2px solid transparent'); chip.style.border='2px solid #5B8266'; overlayState.color=chip.getAttribute('data-color'); renderImage(); saveState(); }); });
 function toggleStickerPanel() { const p = document.getElementById('stickerPanel'); p.style.display = p.style.display==='none'?'block':'none'; }
 function addSticker(emoji) { activeStickers.push({ emoji, x: canvas.width/2 + (Math.random()*40-20), y: canvas.height/2 + (Math.random()*40-20), size: Math.max(32, Math.round(canvas.width*0.08)) }); renderImage(); saveState(); }
