@@ -6,53 +6,81 @@
 <title>RIVLUM — About & Settings</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-  body { font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#FBF8F3; color:#2D312E; margin:0; padding:0; padding-bottom:80px; }
-  .wrap { max-width:700px; margin:0 auto; padding:16px; }
-  .card { background:#FFFFFF; border:1px solid #EAE4DC; border-radius:12px; padding:18px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,0.03); }
-  h1, h2, h3 { color:#5B8266; margin-top:0; }
-  .nav { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #EAE4DC; display:flex; justify-content:space-around; padding:8px 0; z-index:100; }
-  .nav a { text-decoration:none; color:#5B8266; font-size:0.75rem; display:flex; flex-direction:column; align-items:center; gap:2px; }
+  body { background-color: #FBF8F3; color: #2D312E; font-family: 'Atkinson Hyperlegible', sans-serif; margin:0; padding:0; padding-bottom: 90px; }
+  .about-wrap { max-width: 680px; margin: 0 auto; padding: 20px 16px; }
+  .pastel-card { background: #FFFFFF; border: 1.5px solid #EAE4DC; border-radius: 16px; padding: 22px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(91, 130, 102, 0.05); }
+  .pastel-card h1, .pastel-card h2, .pastel-card h3 { color: #5B8266; margin-top: 0; font-weight: 700; }
+  .script-sub { font-family: 'Caveat', cursive; color: #608668; font-size: 1.3rem; margin-top: -8px; margin-bottom: 12px; }
+  
+  .theme-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 12px; }
+  .theme-btn { padding: 12px 10px; border-radius: 12px; border: 2px solid #EAE4DC; background: #FFFFFF; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.85rem; font-family: inherit; transition: all 0.15s ease; }
+  .theme-btn:hover { transform: translateY(-2px); }
+  
+  .theme-btn.meadow { border-color: #5B8266; background: #FBF8F3; color: #5B8266; }
+  .theme-btn.ocean { border-color: #3A7CA5; background: #F0F6F9; color: #3A7CA5; }
+  .theme-btn.sunset { border-color: #D96B43; background: #FDF6F0; color: #D96B43; }
+  .theme-btn.midnight { border-color: #64B5F6; background: #12161A; color: #64B5F6; }
+
+  .pill-btn { display: inline-block; padding: 10px 16px; background: #FFF6D6; color: #2D312E; border-radius: 20px; border: 1px solid #F2C94C; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 0.85rem; margin: 4px 0; }
+  .pill-btn:active { transform: scale(0.98); }
+
+  .nav { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #EAE4DC; display:flex; justify-content:space-around; padding:10px 0; z-index:100; }
+  .nav a { text-decoration:none; color:#5B8266; font-size:0.75rem; display:flex; flex-direction:column; align-items:center; gap:2px; font-weight:bold; }
   .nav a span { font-size:1.2rem; }
-  .btn { padding:8px 14px; border-radius:8px; border:1px solid #EAE4DC; background:#fff; cursor:pointer; font-weight:bold; font-family:inherit; }
-  .btn-primary { background:#5B8266; color:#fff; border:none; }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <div class="card">
-    <h1>💛 About RIVLUM</h1>
-    <p style="line-height:1.6; color:#2D312E;">
-      RIVLUM is a free, quiet, browser-based creative playground built for young people to experiment with light, color theory, and digital storytelling. 
-    </p>
-    <p style="line-height:1.6; color:#6E7570;">
-      It requires zero accounts, collects zero personal data, runs entirely in your browser, and is 100% COPPA-compliant.
+<div class="about-wrap">
+  
+  <!-- HERO HEADER -->
+  <div class="pastel-card" style="text-align: center;">
+    <h1 style="font-size: 2.2rem; margin-bottom: 4px; color: #D07251;">RIVLUM</h1>
+    <div class="script-sub">the river of light 🌊</div>
+    <p style="line-height: 1.6; color: #3A3E3B; font-size: 0.95rem;">
+      A cozy, browser-based playground for kids and teens to explore photography, light, and visual mood. No scary tools. No sign-ups. No ad trackers.
     </p>
   </div>
 
-  <div class="card">
-    <h3>⚙️ Accessibility & Customization</h3>
-    <p style="font-size:0.9rem; color:#6E7570;">Adjust your viewing experience:</p>
+  <!-- 🎨 THEME SWITCHER CARD -->
+  <div class="pastel-card">
+    <h3>🎨 Choose Your Theme</h3>
+    <p style="font-size: 0.9rem; color: #6E7570; margin-bottom: 8px;">Pick a visual palette that fits your mood:</p>
     
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-      <button class="btn" onclick="toggleDyslexicFont()">🔤 Toggle OpenDyslexic Font</button>
-      <button class="btn" onclick="toggleReducedMotion()">⚡ Toggle Reduced Motion</button>
+    <div class="theme-grid">
+      <button class="theme-btn meadow" onclick="switchTheme('meadow')">🌿 Meadow<br><small style="font-weight:normal;">Warm Cream</small></button>
+      <button class="theme-btn ocean" onclick="switchTheme('ocean')">🌊 Ocean<br><small style="font-weight:normal;">Cool Ice Blue</small></button>
+      <button class="theme-btn sunset" onclick="switchTheme('sunset')">🌅 Sunset<br><small style="font-weight:normal;">Warm Amber</small></button>
+      <button class="theme-btn midnight" onclick="switchTheme('midnight')">🌌 Midnight<br><small style="font-weight:normal;">Sleek Dark Mode</small></button>
     </div>
   </div>
 
-  <div class="card">
-    <h3>🔒 Privacy Promise</h3>
-    <p style="font-size:0.9rem; color:#2D312E;">
-      RIVLUM does not track you, sell data, or use cookies. All your saved edits, custom color recipes, and stars live safely on your own device inside your browser's local storage.
-    </p>
-    <a href="privacy.html" style="color:#5B8266; font-weight:bold; font-size:0.85rem;">Read Full Privacy Policy →</a>
+  <!-- ⚙️ ACCESSIBILITY CARD -->
+  <div class="pastel-card">
+    <h3>⚙️ Accessibility & Comfort</h3>
+    <p style="font-size: 0.9rem; color: #6E7570; line-height: 1.5;">Customize reading and motion settings for low eye-strain:</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+      <button class="pill-btn" onclick="toggleDyslexicFont()">🔤 Toggle OpenDyslexic Font</button>
+      <button class="pill-btn" onclick="toggleReducedMotion()">⚡ Toggle Reduced Motion</button>
+    </div>
   </div>
 
-  <footer style="text-align:center; padding:16px 0; color:#6E7570; font-size:0.8rem;">
+  <!-- 🔒 PRIVACY CARD -->
+  <div class="pastel-card">
+    <h3>🔒 The Zero-Data Guarantee</h3>
+    <p style="line-height: 1.6; color: #3A3E3B; font-size: 0.9rem;">
+      RIVLUM is 100% COPPA-compliant. We do not collect email addresses, track browsing behavior, or save your photos to external servers. Everything you create stays safely on your own device.
+    </p>
+    <a href="privacy.html" style="color: #D97D54; font-weight: bold; font-size: 0.85rem; text-decoration: none;">Read Privacy Policy →</a>
+  </div>
+
+  <footer style="text-align: center; padding: 16px 0; color: #6E7570; font-size: 0.8rem;">
     © RIVLUM — A creative playground for light, color & mood.
   </footer>
+
 </div>
 
+<!-- MASTER NAV -->
 <nav class="nav">
   <a href="index.html"><span>🏠</span>Home</a>
   <a href="challenge.html"><span>✨</span>Edit</a>
@@ -63,21 +91,38 @@
 </nav>
 
 <script>
+// ==========================================
+// RIVLUM THEME & ACCESSIBILITY ENGINE
+// ==========================================
+
+function switchTheme(themeName) {
+  document.documentElement.setAttribute('data-theme', themeName);
+  document.body.className = '';
+  if (themeName !== 'meadow') {
+    document.body.classList.add('theme-' + themeName);
+  }
+  localStorage.setItem('rivlum_theme', themeName);
+}
+
 function toggleDyslexicFont() {
   document.body.classList.toggle('dyslexia-font');
   const isDys = document.body.classList.contains('dyslexia-font');
   localStorage.setItem('rivlum_dys', isDys ? '1' : '0');
-  alert(isDys ? "OpenDyslexic font enabled!" : "Standard font enabled!");
+  alert(isDys ? "🔤 OpenDyslexic font enabled!" : "Standard font enabled!");
 }
 
 function toggleReducedMotion() {
   document.body.classList.toggle('reduced-motion');
   const isMotion = document.body.classList.contains('reduced-motion');
   localStorage.setItem('rivlum_motion', isMotion ? '1' : '0');
-  alert(isMotion ? "Reduced motion enabled!" : "Standard motion enabled!");
+  alert(isMotion ? "⚡ Reduced motion enabled!" : "Standard motion enabled!");
 }
 
+// Restore saved settings on load
 window.addEventListener('load', () => {
+  const savedTheme = localStorage.getItem('rivlum_theme') || 'meadow';
+  switchTheme(savedTheme);
+  
   if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
   if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
 });
