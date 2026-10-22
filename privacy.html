@@ -3,142 +3,213 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RIVLUM — Privacy & Trust</title>
+<title>RIVLUM — Privacy</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-  body { background-color: #FBF8F3; color: #2D312E; font-family: 'Atkinson Hyperlegible', sans-serif; margin:0; padding:0; padding-bottom: 90px; }
-  .privacy-wrap { max-width: 680px; margin: 0 auto; padding: 20px 16px; }
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Atkinson+Hyperlegible:wght@400;700&display=swap');
   
-  .pastel-card { 
-    background: #FFFFFF; 
-    border: 1.5px solid #EAE4DC; 
-    border-radius: 16px; 
-    padding: 22px; 
-    margin-bottom: 16px; 
-    box-shadow: 0 4px 12px rgba(91, 130, 102, 0.05); 
-  }
-  .pastel-card h1, .pastel-card h2, .pastel-card h3 { color: #5B8266; margin-top: 0; font-weight: 700; }
-  .script-sub { font-family: 'Caveat', cursive; color: #608668; font-size: 1.3rem; margin-top: -8px; margin-bottom: 12px; }
-  
-  .trust-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #FFF6D6;
-    border: 1px solid #F2C94C;
+  body {
+    background: linear-gradient(180deg, #FBF8F3 0%, #F7F2EA 100%);
     color: #2D312E;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: bold;
-    margin-bottom: 12px;
+    font-family: 'Atkinson Hyperlegible', -apple-system, sans-serif;
+    margin: 0;
+    padding: 0 0 90px 0;
   }
-
-  .policy-point {
+  
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+  
+  .hero {
+    text-align: center;
+    margin-bottom: 26px;
+  }
+  
+  .logo {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #D07251;
+    margin: 0;
+  }
+  
+  .tagline {
+    font-family: 'Caveat', cursive;
+    font-size: 1.45rem;
+    color: #5B8266;
+    margin: 4px 0 12px;
+  }
+  
+  .badge {
+    display: inline-block;
+    background: #E8F5E9;
+    border: 1.5px solid #5B8266;
+    color: #3D6B4F;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  
+  .card {
+    background: #FFFFFF;
+    border: 1.5px solid #EAE4DC;
+    border-radius: 20px;
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(91, 130, 102, 0.06);
+  }
+  
+  .card h2 {
+    margin: 0 0 14px 0;
+    color: #5B8266;
+    font-size: 1.1rem;
+  }
+  
+  .point {
     display: flex;
-    gap: 12px;
+    gap: 14px;
     margin-bottom: 16px;
     align-items: flex-start;
   }
-  .policy-icon {
-    font-size: 1.4rem;
-    background: #F0F6F9;
-    border: 1px solid #6C8EA4;
-    padding: 8px;
-    border-radius: 12px;
-    line-height: 1;
+  
+  .point:last-child { margin-bottom: 0; }
+  
+  .icon {
+    font-size: 1.5rem;
+    width: 42px;
+    height: 42px;
+    background: #FBF8F3;
+    border: 1.5px solid #EAE4DC;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
-  .policy-text h4 { margin: 0 0 4px 0; color: #5B8266; font-size: 0.95rem; }
-  .policy-text p { margin: 0; font-size: 0.88rem; color: #3A3E3B; line-height: 1.5; }
-
-  .nav { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #EAE4DC; display:flex; justify-content:space-around; padding:10px 0; z-index:100; }
-  .nav a { text-decoration:none; color:#5B8266; font-size:0.75rem; display:flex; flex-direction:column; align-items:center; gap:2px; font-weight:bold; }
-  .nav a span { font-size:1.2rem; }
+  
+  .point h3 {
+    margin: 0 0 3px 0;
+    font-size: 0.95rem;
+    color: #2D312E;
+  }
+  
+  .point p {
+    margin: 0;
+    font-size: 0.86rem;
+    color: #5A635C;
+    line-height: 1.5;
+  }
+  
+  .pretty-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 18px 12px;
+  }
+  
+  .pretty-footer .script {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: #5B8266;
+  }
+  
+  .pretty-footer p {
+    margin: 6px 0 0;
+    color: #6E7570;
+    font-size: 0.8rem;
+  }
+  
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #FFFFFF;
+    border-top: 1.5px solid #EAE4DC;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 12px;
+    z-index: 100;
+  }
+  
+  .nav a {
+    text-decoration: none;
+    color: #5B8266;
+    font-size: 0.72rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-weight: 700;
+  }
+  
+  .nav a span { font-size: 1.25rem; }
 </style>
 </head>
 <body>
 
-<div class="privacy-wrap">
-  
-  <!-- HERO HEADER -->
-  <div class="pastel-card" style="text-align: center;">
-    <span class="trust-badge">🛡️ COPPA Compliant & Zero-Data</span>
-    <h1 style="font-size: 2rem; margin-bottom: 4px; color: #D07251;">Privacy & Safety Oath</h1>
-    <div class="script-sub">built for trust, agency, and creative freedom 🌊</div>
-    <p style="line-height: 1.6; color: #3A3E3B; font-size: 0.92rem; margin-bottom: 0;">
-      RIVLUM was engineered from day one to protect young creators. We believe software should serve curiosity without treating children as data points to be monetized.
-    </p>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">🛡️ COPPA Safe · Zero Data</div>
+    <h1 class="logo">Privacy Oath</h1>
+    <div class="tagline">we protect your creativity 🌊</div>
   </div>
 
-  <!-- CORE PRIVACY PILLARS -->
-  <div class="pastel-card">
-    <h3>🌿 The Core Pillars</h3>
-    
-    <div class="policy-point">
-      <div class="policy-icon">🔒</div>
-      <div class="policy-text">
-        <h4>Zero Account Registration</h4>
-        <p>No passwords, no email addresses, no phone numbers. Anyone can land on RIVLUM and start editing instantly with zero friction.</p>
+  <!-- MAIN CARD -->
+  <div class="card">
+    <h2>How we keep RIVLUM safe</h2>
+
+    <div class="point">
+      <div class="icon">🔒</div>
+      <div>
+        <h3>No accounts ever</h3>
+        <p>No emails, no passwords, no profiles. You just open the site and start playing.</p>
       </div>
     </div>
 
-    <div class="policy-point">
-      <div class="policy-icon">📸</div>
-      <div class="policy-text">
-        <h4>Local Device Processing</h4>
-        <p>Your photos never touch a remote cloud server. All pixel manipulations run directly inside your browser via the client-side HTML5 Canvas API.</p>
+    <div class="point">
+      <div class="icon">📱</div>
+      <div>
+        <h3>Everything stays on your device</h3>
+        <p>Photos, edits, stars, and Drifts live only in your browser’s local storage. We never see them.</p>
       </div>
     </div>
 
-    <div class="policy-point">
-      <div class="policy-icon">💾</div>
-      <div class="policy-text">
-        <h4>Browser LocalStorage Only</h4>
-        <p>Saved color recipes, unlocked challenge stars, custom "Drifts," and accessibility preferences remain 100% on your own device.</p>
+    <div class="point">
+      <div class="icon">🌐</div>
+      <div>
+        <h3>Clean hosting</h3>
+        <p>RIVLUM is served as simple static files on Render’s network. No trackers, no analytics cookies, no ads.</p>
       </div>
     </div>
 
-    <div class="policy-point">
-      <div class="policy-icon">🌐</div>
-      <div class="policy-text">
-        <h4>Clean, Static Infrastructure</h4>
-        <p>RIVLUM is delivered securely across Render's global static distribution network. Render serves the pure website files without running analytics trackers, cookies, or targeted advertising scripts.</p>
+    <div class="point">
+      <div class="icon">💛</div>
+      <div>
+        <h3>Built for kids & teens</h3>
+        <p>Fully COPPA-compliant. We collect zero personal information of any kind.</p>
       </div>
     </div>
   </div>
 
-  <!-- COPPA & COMPLIANCE STATEMENT -->
-  <div class="pastel-card">
-    <h3>📜 Plain-Language COPPA Commitment</h3>
-    <p style="line-height: 1.6; color: #3A3E3B; font-size: 0.9rem;">
-      In accordance with the <strong>Children's Online Privacy Protection Act (COPPA)</strong>, RIVLUM does not collect, solicit, store, or sell any personally identifiable information from children under the age of 13 (or any age).
-    </p>
-    <p style="line-height: 1.6; color: #6E7570; font-size: 0.88rem; margin-bottom: 0;">
-      If a user clears their browser cache or local storage, all saved progress and custom recipes are permanently wiped on their device. We hold no backup copies because we never collected them in the first place.
+  <!-- SECOND CARD -->
+  <div class="card">
+    <h2>For parents & teachers</h2>
+    <p style="font-size:0.9rem; color:#4A524C; line-height:1.55; margin:0;">
+      RIVLUM is completely safe for classrooms. There are no chats, no public feeds, and no way for strangers to contact users. Shareable portfolio and room links only contain edit settings — never personal data.
     </p>
   </div>
 
-  <!-- FAQ FOR PARENTS & EDUCATORS -->
-  <div class="pastel-card">
-    <h3>💡 For Parents & Teachers</h3>
-    <p style="line-height: 1.5; color: #3A3E3B; font-size: 0.9rem; margin-bottom: 10px;">
-      <strong>Q: Can RIVLUM be used safely in classrooms?</strong><br>
-      Yes. Because RIVLUM requires no login credentials, collects zero data, and contains no chat rooms or public feeds, it is completely safe for classroom assignments and art labs.
-    </p>
-    <p style="line-height: 1.5; color: #3A3E3B; font-size: 0.9rem; margin-bottom: 0;">
-      <strong>Q: How do shareable URL links work?</strong><br>
-      Portfolio and Co-Edit Room links encode lightweight color values and text directly into the link address itself (`#portfolio=...`). No image or user data is ever sent to or stored on an external database.
-    </p>
+  <!-- PRETTY FOOTER -->
+  <div class="pretty-footer">
+    <div style="font-size:1.3rem;">🌿</div>
+    <div class="script">your creativity belongs only to you</div>
+    <p>© RIVLUM · A creative playground for light, color & mood</p>
   </div>
-
-  <!-- FOOTER -->
-  <footer style="text-align: center; padding: 16px 0; color: #6E7570; font-size: 0.8rem;">
-    © RIVLUM — A creative playground for light, color & mood.
-  </footer>
 
 </div>
 
-<!-- MASTER NAV -->
 <nav class="nav">
   <a href="index.html"><span>🏠</span>Home</a>
   <a href="challenge.html"><span>✨</span>Edit</a>
