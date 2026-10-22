@@ -3,42 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RIVLUM — Privacy Policy</title>
+<title>RIVLUM — Privacy & Trust</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-  body { font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#FBF8F3; color:#2D312E; margin:0; padding:0; padding-bottom:80px; }
-  .wrap { max-width:700px; margin:0 auto; padding:16px; }
-  .card { background:#FFFFFF; border:1px solid #EAE4DC; border-radius:12px; padding:20px; margin-bottom:14px; }
-  h1, h2 { color:#5B8266; margin-top:0; }
-  p { line-height:1.6; color:#2D312E; font-size:0.9rem; }
-  .nav { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #EAE4DC; display:flex; justify-content:space-around; padding:8px 0; z-index:100; }
-  .nav a { text-decoration:none; color:#5B8266; font-size:0.75rem; display:flex; flex-direction:column; align-items:center; gap:2px; }
+  body { background-color: #FBF8F3; color: #2D312E; font-family: 'Atkinson Hyperlegible', sans-serif; margin:0; padding:0; padding-bottom: 90px; }
+  .privacy-wrap { max-width: 680px; margin: 0 auto; padding: 20px 16px; }
+  
+  .pastel-card { 
+    background: #FFFFFF; 
+    border: 1.5px solid #EAE4DC; 
+    border-radius: 16px; 
+    padding: 22px; 
+    margin-bottom: 16px; 
+    box-shadow: 0 4px 12px rgba(91, 130, 102, 0.05); 
+  }
+  .pastel-card h1, .pastel-card h2, .pastel-card h3 { color: #5B8266; margin-top: 0; font-weight: 700; }
+  .script-sub { font-family: 'Caveat', cursive; color: #608668; font-size: 1.3rem; margin-top: -8px; margin-bottom: 12px; }
+  
+  .trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFF6D6;
+    border: 1px solid #F2C94C;
+    color: #2D312E;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+
+  .policy-point {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .policy-icon {
+    font-size: 1.4rem;
+    background: #F0F6F9;
+    border: 1px solid #6C8EA4;
+    padding: 8px;
+    border-radius: 12px;
+    line-height: 1;
+  }
+  .policy-text h4 { margin: 0 0 4px 0; color: #5B8266; font-size: 0.95rem; }
+  .policy-text p { margin: 0; font-size: 0.88rem; color: #3A3E3B; line-height: 1.5; }
+
+  .nav { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #EAE4DC; display:flex; justify-content:space-around; padding:10px 0; z-index:100; }
+  .nav a { text-decoration:none; color:#5B8266; font-size:0.75rem; display:flex; flex-direction:column; align-items:center; gap:2px; font-weight:bold; }
   .nav a span { font-size:1.2rem; }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <div class="card">
-    <h1>🛡️ Privacy Policy (COPPA Compliant)</h1>
-    <p><strong>Last Updated: October 2024</strong></p>
-    
-    <h2>1. Zero Data Collection</h2>
-    <p>RIVLUM does not collect, request, or store any personal user information. There are no registration forms, email requirements, or user profiles.</p>
-
-    <h2>2. Local Storage</h2>
-    <p>All photos, edits, custom "Drift" recipes, unlocked challenge stars, and accessibility preferences stay 100% local to your device using your browser's internal <code>localStorage</code>. No image data is ever uploaded to external servers.</p>
-
-    <h2>3. Hosting & Infrastructure</h2>
-    <p>RIVLUM is hosted securely on Render's static delivery network. Render delivers the website files to your browser without tracking personal identity, collecting cookies, or running analytics scripts.</p>
-
-    <h2>4. Children's Online Privacy (COPPA)</h2>
-    <p>RIVLUM fully complies with the Children's Online Privacy Protection Act (COPPA). Because we do not collect any personal information whatsoever, children can safely explore and edit photos without privacy risks.</p>
-
-    <p style="margin-top:20px;"><a href="index.html" style="color:#5B8266; font-weight:bold;">← Back to Home</a></p>
+<div class="privacy-wrap">
+  
+  <!-- HERO HEADER -->
+  <div class="pastel-card" style="text-align: center;">
+    <span class="trust-badge">🛡️ COPPA Compliant & Zero-Data</span>
+    <h1 style="font-size: 2rem; margin-bottom: 4px; color: #D07251;">Privacy & Safety Oath</h1>
+    <div class="script-sub">built for trust, agency, and creative freedom 🌊</div>
+    <p style="line-height: 1.6; color: #3A3E3B; font-size: 0.92rem; margin-bottom: 0;">
+      RIVLUM was engineered from day one to protect young creators. We believe software should serve curiosity without treating children as data points to be monetized.
+    </p>
   </div>
+
+  <!-- CORE PRIVACY PILLARS -->
+  <div class="pastel-card">
+    <h3>🌿 The Core Pillars</h3>
+    
+    <div class="policy-point">
+      <div class="policy-icon">🔒</div>
+      <div class="policy-text">
+        <h4>Zero Account Registration</h4>
+        <p>No passwords, no email addresses, no phone numbers. Anyone can land on RIVLUM and start editing instantly with zero friction.</p>
+      </div>
+    </div>
+
+    <div class="policy-point">
+      <div class="policy-icon">📸</div>
+      <div class="policy-text">
+        <h4>Local Device Processing</h4>
+        <p>Your photos never touch a remote cloud server. All pixel manipulations run directly inside your browser via the client-side HTML5 Canvas API.</p>
+      </div>
+    </div>
+
+    <div class="policy-point">
+      <div class="policy-icon">💾</div>
+      <div class="policy-text">
+        <h4>Browser LocalStorage Only</h4>
+        <p>Saved color recipes, unlocked challenge stars, custom "Drifts," and accessibility preferences remain 100% on your own device.</p>
+      </div>
+    </div>
+
+    <div class="policy-point">
+      <div class="policy-icon">🌐</div>
+      <div class="policy-text">
+        <h4>Clean, Static Infrastructure</h4>
+        <p>RIVLUM is delivered securely across Render's global static distribution network. Render serves the pure website files without running analytics trackers, cookies, or targeted advertising scripts.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- COPPA & COMPLIANCE STATEMENT -->
+  <div class="pastel-card">
+    <h3>📜 Plain-Language COPPA Commitment</h3>
+    <p style="line-height: 1.6; color: #3A3E3B; font-size: 0.9rem;">
+      In accordance with the <strong>Children's Online Privacy Protection Act (COPPA)</strong>, RIVLUM does not collect, solicit, store, or sell any personally identifiable information from children under the age of 13 (or any age).
+    </p>
+    <p style="line-height: 1.6; color: #6E7570; font-size: 0.88rem; margin-bottom: 0;">
+      If a user clears their browser cache or local storage, all saved progress and custom recipes are permanently wiped on their device. We hold no backup copies because we never collected them in the first place.
+    </p>
+  </div>
+
+  <!-- FAQ FOR PARENTS & EDUCATORS -->
+  <div class="pastel-card">
+    <h3>💡 For Parents & Teachers</h3>
+    <p style="line-height: 1.5; color: #3A3E3B; font-size: 0.9rem; margin-bottom: 10px;">
+      <strong>Q: Can RIVLUM be used safely in classrooms?</strong><br>
+      Yes. Because RIVLUM requires no login credentials, collects zero data, and contains no chat rooms or public feeds, it is completely safe for classroom assignments and art labs.
+    </p>
+    <p style="line-height: 1.5; color: #3A3E3B; font-size: 0.9rem; margin-bottom: 0;">
+      <strong>Q: How do shareable URL links work?</strong><br>
+      Portfolio and Co-Edit Room links encode lightweight color values and text directly into the link address itself (`#portfolio=...`). No image or user data is ever sent to or stored on an external database.
+    </p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="text-align: center; padding: 16px 0; color: #6E7570; font-size: 0.8rem;">
+    © RIVLUM — A creative playground for light, color & mood.
+  </footer>
+
 </div>
 
+<!-- MASTER NAV -->
 <nav class="nav">
   <a href="index.html"><span>🏠</span>Home</a>
   <a href="challenge.html"><span>✨</span>Edit</a>
