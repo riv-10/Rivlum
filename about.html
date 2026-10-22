@@ -6,81 +6,215 @@
 <title>RIVLUM — About & Settings</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-  body { background-color: #FBF8F3; color: #2D312E; font-family: 'Atkinson Hyperlegible', sans-serif; margin:0; padding:0; padding-bottom: 90px; }
-  .about-wrap { max-width: 680px; margin: 0 auto; padding: 20px 16px; }
-  .pastel-card { background: #FFFFFF; border: 1.5px solid #EAE4DC; border-radius: 16px; padding: 22px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(91, 130, 102, 0.05); }
-  .pastel-card h1, .pastel-card h2, .pastel-card h3 { color: #5B8266; margin-top: 0; font-weight: 700; }
-  .script-sub { font-family: 'Caveat', cursive; color: #608668; font-size: 1.3rem; margin-top: -8px; margin-bottom: 12px; }
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Atkinson+Hyperlegible:wght@400;700&display=swap');
   
-  .theme-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 12px; }
-  .theme-btn { padding: 12px 10px; border-radius: 12px; border: 2px solid #EAE4DC; background: #FFFFFF; font-weight: bold; cursor: pointer; text-align: center; font-size: 0.85rem; font-family: inherit; transition: all 0.15s ease; }
-  .theme-btn:hover { transform: translateY(-2px); }
+  body {
+    background: linear-gradient(180deg, #FBF8F3 0%, #F7F2EA 100%);
+    color: #2D312E;
+    font-family: 'Atkinson Hyperlegible', -apple-system, sans-serif;
+    margin: 0;
+    padding: 0 0 90px 0;
+  }
   
-  .theme-btn.meadow { border-color: #5B8266; background: #FBF8F3; color: #5B8266; }
-  .theme-btn.ocean { border-color: #3A7CA5; background: #F0F6F9; color: #3A7CA5; }
-  .theme-btn.sunset { border-color: #D96B43; background: #FDF6F0; color: #D96B43; }
-  .theme-btn.midnight { border-color: #64B5F6; background: #12161A; color: #64B5F6; }
-
-  .pill-btn { display: inline-block; padding: 10px 16px; background: #FFF6D6; color: #2D312E; border-radius: 20px; border: 1px solid #F2C94C; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 0.85rem; margin: 4px 0; }
-  .pill-btn:active { transform: scale(0.98); }
-
-  .nav { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #EAE4DC; display:flex; justify-content:space-around; padding:10px 0; z-index:100; }
-  .nav a { text-decoration:none; color:#5B8266; font-size:0.75rem; display:flex; flex-direction:column; align-items:center; gap:2px; font-weight:bold; }
-  .nav a span { font-size:1.2rem; }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+  
+  .hero {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  
+  .logo {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #D07251;
+    letter-spacing: -1px;
+    margin: 0;
+    line-height: 1;
+  }
+  
+  .tagline {
+    font-family: 'Caveat', cursive;
+    font-size: 1.55rem;
+    color: #5B8266;
+    margin: 6px 0 14px;
+  }
+  
+  .badge {
+    display: inline-block;
+    background: #FFF6D6;
+    border: 1.5px solid #F2C94C;
+    color: #8A6D1D;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  
+  .card {
+    background: #FFFFFF;
+    border: 1.5px solid #EAE4DC;
+    border-radius: 20px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 24px rgba(91, 130, 102, 0.06);
+  }
+  
+  .card h2 {
+    margin: 0 0 6px 0;
+    color: #5B8266;
+    font-size: 1.15rem;
+  }
+  
+  .card p {
+    margin: 0;
+    color: #4A524C;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+  
+  .theme-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  
+  .theme-btn {
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 14px 10px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+  
+  .theme-btn:active { transform: scale(0.97); }
+  
+  .theme-btn.meadow { background: #F4F9F5; border-color: #5B8266; color: #5B8266; }
+  .theme-btn.ocean  { background: #F0F7FB; border-color: #3A7CA5; color: #3A7CA5; }
+  .theme-btn.sunset { background: #FDF6F0; border-color: #D96B43; color: #D96B43; }
+  .theme-btn.midnight { background: #1C2228; border-color: #64B5F6; color: #64B5F6; }
+  
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFF6D6;
+    border: 1.5px solid #F2C94C;
+    color: #2D312E;
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 4px 6px 4px 0;
+    border: none;
+  }
+  
+  .pretty-footer {
+    text-align: center;
+    margin-top: 28px;
+    padding: 20px 12px;
+  }
+  
+  .pretty-footer .heart {
+    font-size: 1.1rem;
+  }
+  
+  .pretty-footer p {
+    margin: 6px 0 0;
+    color: #6E7570;
+    font-size: 0.82rem;
+  }
+  
+  .pretty-footer .script {
+    font-family: 'Caveat', cursive;
+    font-size: 1.15rem;
+    color: #5B8266;
+  }
+  
+  .nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #FFFFFF;
+    border-top: 1.5px solid #EAE4DC;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 12px;
+    z-index: 100;
+  }
+  
+  .nav a {
+    text-decoration: none;
+    color: #5B8266;
+    font-size: 0.72rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-weight: 700;
+  }
+  
+  .nav a span { font-size: 1.25rem; }
 </style>
 </head>
 <body>
 
-<div class="about-wrap">
-  
-  <!-- HERO HEADER -->
-  <div class="pastel-card" style="text-align: center;">
-    <h1 style="font-size: 2.2rem; margin-bottom: 4px; color: #D07251;">RIVLUM</h1>
-    <div class="script-sub">the river of light 🌊</div>
-    <p style="line-height: 1.6; color: #3A3E3B; font-size: 0.95rem;">
-      A cozy, browser-based playground for kids and teens to explore photography, light, and visual mood. No scary tools. No sign-ups. No ad trackers.
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">✨ 100% free · no login · zero data</div>
+    <h1 class="logo">RIVLUM</h1>
+    <div class="tagline">the river of light 🌊</div>
+    <p style="color:#6E7570; font-size:0.92rem; max-width:340px; margin:0 auto; line-height:1.5;">
+      A cozy place where kids learn photo & video editing. No scary tools. Just you, your creativity, and a little blob named Pixel.
     </p>
   </div>
 
-  <!-- 🎨 THEME SWITCHER CARD -->
-  <div class="pastel-card">
-    <h3>🎨 Choose Your Theme</h3>
-    <p style="font-size: 0.9rem; color: #6E7570; margin-bottom: 8px;">Pick a visual palette that fits your mood:</p>
-    
+  <!-- THEMES -->
+  <div class="card">
+    <h2>🎨 Choose Your Theme</h2>
+    <p>Pick the palette that feels like home today.</p>
     <div class="theme-grid">
-      <button class="theme-btn meadow" onclick="switchTheme('meadow')">🌿 Meadow<br><small style="font-weight:normal;">Warm Cream</small></button>
-      <button class="theme-btn ocean" onclick="switchTheme('ocean')">🌊 Ocean<br><small style="font-weight:normal;">Cool Ice Blue</small></button>
-      <button class="theme-btn sunset" onclick="switchTheme('sunset')">🌅 Sunset<br><small style="font-weight:normal;">Warm Amber</small></button>
-      <button class="theme-btn midnight" onclick="switchTheme('midnight')">🌌 Midnight<br><small style="font-weight:normal;">Sleek Dark Mode</small></button>
+      <button class="theme-btn meadow" onclick="switchTheme('meadow')">🌿 Meadow</button>
+      <button class="theme-btn ocean" onclick="switchTheme('ocean')">🌊 Ocean</button>
+      <button class="theme-btn sunset" onclick="switchTheme('sunset')">🌅 Sunset</button>
+      <button class="theme-btn midnight" onclick="switchTheme('midnight')">🌌 Midnight</button>
     </div>
   </div>
 
-  <!-- ⚙️ ACCESSIBILITY CARD -->
-  <div class="pastel-card">
-    <h3>⚙️ Accessibility & Comfort</h3>
-    <p style="font-size: 0.9rem; color: #6E7570; line-height: 1.5;">Customize reading and motion settings for low eye-strain:</p>
-    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
-      <button class="pill-btn" onclick="toggleDyslexicFont()">🔤 Toggle OpenDyslexic Font</button>
-      <button class="pill-btn" onclick="toggleReducedMotion()">⚡ Toggle Reduced Motion</button>
-    </div>
+  <!-- ACCESSIBILITY -->
+  <div class="card">
+    <h2>💛 Comfort Settings</h2>
+    <p style="margin-bottom:12px;">Make RIVLUM easier on your eyes and brain.</p>
+    <button class="pill" onclick="toggleDyslexicFont()">🔤 OpenDyslexic Font</button>
+    <button class="pill" onclick="toggleReducedMotion()">⚡ Reduced Motion</button>
   </div>
 
-  <!-- 🔒 PRIVACY CARD -->
-  <div class="pastel-card">
-    <h3>🔒 The Zero-Data Guarantee</h3>
-    <p style="line-height: 1.6; color: #3A3E3B; font-size: 0.9rem;">
-      RIVLUM is 100% COPPA-compliant. We do not collect email addresses, track browsing behavior, or save your photos to external servers. Everything you create stays safely on your own device.
+  <!-- PHILOSOPHY -->
+  <div class="card">
+    <h2>🧭 Our Little Promise</h2>
+    <p>
+      We believe creative tools for kids should feel soft, safe, and free. No ads. No trackers. No “create an account” walls. Just pure play with light and color.
     </p>
-    <a href="privacy.html" style="color: #D97D54; font-weight: bold; font-size: 0.85rem; text-decoration: none;">Read Privacy Policy →</a>
   </div>
 
-  <footer style="text-align: center; padding: 16px 0; color: #6E7570; font-size: 0.8rem;">
-    © RIVLUM — A creative playground for light, color & mood.
-  </footer>
+  <!-- PRETTY FOOTER -->
+  <div class="pretty-footer">
+    <div class="heart">💛</div>
+    <div class="script">made with care for young creators</div>
+    <p>© RIVLUM · A creative playground for light, color & mood</p>
+  </div>
 
 </div>
 
-<!-- MASTER NAV -->
 <nav class="nav">
   <a href="index.html"><span>🏠</span>Home</a>
   <a href="challenge.html"><span>✨</span>Edit</a>
@@ -91,42 +225,33 @@
 </nav>
 
 <script>
-// ==========================================
-// RIVLUM THEME & ACCESSIBILITY ENGINE
-// ==========================================
-
-function switchTheme(themeName) {
-  document.documentElement.setAttribute('data-theme', themeName);
-  document.body.className = '';
-  if (themeName !== 'meadow') {
-    document.body.classList.add('theme-' + themeName);
-  }
-  localStorage.setItem('rivlum_theme', themeName);
+function switchTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('rivlum_theme', theme);
+  // soft visual feedback
+  document.body.style.transition = 'background 0.4s ease';
 }
 
 function toggleDyslexicFont() {
   document.body.classList.toggle('dyslexia-font');
-  const isDys = document.body.classList.contains('dyslexia-font');
-  localStorage.setItem('rivlum_dys', isDys ? '1' : '0');
-  alert(isDys ? "🔤 OpenDyslexic font enabled!" : "Standard font enabled!");
+  const on = document.body.classList.contains('dyslexia-font');
+  localStorage.setItem('rivlum_dys', on ? '1' : '0');
+  alert(on ? '🔤 OpenDyslexic is on!' : 'Standard font restored');
 }
 
 function toggleReducedMotion() {
   document.body.classList.toggle('reduced-motion');
-  const isMotion = document.body.classList.contains('reduced-motion');
-  localStorage.setItem('rivlum_motion', isMotion ? '1' : '0');
-  alert(isMotion ? "⚡ Reduced motion enabled!" : "Standard motion enabled!");
+  const on = document.body.classList.contains('reduced-motion');
+  localStorage.setItem('rivlum_motion', on ? '1' : '0');
+  alert(on ? '⚡ Reduced motion on' : 'Motion restored');
 }
 
-// Restore saved settings on load
 window.addEventListener('load', () => {
-  const savedTheme = localStorage.getItem('rivlum_theme') || 'meadow';
-  switchTheme(savedTheme);
-  
+  const t = localStorage.getItem('rivlum_theme') || 'meadow';
+  switchTheme(t);
   if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
   if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
 });
 </script>
-
 </body>
 </html>
