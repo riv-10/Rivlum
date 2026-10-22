@@ -7,119 +7,117 @@
 <link rel="stylesheet" href="styles.css">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Atkinson+Hyperlegible:wght@400;700&display=swap');
-  
+
   body {
-    background: linear-gradient(180deg, #FBF8F3 0%, #F7F2EA 100%);
-    color: #2D312E;
-    font-family: 'Atkinson Hyperlegible', -apple-system, sans-serif;
     margin: 0;
     padding: 0 0 90px 0;
+    background: linear-gradient(180deg, #FBF8F3 0%, #F8F1E7 100%);
+    font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #2D312E;
   }
-  
+
   .wrap {
-    max-width: 640px;
+    max-width: 620px;
     margin: 0 auto;
-    padding: 24px 16px;
+    padding: 28px 18px;
   }
-  
+
   .hero {
     text-align: center;
     margin-bottom: 26px;
   }
-  
-  .logo {
-    font-size: 2.4rem;
-    font-weight: 800;
-    color: #D07251;
-    margin: 0;
-  }
-  
-  .tagline {
-    font-family: 'Caveat', cursive;
-    font-size: 1.45rem;
-    color: #5B8266;
-    margin: 4px 0 12px;
-  }
-  
+
   .badge {
     display: inline-block;
     background: #E8F5E9;
     border: 1.5px solid #5B8266;
     color: #3D6B4F;
-    padding: 5px 14px;
-    border-radius: 999px;
     font-size: 0.78rem;
     font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 12px;
   }
-  
+
+  .logo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #D07251;
+    margin: 0;
+  }
+
+  .script {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: #5B8266;
+    margin: 4px 0 10px;
+  }
+
   .card {
     background: #FFFFFF;
     border: 1.5px solid #EAE4DC;
-    border-radius: 20px;
-    padding: 22px;
-    margin-bottom: 16px;
-    box-shadow: 0 8px 24px rgba(91, 130, 102, 0.06);
+    border-radius: 22px;
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 28px rgba(91, 130, 102, 0.07);
   }
-  
+
   .card h2 {
-    margin: 0 0 14px 0;
+    margin: 0 0 16px 0;
     color: #5B8266;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
   }
-  
+
   .point {
     display: flex;
     gap: 14px;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     align-items: flex-start;
   }
-  
   .point:last-child { margin-bottom: 0; }
-  
+
   .icon {
-    font-size: 1.5rem;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     background: #FBF8F3;
     border: 1.5px solid #EAE4DC;
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.4rem;
     flex-shrink: 0;
   }
-  
+
   .point h3 {
-    margin: 0 0 3px 0;
-    font-size: 0.95rem;
+    margin: 0 0 4px 0;
+    font-size: 0.98rem;
     color: #2D312E;
   }
-  
+
   .point p {
     margin: 0;
-    font-size: 0.86rem;
+    font-size: 0.88rem;
     color: #5A635C;
     line-height: 1.5;
   }
-  
+
   .pretty-footer {
     text-align: center;
-    margin-top: 30px;
-    padding: 18px 12px;
+    margin-top: 34px;
+    padding: 10px;
   }
-  
-  .pretty-footer .script {
+  .pretty-footer .script-line {
     font-family: 'Caveat', cursive;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     color: #5B8266;
   }
-  
   .pretty-footer p {
     margin: 6px 0 0;
-    color: #6E7570;
     font-size: 0.8rem;
+    color: #6E7570;
   }
-  
+
   .nav {
     position: fixed;
     bottom: 0; left: 0; right: 0;
@@ -130,35 +128,30 @@
     padding: 10px 0 12px;
     z-index: 100;
   }
-  
   .nav a {
     text-decoration: none;
     color: #5B8266;
     font-size: 0.72rem;
+    font-weight: 700;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 3px;
-    font-weight: 700;
   }
-  
   .nav a span { font-size: 1.25rem; }
 </style>
 </head>
 <body>
-
 <div class="wrap">
 
-  <!-- HERO -->
   <div class="hero">
     <div class="badge">🛡️ COPPA Safe · Zero Data</div>
     <h1 class="logo">Privacy Oath</h1>
-    <div class="tagline">we protect your creativity 🌊</div>
+    <div class="script">we protect your creativity 🌊</div>
   </div>
 
-  <!-- MAIN CARD -->
   <div class="card">
-    <h2>How we keep RIVLUM safe</h2>
+    <h2>How we keep RIVLUM soft & safe</h2>
 
     <div class="point">
       <div class="icon">🔒</div>
@@ -172,7 +165,7 @@
       <div class="icon">📱</div>
       <div>
         <h3>Everything stays on your device</h3>
-        <p>Photos, edits, stars, and Drifts live only in your browser’s local storage. We never see them.</p>
+        <p>Photos, edits, stars and Drifts live only in your browser. We never see them.</p>
       </div>
     </div>
 
@@ -180,7 +173,7 @@
       <div class="icon">🌐</div>
       <div>
         <h3>Clean hosting</h3>
-        <p>RIVLUM is served as simple static files on Render’s network. No trackers, no analytics cookies, no ads.</p>
+        <p>RIVLUM is served as simple static files on Render. No trackers, no analytics cookies, no ads.</p>
       </div>
     </div>
 
@@ -193,18 +186,16 @@
     </div>
   </div>
 
-  <!-- SECOND CARD -->
   <div class="card">
     <h2>For parents & teachers</h2>
-    <p style="font-size:0.9rem; color:#4A524C; line-height:1.55; margin:0;">
-      RIVLUM is completely safe for classrooms. There are no chats, no public feeds, and no way for strangers to contact users. Shareable portfolio and room links only contain edit settings — never personal data.
+    <p style="margin:0; font-size:0.92rem; color:#4A524C; line-height:1.55;">
+      RIVLUM is completely safe for classrooms. There are no chats, no public feeds, and no way for strangers to contact users. Shareable links only contain edit settings — never personal data.
     </p>
   </div>
 
-  <!-- PRETTY FOOTER -->
   <div class="pretty-footer">
-    <div style="font-size:1.3rem;">🌿</div>
-    <div class="script">your creativity belongs only to you</div>
+    <div style="font-size:1.3rem; margin-bottom:4px;">🌿</div>
+    <div class="script-line">your creativity belongs only to you</div>
     <p>© RIVLUM · A creative playground for light, color & mood</p>
   </div>
 
@@ -218,6 +209,5 @@
   <a href="drifts.html"><span>🌌</span>Sky</a>
   <a href="about.html"><span>💛</span>About</a>
 </nav>
-
 </body>
 </html>
