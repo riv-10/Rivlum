@@ -1,308 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>RIVLUM — Your Sky 🌌</title>
-<link rel="stylesheet" href="styles.css"/>
-<style>
-.sky-canvas {
-  width: 100%;
-  height: 240px;
-  border-radius: var(--radius);
-  margin-bottom: 1.5rem;
-  background: linear-gradient(180deg, var(--dusty-blue-light) 0%, var(--terracotta-light) 60%, var(--butter-light) 100%);
-  box-shadow: 0 4px 20px var(--shadow);
-  border: 5px solid white;
-  position: relative;
-  overflow: hidden;
-}
-.sky-canvas canvas { width: 100%; height: 100%; }
-.stats {
-  display: flex;
-  justify-content: center;
-  gap: 1.2rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-.stat-box {
-  background: var(--card);
-  border-radius: var(--radius-sm);
-  padding: 1rem 1.5rem;
-  text-align: center;
-  box-shadow: 0 3px 15px var(--shadow);
-  min-width: 90px;
-}
-.stat-num {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--terracotta-dark);
-}
-.stat-label {
-  font-size: 0.65rem;
-  color: var(--text-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 700;
-}
-.const-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin-bottom: 1.5rem;
-}
-.const-card {
-  background: var(--card);
-  border-radius: var(--radius-sm);
-  padding: 1rem 1.2rem;
-  box-shadow: 0 3px 15px var(--shadow);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-left: 5px solid var(--sage);
-}
-.const-card:nth-child(2n) { border-left-color: var(--terracotta); }
-.const-card:nth-child(3n) { border-left-color: var(--dusty-blue); }
-.const-card h3 { font-size: 0.95rem; margin-bottom: 0.15rem; }
-.const-card p { font-size: 0.72rem; color: var(--text-soft); }
-.const-right { display: flex; align-items: center; gap: 0.6rem; }
-.const-bar { width: 80px; height: 8px; background: var(--cream-deep); border-radius: 4px; overflow: hidden; }
-.const-fill { height: 100%; border-radius: 4px; background: var(--sage); transition: width 0.5s ease; }
-.const-pct { font-size: 0.72rem; font-weight: 700; color: var(--sage-dark); min-width: 32px; text-align: right; }
-.pixel-card {
-  background: var(--terracotta-light);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  text-align: center;
-  margin-top: 1.5rem;
-  border: 2px dashed var(--terracotta);
-}
-.pixel-big {
-  width: 75px;
-  height: 75px;
-  background: var(--terracotta);
-  border-radius: 50% 50% 50% 25%;
-  margin: 0 auto 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 4px 20px var(--shadow-hover);
-  animation: pixelBounce 3s ease-in-out infinite;
-  border: 3px solid white;
-}
-.pixel-big .eye {
-  width: 9px;
-  height: 12px;
-  background: white;
-  border-radius: 50%;
-}
-.pixel-card h3 { font-size: 1.05rem; margin-bottom: 0.2rem; }
-.pixel-card p { font-size: 0.82rem; color: var(--text-soft); }
-.drift-link {
-  display: inline-block;
-  margin-top: 1rem;
-  font-size: 0.85rem;
-  color: var(--terracotta-dark);
-  text-decoration: underline;
-  font-weight: 700;
-}
-
-.expand-panel {
-  background: var(--card);
-  border-radius: var(--radius-sm);
-  padding: 1rem 1.2rem;
-  margin-bottom: 0.8rem;
-  box-shadow: 0 3px 15px var(--shadow);
-  border-left: 4px solid var(--butter);
-  animation: slideDown 0.3s ease;
-}
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.expand-panel h4 {
-  font-family: var(--f-hand);
-  font-size: 1.2rem;
-  color: var(--terracotta-dark);
-  margin-bottom: 0.6rem;
-}
-.expand-row {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--cream-deep);
-  text-decoration: none;
-  color: var(--text);
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: color 0.2s;
-}
-.expand-row:last-child { border: none; }
-.expand-row:hover { color: var(--sage-dark); }
-.expand-row.done { color: var(--sage-dark); }
-.expand-check { font-size: 1rem; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RIVLUM — Sky Map</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .sky-hero {
+      text-align: center;
+      padding: 32px 20px 16px;
+    }
+    .sky-hero h1 {
+      font-size: 2rem;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .sky-hero .sky-script {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      color: var(--script);
+      margin-bottom: 14px;
+    }
+    .sky-hero p {
+      color: var(--muted);
+      max-width: 460px;
+      margin: 0 auto;
+      font-size: 0.92rem;
+    }
+    .sky-stats {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 20px auto;
+      max-width: 420px;
+    }
+    .sky-stat {
+      text-align: center;
+    }
+    .sky-stat strong {
+      display: block;
+      font-size: 1.8rem;
+      color: var(--brand);
+      font-weight: 800;
+    }
+    .sky-stat span {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .sky-canvas-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 16px;
+      position: relative;
+    }
+    .sky-canvas {
+      width: 100%;
+      height: 440px;
+      background: linear-gradient(180deg, #0F1824 0%, #1A2638 50%, #243448 100%);
+      border-radius: 22px;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 16px 40px rgba(30, 50, 80, 0.15);
+      display: block;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    [data-theme="midnight"] .sky-canvas {
+      background: linear-gradient(180deg, #050810 0%, #0F1824 50%, #1A2638 100%);
+    }
+    .node-panel {
+      max-width: 600px;
+      margin: 24px auto;
+      padding: 0 20px;
+    }
+    .node-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 28px var(--shadow);
+      text-align: center;
+      animation: fadeIn 0.4s ease;
+    }
+    .node-card .node-emoji {
+      font-size: 2.4rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .node-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+    .node-card .node-mood {
+      font-family: 'Caveat', cursive;
+      color: var(--script);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+    .node-card .node-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .status-lit {
+      background: var(--gold-bg);
+      color: #8B7A2E;
+      border: 1.5px solid var(--gold);
+    }
+    .status-dim {
+      background: var(--bg2);
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+    }
+    .node-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 16px auto 0;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+  </style>
 </head>
-<body>
+<body data-theme="meadow">
 
-<div class="bg-blobs">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-</div>
+  <!-- ═══ Hero ═══ -->
+  <section class="sky-hero">
+    <span class="pill pill-cool">🌌 your sky, your journey</span>
+    <h1>The Sky Map</h1>
+    <p class="sky-script">every star is a challenge completed ✨</p>
+    <p>Tap a constellation node to see what each star represents. Complete a challenge to light it up forever.</p>
+  </section>
 
-<div class="wrap">
-  <h1 class="page-title">Your Sky 🌌</h1>
-  <p class="page-sub">every edit lights a star. watch your river of light grow.</p>
-
-  <div class="sky-canvas">
-    <canvas id="skyCanvas"></canvas>
-  </div>
-
-  <div class="stats">
-    <div class="stat-box">
-      <div class="stat-num" id="starCount">0</div>
-      <div class="stat-label">Stars ✨</div>
+  <!-- ═══ Stats ═══ -->
+  <div class="sky-stats">
+    <div class="sky-stat">
+      <strong id="statLit">0</strong>
+      <span>⭐ Stars Lit</span>
     </div>
-    <div class="stat-box">
-      <div class="stat-num" id="driftCount">0</div>
-      <div class="stat-label">Drifts 🌊</div>
+    <div class="sky-stat">
+      <strong>6</strong>
+      <span>🌌 Total Nodes</span>
     </div>
-    <div class="stat-box">
-      <div class="stat-num" id="dayCount">1</div>
-      <div class="stat-label">Days 📅</div>
+    <div class="sky-stat">
+      <strong id="statPct">0%</strong>
+      <span>🌊 Sky Mapped</span>
     </div>
   </div>
 
-  <div class="const-list" id="constList"></div>
-
-  <div class="pixel-card">
-    <div class="pixel-big"><div class="eye"></div><div class="eye"></div></div>
-    <h3 id="pixelName">Pixel</h3>
-    <p id="pixelDesc">a tiny dot of light. just getting started on the river.</p>
-    <a href="drifts.html" class="drift-link">View Your Drift Gallery 🌊 →</a>
+  <!-- ═══ Starfield Canvas ═══ -->
+  <div class="sky-canvas-wrap">
+    <canvas id="skyCanvas" class="sky-canvas"></canvas>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#F2C94C;box-shadow:0 0 8px #F2C94C;"></span> Earned</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#6E7570;"></span> Locked</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#FFFFFF;opacity:0.6;"></span> Background Star</div>
+    </div>
   </div>
-</div>
 
-<div class="pixel"><div class="pixel-eye"></div><div class="pixel-eye"></div></div>
+  <!-- ═══ Node Panel ═══ -->
+  <div class="node-panel hidden" id="nodePanel"></div>
 
-<nav class="nav">
-  <a href="index.html"><span>🏠</span>Home</a>
-  <a href="challenge.html"><span>✨</span>Edit</a>
-  <a href="free-edit.html"><span>📸</span>Free</a>
-  <a href="constellation.html" class="active"><span>🌌</span>Sky</a>
-  <a href="about.html"><span>💛</span>About</a>
-</nav>
+  <!-- ═══ Pretty Footer ═══ -->
+  <footer class="pretty-footer">
+    <span class="footer-emoji">🌌</span>
+    <span class="footer-script">keep drifting, keep lighting up the sky</span>
+    <span class="footer-copy">© 2024 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
+  </footer>
 
-<script>
-var savedTheme = localStorage.getItem('rivlum_theme');
-if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
+  <!-- ═══ Bottom Nav ═══ -->
+  <nav class="bottom-nav">
+    <a href="index.html"><span class="nav-icon">🏠</span><span>Home</span></a>
+    <a href="challenge.html"><span class="nav-icon">✨</span><span>Edit</span></a>
+    <a href="free-edit.html"><span class="nav-icon">📸</span><span>Free</span></a>
+    <a href="room.html"><span class="nav-icon">⚡</span><span>Room</span></a>
+    <a href="constellation.html" class="active" aria-current="page"><span class="nav-icon">🌌</span><span>Sky</span></a>
+    <a href="about.html"><span class="nav-icon">💛</span><span>About</span></a>
+  </nav>
 
-var consts=[
-{name:'The Horizon',desc:'light & exposure',icon:'🌅',total:5,keys:['dream_1','golden_1','horizon_2','horizon_3','horizon_4'],challenges:[
-  {name:'Make it feel like a dream',link:'challenge.html?type=dream',done:'dream_1'},
-  {name:'Turn day into golden hour',link:'challenge.html?type=golden',done:'golden_1'},
-  {name:'Brighten the shadows',link:'challenge.html?type=dream',done:'horizon_2'},
-  {name:'Flatten the light',link:'challenge.html?type=golden',done:'horizon_3'},
-  {name:'Create a silhouette',link:'challenge.html?type=storm',done:'horizon_4'}
-]},
-{name:'The Prism',desc:'color & mood',icon:'🎨',total:5,keys:['vintage_1','prism_2','prism_3','prism_4','prism_5'],challenges:[
-  {name:'Turn this into an old photo',link:'challenge.html?type=vintage',done:'vintage_1'},
-  {name:'Make it feel like candy',link:'challenge.html?type=dream',done:'prism_2'},
-  {name:'Remove all color',link:'challenge.html?type=storm',done:'prism_3'},
-  {name:'Shift the mood to blue',link:'challenge.html?type=lonely',done:'prism_4'},
-  {name:'Create a sunset from noon',link:'challenge.html?type=golden',done:'prism_5'}
-]},
-{name:'The Frame',desc:'composition',icon:'📐',total:4,keys:['power_1','frame_2','frame_3','frame_4'],challenges:[
-  {name:'Make them look powerful',link:'challenge.html?type=power',done:'power_1'},
-  {name:'Crop to the subject',link:'challenge.html?type=power',done:'frame_2'},
-  {name:'Use rule of thirds',link:'challenge.html?type=lonely',done:'frame_3'},
-  {name:'Find the leading line',link:'challenge.html?type=golden',done:'frame_4'}
-]},
-{name:'The Mask',desc:'storytelling',icon:'🎭',total:4,keys:['lonely_1','storm_1','mask_3','mask_4'],challenges:[
-  {name:'What color is loneliness?',link:'challenge.html?type=lonely',done:'lonely_1'},
-  {name:'Make it feel like a storm',link:'challenge.html?type=storm',done:'storm_1'},
-  {name:'Tell a happy story',link:'challenge.html?type=golden',done:'mask_3'},
-  {name:'Tell a scary story',link:'challenge.html?type=storm',done:'mask_4'}
-]},
-{name:'The Current',desc:'creative tools',icon:'⚡',total:6,keys:['current_1','current_2','current_3','current_4','current_5','current_6'],challenges:[
-  {name:'Add text to a photo',link:'free-edit.html',done:'current_1'},
-  {name:'Try double exposure',link:'free-edit.html',done:'current_2'},
-  {name:'Use color splash',link:'free-edit.html',done:'current_3'},
-  {name:'Paint with light',link:'free-edit.html',done:'current_4'},
-  {name:'Create a vignette',link:'free-edit.html',done:'current_5'},
-  {name:'Add film grain',link:'free-edit.html',done:'current_6'}
-]},
-{name:'The Deep',desc:'advanced',icon:'🌊',total:6,keys:['deep_1','deep_2','deep_3','deep_4','deep_5','deep_6'],challenges:[
-  {name:'Master split toning',link:'challenge.html?type=lonely',done:'deep_1'},
-  {name:'Selective edit a face',link:'free-edit.html',done:'deep_2'},
-  {name:'Match a movie still',link:'compare.html',done:'deep_3'},
-  {name:'Create a mood preset',link:'moods.html',done:'deep_4'},
-  {name:'Edit a portrait',link:'challenge.html?type=power',done:'deep_5'},
-  {name:'The final drift',link:'challenge.html?type=dream',done:'deep_6'}
-]}
-];
-var stars=JSON.parse(localStorage.getItem('rivlum_stars')||'[]');
-var drifts=JSON.parse(localStorage.getItem('rivlum_drifts')||'[]');
-var born=localStorage.getItem('rivlum_born');
-var days=born?Math.max(1,Math.ceil((Date.now()-parseInt(born))/86400000)):1;
-document.getElementById('starCount').textContent=stars.length;
-document.getElementById('driftCount').textContent=drifts.length;
-document.getElementById('dayCount').textContent=days;
+  <script>
+    /* ══════════════════════════════════════════
+       RIVLUM Constellation — Interactive Sky Map
+       ══════════════════════════════════════════ */
 
-var list=document.getElementById('constList');
-consts.forEach(function(c,idx){
-var done=c.keys.filter(function(k){return stars.includes(k)}).length;
-var pct=Math.round(done/c.total*100);
-var d=document.createElement('div');d.className='const-card';
-d.style.cursor='pointer';
-d.innerHTML='<div><h3>'+c.icon+' '+c.name+'</h3><p>'+c.desc+' · '+done+'/'+c.total+'</p></div><div class="const-right"><div class="const-bar"><div class="const-fill" style="width:'+pct+'%"></div></div><span class="const-pct">'+pct+'%</span></div>';
+    (function(){
+      var t = localStorage.getItem('rivlum_theme') || 'meadow';
+      document.body.setAttribute('data-theme', t);
+      if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
+      if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
+    })();
 
-// Click to expand challenges
-d.addEventListener('click',function(){
-var existing=document.getElementById('expand-'+idx);
-if(existing){existing.remove();return}
-var panel=document.createElement('div');
-panel.id='expand-'+idx;
-panel.className='expand-panel';
-panel.innerHTML='<h4>'+c.icon+' '+c.name+' Challenges</h4>';
-c.challenges.forEach(function(ch){
-var isDone=stars.includes(ch.done);
-var row=document.createElement('a');
-row.href=ch.link;
-row.className='expand-row'+(isDone?' done':'');
-row.innerHTML='<span class="expand-check">'+(isDone?'⭐':'○')+'</span><span>'+ch.name+'</span>';
-panel.appendChild(row)});
-d.after(panel)});
-list.appendChild(d)});
+    var reducedMotion = localStorage.getItem('rivlum_motion') === '1';
 
-var pN=document.getElementById('pixelName'),pD=document.getElementById('pixelDesc');
-if(stars.length>=30){pN.textContent='Pixel the Star ⭐';pD.textContent='pixel has become a star itself, glowing bright in your sky!'}
-else if(stars.length>=15){pN.textContent='Pixel the Glowing ✨';pD.textContent='pixel has a soft glow aura and leaves tiny star trails behind.'}
-else if(stars.length>=5){pN.textContent='Pixel the Curious 👀';pD.textContent='two eyes now! pixel is watching your edits with excitement.'}
-else if(stars.length>=1){pN.textContent='Pixel the Blob 🫧';pD.textContent='a small round blob with one eye. curious about your first edit.'}
+    /* ── Challenge Nodes (positioned as a loose constellation) ── */
+    var nodes = [
+      { key:'prism',   name:'The Prism',   mood:'Dreamy',      emoji:'☁️', x:0.18, y:0.28, desc:'Soften reality into a pastel daydream — misty mornings, faded light leaks.' },
+      { key:'horizon', name:'The Horizon', mood:'Golden Hour', emoji:'🌅', x:0.42, y:0.18, desc:'Bathe your photo in warm amber tones and that magic-hour glow.' },
+      { key:'mask',    name:'The Mask',    mood:'Moody',       emoji:'🌙', x:0.72, y:0.32, desc:'Pull your image into shadow. Deepen contrast, cool the tones, build atmosphere.' },
+      { key:'frame',   name:'The Frame',   mood:'Electric',    emoji:'⚡', x:0.82, y:0.62, desc:'Crank up the energy with bold saturation and punchy, vivid color.' },
+      { key:'grove',   name:'The Grove',   mood:'Nature',      emoji:'🌿', x:0.52, y:0.75, desc:'Celebrate the natural world — lush greens, earthy tones, soft dappled light.' },
+      { key:'reel',    name:'The Reel',    mood:'Vintage',     emoji:'📼', x:0.22, y:0.62, desc:'Step back in time — faded film tones, warm grain, nostalgic analog haze.' }
+    ];
 
-var cv=document.getElementById('skyCanvas');
-var ctx=cv.getContext('2d');
-function resize(){cv.width=cv.parentElement.offsetWidth;cv.height=cv.parentElement.offsetHeight}
-resize();window.addEventListener('resize',resize);
-var pts=[];
-var numStars=Math.max(25,stars.length*8+20);
-var colors=['#E9967A','#A8C4A2','#F5D97C','#A8C0D6','#FFFFFF'];
-for(var i=0;i<numStars;i++){
-pts.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*2.5+1,s:Math.random()*.015+.005,o:Math.random(),c:colors[Math.floor(Math.random()*colors.length)]})}
-function draw(){
-ctx.clearRect(0,0,cv.width,cv.height);
-pts.forEach(function(p){
-p.o+=p.s;if(p.o>1)p.s=-Math.abs(p.s);if(p.o<.3)p.s=Math.abs(p.s);
-ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fillStyle=p.c;ctx.globalAlpha=p.o;ctx.fill();
-ctx.globalAlpha=p.o*0.3;ctx.beginPath();ctx.arc(p.x,p.y,p.r*3,0,Math.PI*2);ctx.fill()});
-ctx.globalAlpha=1;
-requestAnimationFrame(draw)}
-draw();
-</script>
+    /* ── Connection pairs (constellation lines) ── */
+    var lines = [
+      [0,1],[1,2],[2,3],[3,4],[4,5],[5,0], // outer hexagon
+      [0,3],[1,4],[2,5]                     // inner crossing
+    ];
+
+    /* ── Canvas Setup ── */
+    var canvas = document.getElementById('skyCanvas');
+    var ctx = canvas.getContext('2d');
+    var W = 0, H = 0, dpr = window.devicePixelRatio || 1;
+    var bgStars = [];
+
+    function resize() {
+      var rect = canvas.getBoundingClientRect();
+      W = rect.width;
+      H = rect.height;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      generateBackgroundStars();
+    }
+
+    function generateBackgroundStars() {
+      bgStars = [];
+      var count = Math.round((W * H) / 2800);
+      for (var i = 0; i < count; i++) {
+        bgStars.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 1.4 + 0.3,
+          a: Math.random() * 0.6 + 0.2,
+          speed: Math.random() * 0.015 + 0.005,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    /* ── Get Lit Stars ── */
+    function getLitStars() {
+      try {
+        return JSON.parse(localStorage.getItem('rivlum_stars') || '[]');
+      } catch(e) { return []; }
+    }
+
+    /* ── Update Stats ── */
+    function updateStats() {
+      var lit = getLitStars();
+      var litCount = nodes.filter(function(n){ return lit.indexOf(n.key) !== -1; }).length;
+      document.getElementById('statLit').textContent = litCount;
+      document.getElementById('statPct').textContent = Math.round((litCount / nodes.length) * 100) + '%';
+    }
+
+    /* ── Draw Loop ── */
+    var t0 = 0;
+    function draw(timestamp) {
+      if (!timestamp) timestamp = 0;
+      ctx.clearRect(0, 0, W, H);
+
+      /* Background stars with twinkle */
+      bgStars.forEach(function(s) {
+        var alpha;
+        if (reducedMotion) {
+          alpha = s.a;
+        } else {
+          alpha = s.a * (0.5 + 0.5 * Math.sin(timestamp * s.speed + s.phase));
+        }
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      var lit = getLitStars();
+
+      /* Constellation lines */
+      lines.forEach(function(pair) {
+        var a = nodes[pair[0]];
+        var b = nodes[pair[1]];
+        var aLit = lit.indexOf(a.key) !== -1;
+        var bLit = lit.indexOf(b.key) !== -1;
+        var ax = a.x * W, ay = a.y * H;
+        var bx = b.x * W, by = b.y * H;
+
+        ctx.beginPath();
+        ctx.strokeStyle = (aLit && bLit) ? 'rgba(242,201,76,0.4)' : 'rgba(255,255,255,0.08)';
+        ctx.lineWidth = (aLit && bLit) ? 1.4 : 0.8;
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(bx, by);
+        ctx.stroke();
+      });
+
+      /* Nodes */
+      nodes.forEach(function(n) {
+        var isLit = lit.indexOf(n.key) !== -1;
+        var nx = n.x * W;
+        var ny = n.y * H;
+
+        if (isLit) {
+          /* Glow */
+          var glow = ctx.createRadialGradient(nx, ny, 0, nx, ny, 36);
+          glow.addColorStop(0, 'rgba(242,201,76,0.6)');
+          glow.addColorStop(1, 'rgba(242,201,76,0)');
+          ctx.fillStyle = glow;
+          ctx.beginPath();
+          ctx.arc(nx, ny, 36, 0, Math.PI * 2);
+          ctx.fill();
+
+          /* Pulse (reduced-motion skips) */
+          var pulse = reducedMotion ? 1 : (1 + 0.1 * Math.sin(timestamp * 0.002));
+          var baseR = 10 * pulse;
+
+          /* Core star */
+          ctx.fillStyle = '#F2C94C';
+          ctx.beginPath();
+          ctx.arc(nx, ny, baseR, 0, Math.PI * 2);
+          ctx.fill();
+
+          /* Inner highlight */
+          ctx.fillStyle = '#FFF6D6';
+          ctx.beginPath();
+          ctx.arc(nx - 2, ny - 2, baseR * 0.35, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          /* Dim node */
+          ctx.fillStyle = 'rgba(255,255,255,0.25)';
+          ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(nx, ny, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        /* Emoji label */
+        ctx.font = '18px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(n.emoji, nx, ny - 26);
+
+        /* Name label */
+        ctx.font = '600 11px "Atkinson Hyperlegible", sans-serif';
+        ctx.fillStyle = isLit ? 'rgba(255,246,214,0.95)' : 'rgba(255,255,255,0.55)';
+        ctx.fillText(n.name, nx, ny + 24);
+      });
+
+      if (!reducedMotion) {
+        requestAnimationFrame(draw);
+      }
+    }
+
+    /* ── Click Handler ── */
+    canvas.addEventListener('click', function(e) {
+      var rect = canvas.getBoundingClientRect();
+      var cx = e.clientX - rect.left;
+      var cy = e.clientY - rect.top;
+
+      for (var i = 0; i < nodes.length; i++) {
+        var n = nodes[i];
+        var nx = n.x * W, ny = n.y * H;
+        var dx = cx - nx, dy = cy - ny;
+        if (Math.sqrt(dx*dx + dy*dy) < 28) {
+          showNodePanel(n);
+          return;
+        }
+      }
+    });
+
+    function showNodePanel(node) {
+      var lit = getLitStars();
+      var isLit = lit.indexOf(node.key) !== -1;
+      var panel = document.getElementById('nodePanel');
+
+      panel.innerHTML = '';
+      panel.classList.remove('hidden');
+
+      var card = document.createElement('div');
+      card.className = 'node-card';
+
+      var statusClass = isLit ? 'status-lit' : 'status-dim';
+      var statusText = isLit ? '⭐ Star Earned' : '🌙 Not yet lit';
+
+      card.innerHTML =
+        '<span class="node-emoji">' + node.emoji + '</span>' +
+        '<h3>' + node.name + '</h3>' +
+        '<div class="node-mood">' + node.mood + '</div>' +
+        '<span class="node-status ' + statusClass + '">' + statusText + '</span>' +
+        '<p>' + node.desc + '</p>' +
+        '<a href="challenge.html?c=' + node.key + '" class="btn btn-accent">' +
+          (isLit ? '🎨 Edit Again' : '✨ Start Challenge') +
+        '</a>';
+
+      panel.appendChild(card);
+      panel.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
+    }
+
+    /* ── Init ── */
+    window.addEventListener('resize', function(){
+      resize();
+      if (reducedMotion) draw(0);
+    });
+
+    resize();
+    updateStats();
+
+    if (reducedMotion) {
+      draw(0);
+    } else {
+      requestAnimationFrame(draw);
+    }
+  </script>
+
 </body>
 </html>
