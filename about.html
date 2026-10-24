@@ -1,238 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RIVLUM — About</title>
-<link rel="stylesheet" href="styles.css">
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Atkinson+Hyperlegible:wght@400;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About · RIVLUM</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .about-hero {
+      text-align: center;
+      padding: 3rem 1.5rem 2rem;
+      background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+    }
+    .about-hero h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 2.4rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .about-hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    .about-section {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    .about-section h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.6rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .about-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+    .about-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+    .about-card p:last-child {
+      margin-bottom: 0;
+    }
 
-  body {
-    margin: 0;
-    padding: 0 0 90px 0;
-    background: linear-gradient(180deg, #FBF8F3 0%, #F8F1E7 100%);
-    font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, sans-serif;
-    color: #2D312E;
-  }
+    /* Theme Switcher */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .theme-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      cursor: pointer;
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .theme-btn:hover {
+      transform: translateY(-1px);
+    }
+    .theme-btn.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(91,130,102,0.12);
+    }
+    .theme-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+    .swatch-meadow { background: linear-gradient(135deg, #FBF8F3 50%, #5B8266 50%); }
+    .swatch-ocean { background: linear-gradient(135deg, #F0F6F9 50%, #3A7CA5 50%); }
+    .swatch-sunset { background: linear-gradient(135deg, #FDF6F0 50%, #D96B43 50%); }
+    .swatch-midnight { background: linear-gradient(135deg, #12161A 50%, #64B5F6 50%); }
 
-  .wrap {
-    max-width: 620px;
-    margin: 0 auto;
-    padding: 28px 18px;
-  }
+    /* Comfort Toggles */
+    .comfort-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .comfort-row:last-child {
+      border-bottom: none;
+    }
+    .comfort-label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .comfort-label strong {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .comfort-label small {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      border-radius: 13px;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.25s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .toggle-switch input:checked + .toggle-track {
+      background: var(--accent);
+    }
+    .toggle-switch input:checked + .toggle-track::after {
+      transform: translateX(22px);
+    }
+    .toggle-switch input:focus-visible + .toggle-track {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
 
-  .hero {
-    text-align: center;
-    margin-bottom: 28px;
-  }
+    /* Promise Card */
+    .promise-card {
+      background: linear-gradient(135deg, var(--bg2) 0%, var(--card) 100%);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      padding: 1.75rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .promise-card .promise-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .promise-card h3 {
+      justify-content: center;
+      font-size: 1.8rem;
+      color: var(--accent);
+    }
+    .promise-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .promise-list {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0;
+      text-align: left;
+    }
+    .promise-list li {
+      padding: 0.4rem 0;
+      color: var(--text);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .promise-list li::before {
+      content: '🌱';
+      flex-shrink: 0;
+    }
 
-  .badge {
-    display: inline-block;
-    background: #FFF6D6;
-    border: 1.5px solid #F2C94C;
-    color: #8A6D1D;
-    font-size: 0.78rem;
-    font-weight: 700;
-    padding: 5px 14px;
-    border-radius: 999px;
-    margin-bottom: 14px;
-  }
+    .about-footer-spacer {
+      height: 5rem;
+    }
 
-  .logo {
-    font-size: 3rem;
-    font-weight: 800;
-    color: #D07251;
-    letter-spacing: -1.5px;
-    margin: 0;
-    line-height: 1;
-  }
-
-  .script {
-    font-family: 'Caveat', cursive;
-    font-size: 1.6rem;
-    color: #5B8266;
-    margin: 6px 0 12px;
-  }
-
-  .card {
-    background: #FFFFFF;
-    border: 1.5px solid #EAE4DC;
-    border-radius: 22px;
-    padding: 24px;
-    margin-bottom: 18px;
-    box-shadow: 0 10px 28px rgba(91, 130, 102, 0.07);
-  }
-
-  .card h2 {
-    margin: 0 0 8px 0;
-    color: #5B8266;
-    font-size: 1.15rem;
-  }
-
-  .card p {
-    margin: 0;
-    color: #4A524C;
-    font-size: 0.93rem;
-    line-height: 1.55;
-  }
-
-  .theme-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 16px;
-  }
-
-  .theme-btn {
-    border: 2px solid transparent;
-    border-radius: 16px;
-    padding: 14px 8px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    font-family: inherit;
-    transition: 0.15s;
-  }
-  .theme-btn:active { transform: scale(0.97); }
-
-  .theme-btn.meadow   { background: #F4F9F5; border-color: #5B8266; color: #5B8266; }
-  .theme-btn.ocean    { background: #F0F7FB; border-color: #3A7CA5; color: #3A7CA5; }
-  .theme-btn.sunset   { background: #FDF6F0; border-color: #D96B43; color: #D96B43; }
-  .theme-btn.midnight { background: #1C2228; border-color: #64B5F6; color: #64B5F6; }
-
-  .pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #FFF6D6;
-    border: 1.5px solid #F2C94C;
-    color: #2D312E;
-    padding: 10px 16px;
-    border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    cursor: pointer;
-    margin: 5px 6px 5px 0;
-  }
-
-  .pretty-footer {
-    text-align: center;
-    margin-top: 36px;
-    padding: 10px;
-  }
-  .pretty-footer .heart { font-size: 1.3rem; margin-bottom: 4px; }
-  .pretty-footer .script-line {
-    font-family: 'Caveat', cursive;
-    font-size: 1.25rem;
-    color: #5B8266;
-  }
-  .pretty-footer p {
-    margin: 6px 0 0;
-    font-size: 0.8rem;
-    color: #6E7570;
-  }
-
-  .nav {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: #FFFFFF;
-    border-top: 1.5px solid #EAE4DC;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0 12px;
-    z-index: 100;
-  }
-  .nav a {
-    text-decoration: none;
-    color: #5B8266;
-    font-size: 0.72rem;
-    font-weight: 700;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-  }
-  .nav a span { font-size: 1.25rem; }
-</style>
+    @media (min-width: 600px) {
+      .theme-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
 
-  <div class="hero">
-    <div class="badge">✨ 100% free · no login · zero data</div>
-    <h1 class="logo">RIVLUM</h1>
-    <div class="script">the river of light 🌊</div>
-    <p style="color:#6E7570; font-size:0.95rem; max-width:360px; margin:0 auto; line-height:1.5;">
-      A cozy place where kids learn photo editing. No scary tools. No sign-ups. Just you, your creativity, and a little blob named Pixel.
-    </p>
-  </div>
+  <script>
+    (function(){
+      var t = localStorage.getItem('rivlum_theme') || 'meadow';
+      document.body.setAttribute('data-theme', t);
+      if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
+      if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
+    })();
+  </script>
 
-  <div class="card">
-    <h2>🎨 Choose Your Theme</h2>
-    <p>Pick the palette that feels right today.</p>
-    <div class="theme-grid">
-      <button class="theme-btn meadow" onclick="switchTheme('meadow')">🌿 Meadow</button>
-      <button class="theme-btn ocean" onclick="switchTheme('ocean')">🌊 Ocean</button>
-      <button class="theme-btn sunset" onclick="switchTheme('sunset')">🌅 Sunset</button>
-      <button class="theme-btn midnight" onclick="switchTheme('midnight')">🌌 Midnight</button>
+  <!-- Header -->
+  <header class="site-header">
+    <a href="index.html" class="logo-text" style="text-decoration:none;">RIVLUM</a>
+    <p class="logo-tagline">the river of light 🌊</p>
+  </header>
+
+  <!-- Hero -->
+  <section class="about-hero">
+    <h2>hey, welcome to the quiet corner 💛</h2>
+    <p>RIVLUM is a tiny photo-editing playground built for young creators who just want to make beautiful things — no accounts, no ads, no noise.</p>
+  </section>
+
+  <div class="about-section">
+
+    <!-- Our Little Promise -->
+    <div class="promise-card">
+      <div class="promise-emoji">🤝</div>
+      <h3>Our Little Promise</h3>
+      <p>We built this space with a very simple rule: <strong>your creativity belongs to you, and your privacy is not for sale.</strong></p>
+      <ul class="promise-list">
+        <li>Everything you edit stays on your device — we never see your photos</li>
+        <li>No signups, no emails, no passwords, no tracking pixels</li>
+        <li>No ads, no sponsored content, no "recommended for you" algorithms</li>
+        <li>Your saved edits live in your browser's localStorage — clear your browser data and it's all gone, just like that</li>
+        <li>We don't even have a database. There's literally nothing to leak</li>
+      </ul>
     </div>
+
+    <!-- Theme Switcher -->
+    <div class="about-card">
+      <h3>🎨 Pick Your Vibe</h3>
+      <p>Choose a color theme that feels right. It saves automatically and follows you across every page.</p>
+      <div class="theme-grid">
+        <button class="theme-btn" data-theme="meadow" aria-label="Meadow theme">
+          <span class="theme-swatch swatch-meadow"></span>
+          Meadow
+        </button>
+        <button class="theme-btn" data-theme="ocean" aria-label="Ocean theme">
+          <span class="theme-swatch swatch-ocean"></span>
+          Ocean
+        </button>
+        <button class="theme-btn" data-theme="sunset" aria-label="Sunset theme">
+          <span class="theme-swatch swatch-sunset"></span>
+          Sunset
+        </button>
+        <button class="theme-btn" data-theme="midnight" aria-label="Midnight theme">
+          <span class="theme-swatch swatch-midnight"></span>
+          Midnight
+        </button>
+      </div>
+    </div>
+
+    <!-- Comfort Settings -->
+    <div class="about-card">
+      <h3>🧸 Comfort Settings</h3>
+      <p>Small tweaks that can make a big difference. These save to your browser too.</p>
+
+      <div class="comfort-row">
+        <div class="comfort-label">
+          <strong>OpenDyslexic Font</strong>
+          <small>A font designed to be easier to read for some people with dyslexia</small>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="dysToggle" aria-label="Toggle OpenDyslexic font">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+
+      <div class="comfort-row">
+        <div class="comfort-label">
+          <strong>Reduce Motion</strong>
+          <small>Tones down animations and transitions across the site</small>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="motionToggle" aria-label="Toggle reduced motion">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- What is RIVLUM -->
+    <div class="about-card">
+      <h3>🌊 What is RIVLUM?</h3>
+      <p>RIVLUM is a free, open photo-editing playground for kids and teens (ages 8–16). Think of it as a gentle first step into the world of color grading, light editing, and visual storytelling.</p>
+      <p>It runs entirely in your browser — no downloads, no installs, no servers storing your work. Every edit you make uses your device's own processing power, and every saved "drift" lives in a tiny pocket of browser storage called localStorage.</p>
+      <p>The name comes from the idea of a <em>river of light</em> — how light flows through a photograph and how you can gently redirect it to tell your own story. 🌊✨</p>
+    </div>
+
+    <!-- How It Works -->
+    <div class="about-card">
+      <h3>🛠️ How It Works</h3>
+      <p><strong>Challenges:</strong> Try to match a target edit by adjusting 10 real photo-editing sliders. Our Drift Engine compares your result and tells you how close you got.</p>
+      <p><strong>Free Edit:</strong> No targets, no pressure. Just you, a photo, and all the sliders. Save your drift to your portfolio whenever you want.</p>
+      <p><strong>Co-Edit Rooms:</strong> Share a link with a friend and take turns editing the same photo. Everything happens through the URL — no servers involved.</p>
+      <p><strong>Portfolio:</strong> Your saved drifts live in a little gallery you can share with anyone via a link.</p>
+    </div>
+
+    <!-- Built With Love -->
+    <div class="about-card">
+      <h3>💻 Built With</h3>
+      <p>Plain HTML, CSS, and vanilla JavaScript. No frameworks, no build tools, no npm packages. Just the web, the way it was meant to be — fast, simple, and accessible on a cheap phone over a slow connection.</p>
+      <p>The only external resources we load are two Google Fonts (<em>Atkinson Hyperlegible</em> for readability and <em>Caveat</em> for that handwritten feel) and some sample photos from Unsplash so you have something to edit right away.</p>
+    </div>
+
   </div>
 
-  <div class="card">
-    <h2>💛 Comfort Settings</h2>
-    <p style="margin-bottom:14px;">Make RIVLUM easier on your eyes.</p>
-    <button class="pill" onclick="toggleDyslexicFont()">🔤 OpenDyslexic Font</button>
-    <button class="pill" onclick="toggleReducedMotion()">⚡ Reduced Motion</button>
-  </div>
+  <div class="about-footer-spacer"></div>
 
-  <div class="card">
-    <h2>🧭 Our Little Promise</h2>
-    <p>
-      Creative tools for kids should feel soft, safe, and free. No ads. No trackers. No “create an account” walls. Just pure play with light and color.
-    </p>
-  </div>
+  <!-- Pretty Footer -->
+  <footer class="pretty-footer">
+    <span class="footer-emoji">🌿</span>
+    <span class="footer-script">made with care for young creators</span>
+    <span class="footer-copy">© 2024 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
+  </footer>
 
-  <div class="pretty-footer">
-    <div class="heart">💛</div>
-    <div class="script-line">made with care for young creators</div>
-    <p>© RIVLUM · A creative playground for light, color & mood</p>
-  </div>
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="challenge.html" class="nav-item">
+      <span class="nav-icon">✨</span>
+      <span class="nav-label">Edit</span>
+    </a>
+    <a href="free-edit.html" class="nav-item">
+      <span class="nav-icon">📸</span>
+      <span class="nav-label">Free</span>
+    </a>
+    <a href="room.html" class="nav-item">
+      <span class="nav-icon">⚡</span>
+      <span class="nav-label">Room</span>
+    </a>
+    <a href="constellation.html" class="nav-item">
+      <span class="nav-icon">🌌</span>
+      <span class="nav-label">Sky</span>
+    </a>
+    <a href="about.html" class="nav-item active" aria-current="page">
+      <span class="nav-icon">💛</span>
+      <span class="nav-label">About</span>
+    </a>
+  </nav>
 
-</div>
+  <script>
+    /* Theme Switcher */
+    var themeBtns = document.querySelectorAll('.theme-btn');
+    var currentTheme = localStorage.getItem('rivlum_theme') || 'meadow';
 
-<nav class="nav">
-  <a href="index.html"><span>🏠</span>Home</a>
-  <a href="challenge.html"><span>✨</span>Edit</a>
-  <a href="free-edit.html"><span>📸</span>Free</a>
-  <a href="room.html"><span>⚡</span>Room</a>
-  <a href="drifts.html"><span>🌌</span>Sky</a>
-  <a href="about.html"><span>💛</span>About</a>
-</nav>
+    function setActiveTheme(theme) {
+      themeBtns.forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
+      });
+    }
+    setActiveTheme(currentTheme);
 
-<script>
-function switchTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem('rivlum_theme', theme);
-}
-function toggleDyslexicFont() {
-  document.body.classList.toggle('dyslexia-font');
-  const on = document.body.classList.contains('dyslexia-font');
-  localStorage.setItem('rivlum_dys', on ? '1' : '0');
-  alert(on ? '🔤 OpenDyslexic is on!' : 'Standard font restored');
-}
-function toggleReducedMotion() {
-  document.body.classList.toggle('reduced-motion');
-  const on = document.body.classList.contains('reduced-motion');
-  localStorage.setItem('rivlum_motion', on ? '1' : '0');
-  alert(on ? '⚡ Reduced motion on' : 'Motion restored');
-}
-window.addEventListener('load', () => {
-  const t = localStorage.getItem('rivlum_theme') || 'meadow';
-  switchTheme(t);
-  if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
-  if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
-});
-</script>
+    themeBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var theme = this.getAttribute('data-theme');
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem('rivlum_theme', theme);
+        setActiveTheme(theme);
+      });
+    });
+
+    /* Comfort Toggles */
+    var dysToggle = document.getElementById('dysToggle');
+    var motionToggle = document.getElementById('motionToggle');
+
+    dysToggle.checked = localStorage.getItem('rivlum_dys') === '1';
+    motionToggle.checked = localStorage.getItem('rivlum_motion') === '1';
+
+    dysToggle.addEventListener('change', function() {
+      if (this.checked) {
+        document.body.classList.add('dyslexia-font');
+        localStorage.setItem('rivlum_dys', '1');
+      } else {
+        document.body.classList.remove('dyslexia-font');
+        localStorage.setItem('rivlum_dys', '0');
+      }
+    });
+
+    motionToggle.addEventListener('change', function() {
+      if (this.checked) {
+        document.body.classList.add('reduced-motion');
+        localStorage.setItem('rivlum_motion', '1');
+      } else {
+        document.body.classList.remove('reduced-motion');
+        localStorage.setItem('rivlum_motion', '0');
+      }
+    });
+  </script>
+
 </body>
 </html>
