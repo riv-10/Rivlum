@@ -1,270 +1,589 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>RIVLUM — Eye Trainer 👁</title>
-<link rel="stylesheet" href="styles.css"/>
-<style>
-.compare-wrap {
-  position: relative;
-  z-index: 1;
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-.slider-box {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4/3;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 6px 25px var(--shadow);
-  border: 6px solid white;
-  touch-action: none;
-  transform: rotate(-0.3deg);
-}
-.before-img, .after-img {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  user-select: none;
-}
-.before-img img, .after-img img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.after-img { z-index: 2; width: 50%; }
-.handle {
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%;
-  width: 4px;
-  background: white;
-  z-index: 3;
-  cursor: ew-resize;
-  transform: translateX(-50%);
-  box-shadow: 0 0 10px rgba(0,0,0,0.15);
-}
-.handle-dot {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 40px; height: 40px;
-  background: white;
-  border: 3px solid var(--terracotta);
-  border-radius: 50%;
-  transform: translate(-50%,-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.9rem;
-  color: var(--terracotta-dark);
-  font-weight: 800;
-  box-shadow: 0 3px 10px var(--shadow);
-}
-.labels {
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 0.8rem;
-  z-index: 4;
-  pointer-events: none;
-}
-.lbl {
-  background: rgba(255,255,255,0.9);
-  color: var(--text);
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 0.25rem 0.6rem;
-  border-radius: 50px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  box-shadow: 0 2px 6px var(--shadow);
-}
-.switcher {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1.2rem;
-}
-.sw-btn {
-  flex: 1;
-  background: var(--card);
-  border: 2px solid var(--cream-deep);
-  border-radius: var(--radius-sm);
-  padding: 0.7rem;
-  font-family: var(--f);
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--text);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.sw-btn.active {
-  background: var(--terracotta-light);
-  border-color: var(--terracotta);
-  color: var(--terracotta-dark);
-}
-.lesson {
-  background: var(--sage-light);
-  border-left: 5px solid var(--sage);
-  border-radius: var(--radius-sm);
-  padding: 1.2rem;
-  margin-top: 1.2rem;
-}
-.lesson h3 {
-  font-family: var(--f-hand);
-  font-size: 1.3rem;
-  color: var(--sage-dark);
-  margin-bottom: 0.4rem;
-}
-.lesson p {
-  font-size: 0.85rem;
-  color: var(--text);
-  line-height: 1.7;
-}
-.layers-box {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 1.2rem;
-  margin-top: 1rem;
-  box-shadow: 0 3px 15px var(--shadow);
-}
-.layers-box h3 {
-  font-size: 0.95rem;
-  margin-bottom: 0.6rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-.layer-item {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--cream-deep);
-  font-size: 0.8rem;
-}
-.layer-item:last-child { border: none; }
-.layer-num {
-  width: 24px; height: 24px;
-  background: var(--terracotta-light);
-  color: var(--terracotta-dark);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  font-weight: 800;
-  flex-shrink: 0;
-}
-.layer-text { color: var(--text); }
-.layer-text strong { color: var(--terracotta-dark); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RIVLUM — Eye Trainer</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .compare-hero {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+    .compare-hero h1 {
+      font-size: 2rem;
+      color: var(--text);
+      margin: 10px 0 6px;
+    }
+    .compare-hero .compare-script {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      color: var(--script);
+      margin-bottom: 14px;
+    }
+    .compare-hero p {
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto;
+      font-size: 0.95rem;
+    }
+    .example-picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      padding: 16px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .example-chip {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .example-chip:hover {
+      background: var(--bg2);
+      border-color: var(--accent);
+    }
+    .example-chip.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .compare-stage {
+      max-width: 720px;
+      margin: 20px auto;
+      padding: 0 16px;
+    }
+    .compare-container {
+      position: relative;
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 16px 40px var(--shadow);
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      background: #000;
+      aspect-ratio: 4 / 3;
+    }
+    .compare-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .compare-after-wrap {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      width: 50%;
+    }
+    .compare-after-wrap canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .compare-handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 3px;
+      background: #FFFFFF;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+      cursor: ew-resize;
+      z-index: 10;
+      transform: translateX(-50%);
+    }
+    .compare-handle-knob {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      border: 3px solid #FFFFFF;
+    }
+    .compare-label {
+      position: absolute;
+      top: 12px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      z-index: 5;
+      background: rgba(255,255,255,0.95);
+      color: var(--text);
+      letter-spacing: 0.5px;
+    }
+    .compare-label.before { left: 12px; }
+    .compare-label.after { right: 12px; background: var(--accent); color: #FFFFFF; }
+    .timeline-section {
+      max-width: 640px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+    .timeline-heading {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .timeline-heading h2 {
+      font-size: 1.4rem;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .timeline-heading .script {
+      font-family: 'Caveat', cursive;
+      font-size: 1.15rem;
+      color: var(--script);
+    }
+    .timeline {
+      margin-top: 24px;
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 22px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: var(--border);
+    }
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+      animation: fadeIn 0.5s ease;
+    }
+    .timeline-number {
+      flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      z-index: 1;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+    .timeline-content {
+      flex: 1;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-shadow: 0 6px 18px var(--shadow);
+    }
+    .timeline-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .timeline-value {
+      display: inline-block;
+      padding: 1px 10px;
+      border-radius: 999px;
+      background: var(--gold-bg);
+      color: #8B7A2E;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+    .timeline-value.neg {
+      background: rgba(108,142,164,0.15);
+      color: var(--cool);
+    }
+    .timeline-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .lesson-cta {
+      text-align: center;
+      max-width: 500px;
+      margin: 32px auto 20px;
+      padding: 24px;
+      background: var(--bg2);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+    }
+    .lesson-cta p {
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      color: var(--script);
+      margin-bottom: 14px;
+    }
+    .hint-text {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 8px 0;
+      font-style: italic;
+    }
+  </style>
 </head>
-<body>
+<body data-theme="meadow">
 
-<div class="bg-blobs">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-</div>
+  <div class="toast" id="toast"></div>
 
-<div class="wrap">
-  <h1 class="page-title">Eye Trainer 👁</h1>
-  <p class="page-sub">drag the slider to see how pros transform raw photos.</p>
-</div>
+  <!-- ═══ Hero ═══ -->
+  <section class="compare-hero">
+    <span class="pill pill-accent">👁️ train your eye</span>
+    <h1>The Eye Trainer</h1>
+    <p class="compare-script">drag the handle, see the magic ✨</p>
+    <p>Great editing is invisible until you look twice. Slide the handle to see exactly what changed — then learn why.</p>
+  </section>
 
-<div class="compare-wrap">
-  <div class="slider-box" id="sliderBox">
-    <div class="before-img">
-      <img id="imgBefore" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80"/>
+  <!-- ═══ Example Picker ═══ -->
+  <div class="example-picker" id="examplePicker"></div>
+
+  <!-- ═══ Compare Stage ═══ -->
+  <div class="compare-stage">
+    <div class="compare-container" id="compareContainer">
+      <span class="compare-label before">BEFORE</span>
+      <span class="compare-label after">AFTER</span>
+      <img id="beforeImg" class="compare-image" src="" crossorigin="anonymous" alt="Before edit">
+      <div class="compare-after-wrap" id="afterWrap">
+        <canvas id="afterCanvas"></canvas>
+      </div>
+      <div class="compare-handle" id="compareHandle">
+        <div class="compare-handle-knob">◀▶</div>
+      </div>
     </div>
-    <div class="after-img" id="afterWrap">
-      <img id="imgAfter" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80" style="filter:brightness(115%) sepia(25%) saturate(135%) contrast(90%)"/>
-    </div>
-    <div class="handle" id="handle">
-      <div class="handle-dot">↔</div>
-    </div>
-    <div class="labels">
-      <span class="lbl">✨ Edited</span>
-      <span class="lbl">📷 Raw</span>
-    </div>
+    <p class="hint-text">💡 Drag the knob left and right — or tap anywhere on the image</p>
   </div>
 
-  <div class="switcher">
-    <button class="sw-btn active" onclick="changeSet(0,this)">🌅 Sunset Forest</button>
-    <button class="sw-btn" onclick="changeSet(1,this)">🏙 Quiet Street</button>
-    <button class="sw-btn" onclick="changeSet(2,this)">🌊 Ocean Mist</button>
-  </div>
-
-  <div class="lesson">
-    <h3 id="lessonTitle">What happened here?</h3>
-    <p id="lessonText">Look at the trees. In the raw version they look dark and heavy. The editor added warmth (sepia) to make the sunset glow wrap around the branches, reduced contrast to reveal misty details, and gave the shadows an orange splash.</p>
-  </div>
-
-  <div class="layers-box">
-    <h3>🧅 The Edit Layers</h3>
-    <p style="font-size:0.75rem;color:var(--text-soft);margin-bottom:0.6rem">Every great edit is just a stack of small decisions. Here's the recipe:</p>
-    <div id="layersList">
-      <div class="layer-item"><span class="layer-num">1</span><span class="layer-text"><strong>Brightness +15%</strong> — lifted the overall light</span></div>
-      <div class="layer-item"><span class="layer-num">2</span><span class="layer-text"><strong>Contrast -10%</strong> — softened the shadows</span></div>
-      <div class="layer-item"><span class="layer-num">3</span><span class="layer-text"><strong>Saturation +35%</strong> — made colors pop</span></div>
-      <div class="layer-item"><span class="layer-num">4</span><span class="layer-text"><strong>Warmth +25%</strong> — added golden sunset glow</span></div>
+  <!-- ═══ Timeline ═══ -->
+  <section class="timeline-section">
+    <div class="timeline-heading">
+      <h2 id="timelineTitle">The Edit Breakdown</h2>
+      <p class="script" id="timelineScript">each change, step by step 🌊</p>
     </div>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <!-- ═══ Lesson CTA ═══ -->
+  <div class="lesson-cta">
+    <p>now go make your own ✨</p>
+    <a href="free-edit.html" class="btn btn-accent">📸 Open Free Editor</a>
   </div>
-</div>
 
-<div style="height:2rem"></div>
+  <!-- ═══ Pretty Footer ═══ -->
+  <footer class="pretty-footer">
+    <span class="footer-emoji">👁️</span>
+    <span class="footer-script">a trained eye sees the whole river</span>
+    <span class="footer-copy">© 2024 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
+  </footer>
 
-<div class="pixel"><div class="pixel-eye"></div><div class="pixel-eye"></div></div>
+  <!-- ═══ Bottom Nav ═══ -->
+  <nav class="bottom-nav">
+    <a href="index.html"><span class="nav-icon">🏠</span><span>Home</span></a>
+    <a href="challenge.html"><span class="nav-icon">✨</span><span>Edit</span></a>
+    <a href="free-edit.html"><span class="nav-icon">📸</span><span>Free</span></a>
+    <a href="room.html"><span class="nav-icon">⚡</span><span>Room</span></a>
+    <a href="constellation.html"><span class="nav-icon">🌌</span><span>Sky</span></a>
+    <a href="about.html"><span class="nav-icon">💛</span><span>About</span></a>
+  </nav>
 
-<nav class="nav">
-  <a href="index.html"><span>🏠</span>Home</a>
-  <a href="challenge.html"><span>✨</span>Edit</a>
-  <a href="free-edit.html"><span>📸</span>Free</a>
-  <a href="constellation.html"><span>🌌</span>Sky</a>
-  <a href="about.html"><span>💛</span>About</a>
-</nav>
+  <script>
+    /* ══════════════════════════════════════════
+       RIVLUM Eye Trainer — Compare + Timeline
+       ══════════════════════════════════════════ */
 
-<script>
-var savedTheme = localStorage.getItem('rivlum_theme');
-if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
+    (function(){
+      var t = localStorage.getItem('rivlum_theme') || 'meadow';
+      document.body.setAttribute('data-theme', t);
+      if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
+      if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
+    })();
 
-var sets=[
-{title:'Sunset Forest',text:'Look at the trees. In the raw version they look dark and heavy. The editor added warmth (sepia) to make the sunset glow wrap around the branches, reduced contrast to reveal misty details, and gave the shadows an orange splash.',raw:'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80',filt:'brightness(115%) sepia(25%) saturate(135%) contrast(90%)',layers:['<strong>Brightness +15%</strong> — lifted the overall light','<strong>Contrast -10%</strong> — softened the shadows','<strong>Saturation +35%</strong> — made colors pop','<strong>Warmth +25%</strong> — added golden sunset glow']},
-{title:'Quiet Street',text:'Notice the buildings and the blue hour sky. The original looks dry and grey. The editor boosted saturation to pull out warm colors, lowered brightness to make it feel like midnight, and applied a cool tint shift to paint everything blue.',raw:'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80',filt:'brightness(80%) saturate(150%) hue-rotate(200deg)',layers:['<strong>Brightness -20%</strong> — darkened for nighttime feel','<strong>Saturation +50%</strong> — pulled out hidden colors','<strong>Hue Shift 200°</strong> — painted everything cool blue']},
-{title:'Ocean Mist',text:'The raw photo is sharp and harsh. The editor softened it with a tiny blur, lifted the shadows to reveal details in the rocks, and added a cool desaturated tone to make it feel like a quiet morning by the sea.',raw:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=800&q=80',filt:'brightness(105%) contrast(85%) saturate(80%) blur(0.8px) hue-rotate(10deg)',layers:['<strong>Brightness +5%</strong> — gentle lift','<strong>Contrast -15%</strong> — softened everything','<strong>Saturation -20%</strong> — muted for calm','<strong>Soft Blur 0.8px</strong> — added misty dreaminess']}
-];
-function changeSet(idx,btn){
-document.querySelectorAll('.sw-btn').forEach(function(x){x.classList.remove('active')});
-btn.classList.add('active');
-var s=sets[idx];
-document.getElementById('imgBefore').src=s.raw;
-document.getElementById('imgAfter').src=s.raw;
-document.getElementById('imgAfter').style.filter=s.filt;
-document.getElementById('lessonTitle').textContent='What happened in '+s.title+'?';
-document.getElementById('lessonText').textContent=s.text;
-var ll=document.getElementById('layersList');ll.innerHTML='';
-s.layers.forEach(function(l,i){
-var d=document.createElement('div');d.className='layer-item';
-d.innerHTML='<span class="layer-num">'+(i+1)+'</span><span class="layer-text">'+l+'</span>';
-ll.appendChild(d)})}
+    /* ── Examples ── */
+    var examples = [
+      {
+        key: 'golden',
+        name: '🌅 Golden Hour',
+        image: 'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=800&q=80',
+        edits: {exposure:20,contrast:10,highlights:-10,shadows:10,temperature:40,tint:5,saturation:15,vibrance:15,clarity:5,vignette:20},
+        blend: 'overlay',
+        steps: [
+          {label:'Exposure', val:20, desc:'Lifted the overall brightness to recreate that warm sun-washed glow.'},
+          {label:'Temperature', val:40, desc:'Pushed hard into warm amber tones — this is what makes golden hour feel golden.'},
+          {label:'Shadows', val:10, desc:'Opened up the darker areas slightly so no detail gets lost in silhouette.'},
+          {label:'Vibrance', val:15, desc:'Boosted the subtle colors without over-saturating skin tones.'},
+          {label:'Vignette', val:20, desc:'Added a soft dark halo at the edges to draw the eye to the center.'},
+          {label:'Blend: Overlay', val:0, desc:'Layered a warm wash across the whole image for cohesion.'}
+        ]
+      },
+      {
+        key: 'moody',
+        name: '🌙 Moody',
+        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80',
+        edits: {exposure:-20,contrast:30,highlights:-25,shadows:-30,temperature:-15,tint:-5,saturation:-10,vibrance:-5,clarity:20,vignette:35},
+        blend: 'multiply',
+        steps: [
+          {label:'Exposure', val:-20, desc:'Dropped the brightness to pull the image into shadow territory.'},
+          {label:'Contrast', val:30, desc:'Deepened the gap between lights and darks for drama.'},
+          {label:'Shadows', val:-30, desc:'Crushed the darks even further — this is where moody lives.'},
+          {label:'Temperature', val:-15, desc:'Cooled the color temperature slightly for a nighttime feel.'},
+          {label:'Clarity', val:20, desc:'Sharpened edges to make the atmosphere feel intentional, not soft.'},
+          {label:'Vignette', val:35, desc:'Heavy edge darkening — the eye tunnels toward the subject.'}
+        ]
+      },
+      {
+        key: 'vintage',
+        name: '📼 Vintage',
+        image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80',
+        edits: {exposure:5,contrast:-10,highlights:-15,shadows:10,temperature:20,tint:10,saturation:-30,vibrance:-15,clarity:-10,vignette:30},
+        blend: 'overlay',
+        steps: [
+          {label:'Contrast', val:-10, desc:'Flattened the tones to mimic old film stock.'},
+          {label:'Temperature', val:20, desc:'Warmed the whole image — old photos always drift amber over time.'},
+          {label:'Saturation', val:-30, desc:'Pulled out the vividness. Vintage never shouts.'},
+          {label:'Highlights', val:-15, desc:'Softened the brightest areas so nothing feels digital.'},
+          {label:'Clarity', val:-10, desc:'Slight softness — like the lens from your grandparent\'s camera.'},
+          {label:'Vignette', val:30, desc:'That classic darkened corner halo of pre-digital photography.'}
+        ]
+      }
+    ];
 
-var box=document.getElementById('sliderBox');
-var after=document.getElementById('afterWrap');
-var handle=document.getElementById('handle');
-var dragging=false;
-function setPos(x){var r=box.getBoundingClientRect();var p=Math.max(0,Math.min(1,(x-r.left)/r.width));after.style.width=(p*100)+'%';handle.style.left=(p*100)+'%'}
-box.addEventListener('mousedown',function(e){dragging=true;setPos(e.clientX)});
-window.addEventListener('mousemove',function(e){if(dragging)setPos(e.clientX)});
-window.addEventListener('mouseup',function(){dragging=false});
-box.addEventListener('touchstart',function(e){dragging=true;setPos(e.touches[0].clientX)});
-window.addEventListener('touchmove',function(e){if(dragging)setPos(e.touches[0].clientX)});
-window.addEventListener('touchend',function(){dragging=false});
-</script>
+    /* ── State ── */
+    var currentIdx = 0;
+    var canvas = document.getElementById('afterCanvas');
+    var ctx = canvas.getContext('2d');
+    var beforeImg = document.getElementById('beforeImg');
+    var sourceImg = new Image();
+    sourceImg.crossOrigin = 'anonymous';
+
+    /* ── Render Picker ── */
+    (function renderPicker() {
+      var picker = document.getElementById('examplePicker');
+      examples.forEach(function(ex, i) {
+        var btn = document.createElement('button');
+        btn.className = 'example-chip' + (i === 0 ? ' active' : '');
+        btn.textContent = ex.name;
+        btn.onclick = function() {
+          document.querySelectorAll('.example-chip').forEach(function(c){ c.classList.remove('active'); });
+          btn.classList.add('active');
+          currentIdx = i;
+          loadExample(ex);
+        };
+        picker.appendChild(btn);
+      });
+    })();
+
+    /* ── Load Example ── */
+    function loadExample(ex) {
+      beforeImg.src = ex.image;
+      sourceImg = new Image();
+      sourceImg.crossOrigin = 'anonymous';
+      sourceImg.onload = function() {
+        canvas.width = sourceImg.naturalWidth;
+        canvas.height = sourceImg.naturalHeight;
+        renderAfter(ex);
+      };
+      sourceImg.onerror = function() {
+        showToast('⚠️ Could not load image');
+      };
+      sourceImg.src = ex.image;
+      renderTimeline(ex);
+      resetHandle();
+    }
+
+    /* ── Render AFTER (edited) canvas ── */
+    function renderAfter(ex) {
+      var sv = ex.edits;
+      var w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      var brightness = 100 + sv.exposure;
+      var contrast = 100 + sv.contrast;
+      var saturate = 100 + sv.saturation + Math.round(sv.vibrance * 0.5);
+      var blur = sv.clarity < 0 ? Math.abs(sv.clarity) * 0.03 : 0;
+      var hueShift = sv.tint;
+      var sepia = sv.temperature > 0 ? sv.temperature * 0.4 : 0;
+
+      ctx.filter = 'brightness('+brightness+'%) contrast('+contrast+'%) saturate('+saturate+'%) blur('+blur+'px) hue-rotate('+hueShift+'deg) sepia('+sepia+'%)';
+      ctx.drawImage(sourceImg, 0, 0, w, h);
+      ctx.filter = 'none';
+
+      if (sv.highlights !== 0 || sv.shadows !== 0) {
+        var d = ctx.getImageData(0, 0, w, h);
+        var p = d.data;
+        for (var i = 0; i < p.length; i += 4) {
+          var lum = p[i]*0.299 + p[i+1]*0.587 + p[i+2]*0.114;
+          if (lum > 170 && sv.highlights !== 0) {
+            var hf = sv.highlights * 0.5;
+            p[i]=Math.min(255,Math.max(0,p[i]+hf));
+            p[i+1]=Math.min(255,Math.max(0,p[i+1]+hf));
+            p[i+2]=Math.min(255,Math.max(0,p[i+2]+hf));
+          }
+          if (lum < 85 && sv.shadows !== 0) {
+            var sf = sv.shadows * 0.5;
+            p[i]=Math.min(255,Math.max(0,p[i]+sf));
+            p[i+1]=Math.min(255,Math.max(0,p[i+1]+sf));
+            p[i+2]=Math.min(255,Math.max(0,p[i+2]+sf));
+          }
+        }
+        ctx.putImageData(d, 0, 0);
+      }
+
+      if (sv.temperature < 0) {
+        ctx.globalCompositeOperation = 'overlay';
+        ctx.fillStyle = 'rgba(60,130,200,' + (Math.abs(sv.temperature) * 0.003) + ')';
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      if (ex.blend && ex.blend !== 'normal') {
+        ctx.globalCompositeOperation = ex.blend;
+        var warm = sv.temperature > 0 ? sv.temperature : 0;
+        ctx.fillStyle = 'rgba('+(180+warm)+','+(140+Math.round(warm*0.5))+',80,0.08)';
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      if (sv.clarity > 0) {
+        ctx.globalCompositeOperation = 'overlay';
+        ctx.fillStyle = 'rgba(128,128,128,' + (sv.clarity * 0.002) + ')';
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      if (sv.vignette > 0) {
+        var g = ctx.createRadialGradient(w/2, h/2, w*0.25, w/2, h/2, w*0.75);
+        g.addColorStop(0, 'rgba(0,0,0,0)');
+        g.addColorStop(1, 'rgba(0,0,0,' + (sv.vignette * 0.008) + ')');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, w, h);
+      }
+    }
+
+    /* ── Render Timeline ── */
+    function renderTimeline(ex) {
+      var tl = document.getElementById('timeline');
+      tl.innerHTML = '';
+      document.getElementById('timelineTitle').textContent = ex.name.replace(/^[^\s]+\s/, '') + ' — Step by Step';
+
+      ex.steps.forEach(function(step, i) {
+        var item = document.createElement('div');
+        item.className = 'timeline-item';
+
+        var num = document.createElement('div');
+        num.className = 'timeline-number';
+        num.textContent = (i + 1);
+        item.appendChild(num);
+
+        var content = document.createElement('div');
+        content.className = 'timeline-content';
+
+        var title = document.createElement('div');
+        title.className = 'timeline-title';
+        title.innerHTML = step.label;
+        if (step.val !== undefined && step.val !== 0) {
+          var vt = document.createElement('span');
+          vt.className = 'timeline-value' + (step.val < 0 ? ' neg' : '');
+          vt.textContent = (step.val > 0 ? '+' : '') + step.val;
+          title.appendChild(vt);
+        }
+        content.appendChild(title);
+
+        var desc = document.createElement('div');
+        desc.className = 'timeline-desc';
+        desc.textContent = step.desc;
+        content.appendChild(desc);
+
+        item.appendChild(content);
+        tl.appendChild(item);
+      });
+    }
+
+    /* ── Compare Slider Interaction ── */
+    var container = document.getElementById('compareContainer');
+    var handle = document.getElementById('compareHandle');
+    var afterWrap = document.getElementById('afterWrap');
+    var dragging = false;
+
+    function setSplit(pct) {
+      pct = Math.max(0, Math.min(100, pct));
+      handle.style.left = pct + '%';
+      afterWrap.style.width = pct + '%';
+    }
+
+    function resetHandle() {
+      setSplit(50);
+    }
+
+    function handleMove(clientX) {
+      var rect = container.getBoundingClientRect();
+      var x = clientX - rect.left;
+      var pct = (x / rect.width) * 100;
+      setSplit(pct);
+    }
+
+    container.addEventListener('mousedown', function(e) {
+      dragging = true;
+      handleMove(e.clientX);
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', function(e) {
+      if (dragging) handleMove(e.clientX);
+    });
+    window.addEventListener('mouseup', function() { dragging = false; });
+
+    container.addEventListener('touchstart', function(e) {
+      dragging = true;
+      if (e.touches[0]) handleMove(e.touches[0].clientX);
+    }, { passive: true });
+    container.addEventListener('touchmove', function(e) {
+      if (dragging && e.touches[0]) handleMove(e.touches[0].clientX);
+    }, { passive: true });
+    container.addEventListener('touchend', function() { dragging = false; });
+
+    /* ── Toast ── */
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(t._timeout);
+      t._timeout = setTimeout(function(){ t.classList.remove('show'); }, 2500);
+    }
+
+    /* ── Init ── */
+    loadExample(examples[0]);
+  </script>
+
 </body>
 </html>
