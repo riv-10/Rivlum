@@ -1,213 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RIVLUM — Privacy</title>
-<link rel="stylesheet" href="styles.css">
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Atkinson+Hyperlegible:wght@400;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Oath · RIVLUM</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .privacy-hero {
+      text-align: center;
+      padding: 3rem 1.5rem 2rem;
+      background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+    }
+    .privacy-hero .oath-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .privacy-hero h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 2.4rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .privacy-hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
 
-  body {
-    margin: 0;
-    padding: 0 0 90px 0;
-    background: linear-gradient(180deg, #FBF8F3 0%, #F8F1E7 100%);
-    font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, sans-serif;
-    color: #2D312E;
-  }
+    .privacy-section {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    .privacy-section h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.6rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-  .wrap {
-    max-width: 620px;
-    margin: 0 auto;
-    padding: 28px 18px;
-  }
+    .privacy-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+    .privacy-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+    .privacy-card p:last-child {
+      margin-bottom: 0;
+    }
 
-  .hero {
-    text-align: center;
-    margin-bottom: 26px;
-  }
+    /* Oath Points */
+    .oath-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .oath-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .oath-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .oath-item:first-child {
+      padding-top: 0;
+    }
+    .oath-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg2);
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Caveat', cursive;
+      font-size: 1.2rem;
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+    .oath-content strong {
+      display: block;
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+    .oath-content span {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
 
-  .badge {
-    display: inline-block;
-    background: #E8F5E9;
-    border: 1.5px solid #5B8266;
-    color: #3D6B4F;
-    font-size: 0.78rem;
-    font-weight: 700;
-    padding: 5px 14px;
-    border-radius: 999px;
-    margin-bottom: 12px;
-  }
+    /* Parent Card */
+    .parent-card {
+      background: linear-gradient(135deg, var(--bg2) 0%, var(--card) 100%);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 1.75rem;
+    }
+    .parent-card h3 {
+      color: var(--gold);
+    }
+    .parent-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      margin-bottom: 0.65rem;
+    }
+    .parent-detail:last-child {
+      margin-bottom: 0;
+    }
+    .parent-detail .detail-icon {
+      flex-shrink: 0;
+      font-size: 1.1rem;
+      margin-top: 0.1rem;
+    }
+    .parent-detail p {
+      margin: 0;
+      font-size: 0.93rem;
+    }
 
-  .logo {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #D07251;
-    margin: 0;
-  }
+    /* Data Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+      font-size: 0.88rem;
+    }
+    .data-table th {
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      background: var(--bg2);
+      color: var(--text);
+      font-weight: 700;
+      border-bottom: 2px solid var(--border);
+    }
+    .data-table td {
+      padding: 0.6rem 0.75rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .data-table code {
+      background: var(--bg2);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      color: var(--accent);
+    }
 
-  .script {
-    font-family: 'Caveat', cursive;
-    font-size: 1.5rem;
-    color: #5B8266;
-    margin: 4px 0 10px;
-  }
+    .privacy-footer-spacer {
+      height: 5rem;
+    }
 
-  .card {
-    background: #FFFFFF;
-    border: 1.5px solid #EAE4DC;
-    border-radius: 22px;
-    padding: 24px;
-    margin-bottom: 18px;
-    box-shadow: 0 10px 28px rgba(91, 130, 102, 0.07);
-  }
-
-  .card h2 {
-    margin: 0 0 16px 0;
-    color: #5B8266;
-    font-size: 1.15rem;
-  }
-
-  .point {
-    display: flex;
-    gap: 14px;
-    margin-bottom: 18px;
-    align-items: flex-start;
-  }
-  .point:last-child { margin-bottom: 0; }
-
-  .icon {
-    width: 44px;
-    height: 44px;
-    background: #FBF8F3;
-    border: 1.5px solid #EAE4DC;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    flex-shrink: 0;
-  }
-
-  .point h3 {
-    margin: 0 0 4px 0;
-    font-size: 0.98rem;
-    color: #2D312E;
-  }
-
-  .point p {
-    margin: 0;
-    font-size: 0.88rem;
-    color: #5A635C;
-    line-height: 1.5;
-  }
-
-  .pretty-footer {
-    text-align: center;
-    margin-top: 34px;
-    padding: 10px;
-  }
-  .pretty-footer .script-line {
-    font-family: 'Caveat', cursive;
-    font-size: 1.25rem;
-    color: #5B8266;
-  }
-  .pretty-footer p {
-    margin: 6px 0 0;
-    font-size: 0.8rem;
-    color: #6E7570;
-  }
-
-  .nav {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: #FFFFFF;
-    border-top: 1.5px solid #EAE4DC;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0 12px;
-    z-index: 100;
-  }
-  .nav a {
-    text-decoration: none;
-    color: #5B8266;
-    font-size: 0.72rem;
-    font-weight: 700;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-  }
-  .nav a span { font-size: 1.25rem; }
-</style>
+    @media (min-width: 600px) {
+      .privacy-hero h2 {
+        font-size: 2.8rem;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
 
-  <div class="hero">
-    <div class="badge">🛡️ COPPA Safe · Zero Data</div>
-    <h1 class="logo">Privacy Oath</h1>
-    <div class="script">we protect your creativity 🌊</div>
-  </div>
+  <script>
+    (function(){
+      var t = localStorage.getItem('rivlum_theme') || 'meadow';
+      document.body.setAttribute('data-theme', t);
+      if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
+      if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
+    })();
+  </script>
 
-  <div class="card">
-    <h2>How we keep RIVLUM soft & safe</h2>
+  <!-- Header -->
+  <header class="site-header">
+    <a href="index.html" class="logo-text" style="text-decoration:none;">RIVLUM</a>
+    <p class="logo-tagline">the river of light 🌊</p>
+  </header>
 
-    <div class="point">
-      <div class="icon">🔒</div>
-      <div>
-        <h3>No accounts ever</h3>
-        <p>No emails, no passwords, no profiles. You just open the site and start playing.</p>
-      </div>
+  <!-- Hero -->
+  <section class="privacy-hero">
+    <span class="oath-icon">🛡️</span>
+    <h2>our privacy oath</h2>
+    <p>This isn't a legal document written by lawyers in a tall building. It's a promise from one creator to another — written in plain language because you deserve to know exactly what happens (and doesn't happen) with your stuff.</p>
+  </section>
+
+  <div class="privacy-section">
+
+    <!-- 4-Point Oath -->
+    <div class="privacy-card">
+      <h3>🌿 How we keep RIVLUM soft & safe</h3>
+      <ul class="oath-list">
+        <li class="oath-item">
+          <span class="oath-number">1</span>
+          <div class="oath-content">
+            <strong>Your photos never leave your device</strong>
+            <span>Every edit happens right inside your browser using your phone or computer's own processor. When you upload a photo, it goes into your browser's memory — not to any server, not to any cloud, nowhere. It's yours and it stays yours.</span>
+          </div>
+        </li>
+        <li class="oath-item">
+          <span class="oath-number">2</span>
+          <div class="oath-content">
+            <strong>No cookies, no trackers, no analytics</strong>
+            <span>We don't use Google Analytics, Facebook Pixels, Hotjar, or any other tracking tool. We don't set cookies. We don't know how many people visit, which buttons you click, or how long you stay. And honestly? We're totally fine with that.</span>
+          </div>
+        </li>
+        <li class="oath-item">
+          <span class="oath-number">3</span>
+          <div class="oath-content">
+            <strong>No accounts, no emails, no personal info</strong>
+            <span>There is no signup form. There is no login screen. We don't ask for your name, your age, your email, your phone number, or anything else. You just open the site and start creating. That's it.</span>
+          </div>
+        </li>
+        <li class="oath-item">
+          <span class="oath-number">4</span>
+          <div class="oath-content">
+            <strong>The only outside connections are fonts & sample photos</strong>
+            <span>To make the site look nice, we load two fonts from Google Fonts. To give you something to edit right away, we pull a few sample images from Unsplash. Those are the only two outside services RIVLUM talks to — ever.</span>
+          </div>
+        </li>
+      </ul>
     </div>
 
-    <div class="point">
-      <div class="icon">📱</div>
-      <div>
-        <h3>Everything stays on your device</h3>
-        <p>Photos, edits, stars and Drifts live only in your browser. We never see them.</p>
-      </div>
+    <!-- What We Do Store -->
+    <div class="privacy-card">
+      <h3>📦 What lives in your browser</h3>
+      <p>RIVLUM uses something called <strong>localStorage</strong> — a tiny pocket of memory inside your web browser. Think of it like a sticky note your browser keeps for you. Here's exactly what we save there:</p>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>What it stores</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>rivlum_theme</code></td>
+            <td>Your chosen color theme (meadow, ocean, sunset, or midnight)</td>
+          </tr>
+          <tr>
+            <td><code>rivlum_dys</code></td>
+            <td>Whether you turned on the OpenDyslexic font</td>
+          </tr>
+          <tr>
+            <td><code>rivlum_motion</code></td>
+            <td>Whether you turned on reduced motion</td>
+          </tr>
+          <tr>
+            <td><code>rivlum_stars</code></td>
+            <td>Which challenges you've completed (just a list of names like "prism")</td>
+          </tr>
+          <tr>
+            <td><code>rivlum_drifts</code></td>
+            <td>Your saved edits — slider values, stickers, and a copy of the image</td>
+          </tr>
+          <tr>
+            <td><code>rivlum_born</code></td>
+            <td>The date you made your very first edit (so we can show your "days creating" stat)</td>
+          </tr>
+          <tr>
+            <td><code>rivlum_tips</code></td>
+            <td>Little tips you've saved while editing</td>
+          </tr>
+          <tr>
+            <td><code>rivlum_restore</code></td>
+            <td>A temporary copy of your last free edit so you can pick up where you left off</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 1rem;"><strong>Want to delete everything?</strong> Just clear your browser's site data or use the "Clear All" button on the homepage. Poof — gone forever. We have no backup because we never had a copy. 🧹</p>
     </div>
 
-    <div class="point">
-      <div class="icon">🌐</div>
-      <div>
-        <h3>Clean hosting</h3>
-        <p>RIVLUM is served as simple static files on Render. No trackers, no analytics cookies, no ads.</p>
+    <!-- For Parents & Teachers -->
+    <div class="parent-card">
+      <h3>👩‍👧 For parents & teachers</h3>
+      <p style="color: var(--muted); line-height: 1.7; font-size: 0.95rem; margin-bottom: 1rem;">If you're a grown-up checking whether this site is safe for the young person in your life — hi, thank you for caring, and here's the short version:</p>
+
+      <div class="parent-detail">
+        <span class="detail-icon">✅</span>
+        <p><strong>There is no backend server.</strong> RIVLUM is a collection of static HTML files. There is no database, no user accounts, and no way for us to collect, store, or access any data from any visitor.</p>
       </div>
+      <div class="parent-detail">
+        <span class="detail-icon">✅</span>
+        <p><strong>There is no social interaction.</strong> The "co-edit room" feature works by encoding edit settings into a shareable URL link. There is no chat, no messaging, no comments, and no way for strangers to contact your child. They can only share a link with someone they already know.</p>
+      </div>
+      <div class="parent-detail">
+        <span class="detail-icon">✅</span>
+        <p><strong>There is no advertising or monetization.</strong> No ads, no affiliate links, no sponsored content, no "upgrade to premium" upsells. RIVLUM is and will remain completely free.</p>
+      </div>
+      <div class="parent-detail">
+        <span class="detail-icon">✅</span>
+        <p><strong>There is no data collection of any kind.</strong> No cookies, no analytics, no fingerprinting, no third-party scripts. The site is fully COPPA-compliant by design because there is literally nothing to comply with — we collect zero data.</p>
+      </div>
+      <div class="parent-detail">
+        <span class="detail-icon">✅</span>
+        <p><strong>All content is age-appropriate.</strong> The sample photos are landscapes and nature scenes from Unsplash. The language is warm and encouraging. The challenges teach real photo-editing concepts (exposure, contrast, color temperature) in a gentle, gamified way.</p>
+      </div>
+
+      <p style="color: var(--muted); line-height: 1.7; font-size: 0.93rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">If you have any questions or concerns, this site was built by a 16-year-old creator who genuinely cares about making a safe space for young artists. The entire codebase is simple enough to inspect yourself — just right-click and "View Page Source" on any page. What you see is what you get. 💛</p>
     </div>
 
-    <div class="point">
-      <div class="icon">💛</div>
-      <div>
-        <h3>Built for kids & teens</h3>
-        <p>Fully COPPA-compliant. We collect zero personal information of any kind.</p>
-      </div>
+    <!-- Last Updated -->
+    <div class="privacy-card" style="text-align: center;">
+      <p style="color: var(--muted); font-size: 0.88rem;">This oath was last reviewed in 2026. If anything ever changes (it probably won't, but just in case), we'll update this page and note the new date right here.</p>
+      <p style="font-family: 'Caveat', cursive; font-size: 1.3rem; color: var(--accent); margin-top: 0.5rem;">your creativity is yours. always. 🌊</p>
     </div>
+
   </div>
 
-  <div class="card">
-    <h2>For parents & teachers</h2>
-    <p style="margin:0; font-size:0.92rem; color:#4A524C; line-height:1.55;">
-      RIVLUM is completely safe for classrooms. There are no chats, no public feeds, and no way for strangers to contact users. Shareable links only contain edit settings — never personal data.
-    </p>
-  </div>
+  <div class="privacy-footer-spacer"></div>
 
-  <div class="pretty-footer">
-    <div style="font-size:1.3rem; margin-bottom:4px;">🌿</div>
-    <div class="script-line">your creativity belongs only to you</div>
-    <p>© RIVLUM · A creative playground for light, color & mood</p>
-  </div>
+  <!-- Pretty Footer -->
+  <footer class="pretty-footer">
+    <span class="footer-emoji">🌿</span>
+    <span class="footer-script">made with care for young creators</span>
+    <span class="footer-copy">© 2024 RIVLUM · <a href="about.html">About</a></span>
+  </footer>
 
-</div>
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="challenge.html" class="nav-item">
+      <span class="nav-icon">✨</span>
+      <span class="nav-label">Edit</span>
+    </a>
+    <a href="free-edit.html" class="nav-item">
+      <span class="nav-icon">📸</span>
+      <span class="nav-label">Free</span>
+    </a>
+    <a href="room.html" class="nav-item">
+      <span class="nav-icon">⚡</span>
+      <span class="nav-label">Room</span>
+    </a>
+    <a href="constellation.html" class="nav-item">
+      <span class="nav-icon">🌌</span>
+      <span class="nav-label">Sky</span>
+    </a>
+    <a href="about.html" class="nav-item active" aria-current="page">
+      <span class="nav-icon">💛</span>
+      <span class="nav-label">About</span>
+    </a>
+  </nav>
 
-<nav class="nav">
-  <a href="index.html"><span>🏠</span>Home</a>
-  <a href="challenge.html"><span>✨</span>Edit</a>
-  <a href="free-edit.html"><span>📸</span>Free</a>
-  <a href="room.html"><span>⚡</span>Room</a>
-  <a href="drifts.html"><span>🌌</span>Sky</a>
-  <a href="about.html"><span>💛</span>About</a>
-</nav>
 </body>
 </html>
