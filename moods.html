@@ -1,209 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>RIVLUM — Mood Lab 🎨</title>
-<link rel="stylesheet" href="styles.css"/>
-<style>
-.preview-wrap {
-  position: relative;
-  z-index: 1;
-  max-width: 640px;
-  margin: 0 auto 1.5rem;
-  padding: 0 1rem;
-}
-.mood-grid {
-  position: relative;
-  z-index: 1;
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 0.8rem;
-}
-.mood-btn {
-  background: var(--card);
-  border: 2px solid transparent;
-  border-radius: var(--radius-sm);
-  padding: 1.1rem;
-  text-align: left;
-  cursor: pointer;
-  color: var(--text);
-  font-family: var(--f);
-  transition: all 0.3s;
-  box-shadow: 0 3px 12px var(--shadow);
-  position: relative;
-}
-.mood-btn::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  background: var(--sage);
-}
-.mood-btn:nth-child(2)::before { background: var(--terracotta); }
-.mood-btn:nth-child(3)::before { background: var(--dusty-blue); }
-.mood-btn:nth-child(4)::before { background: var(--butter); }
-.mood-btn:nth-child(5)::before { background: var(--pink-accent); }
-.mood-btn:nth-child(6)::before { background: var(--sage-dark); }
-.mood-btn:hover, .mood-btn.active {
-  border-color: var(--terracotta);
-  transform: translateY(-3px) rotate(0deg);
-  box-shadow: 0 8px 25px var(--shadow-hover);
-}
-.mood-btn h3 {
-  font-size: 0.95rem;
-  margin-bottom: 0.3rem;
-}
-.mood-btn p {
-  font-size: 0.72rem;
-  color: var(--text-soft);
-  line-height: 1.4;
-}
-.recipe-card {
-  position: relative;
-  z-index: 1;
-  max-width: 640px;
-  margin: 1rem auto;
-  padding: 0 1rem;
-  display: none;
-}
-.recipe-card.show { display: block; }
-.recipe-inner {
-  background: var(--butter-light);
-  border: 2px dashed var(--butter);
-  border-radius: var(--radius);
-  padding: 1.3rem;
-}
-.recipe-inner h4 {
-  font-family: var(--f-hand);
-  font-size: 1.4rem;
-  color: #A67C00;
-  margin-bottom: 0.4rem;
-}
-.recipe-inner p {
-  font-size: 0.85rem;
-  color: var(--text);
-  line-height: 1.7;
-  margin-bottom: 0.8rem;
-}
-.chips {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-.chip {
-  background: white;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 0.3rem 0.7rem;
-  border-radius: 50px;
-  color: var(--terracotta-dark);
-  border: 2px solid var(--terracotta-light);
-}
-.tip-box {
-  position: relative;
-  z-index: 1;
-  max-width: 640px;
-  margin: 1.5rem auto;
-  padding: 0 1rem;
-}
-.tip-inner {
-  background: var(--sage-light);
-  border-left: 5px solid var(--sage);
-  border-radius: var(--radius-sm);
-  padding: 1.2rem;
-}
-.tip-inner h4 {
-  font-size: 0.85rem;
-  color: var(--sage-dark);
-  margin-bottom: 0.3rem;
-}
-.tip-inner p {
-  font-size: 0.8rem;
-  color: var(--text);
-  line-height: 1.6;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RIVLUM — Color Recipes</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .moods-hero {
+      text-align: center;
+      padding: 40px 20px 24px;
+    }
+    .moods-hero h1 {
+      font-size: 2rem;
+      color: var(--text);
+      margin: 10px 0 6px;
+    }
+    .moods-hero .moods-script {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      color: var(--script);
+      margin-bottom: 14px;
+    }
+    .moods-hero p {
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto;
+      font-size: 0.95rem;
+    }
+    .mood-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    @media (min-width: 620px) {
+      .mood-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (min-width: 960px) {
+      .mood-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+    .mood-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px var(--shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .mood-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 42px var(--shadow-hover);
+    }
+    .mood-swatches {
+      height: 100px;
+      display: flex;
+      position: relative;
+    }
+    .mood-swatches .swatch {
+      flex: 1;
+      transition: flex 0.3s ease;
+    }
+    .mood-card:hover .mood-swatches .swatch:hover {
+      flex: 2;
+    }
+    .mood-body {
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+    .mood-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mood-emoji {
+      font-size: 1.8rem;
+    }
+    .mood-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--text);
+    }
+    .mood-poetic {
+      font-family: 'Caveat', cursive;
+      font-size: 1.15rem;
+      color: var(--script);
+      line-height: 1.4;
+    }
+    .mood-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .mood-recipe {
+      background: var(--bg2);
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 8px;
+    }
+    .mood-recipe-heading {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .recipe-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      font-size: 0.82rem;
+    }
+    .recipe-item .recipe-label {
+      color: var(--text);
+      font-weight: 700;
+    }
+    .recipe-item .recipe-val {
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--brand);
+    }
+    .recipe-val.neg { color: var(--cool); }
+    .mood-cta {
+      margin-top: auto;
+      padding-top: 12px;
+    }
+    .mood-cta .btn {
+      width: 100%;
+    }
+    .hex-code {
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      color: #FFF;
+      background: rgba(0,0,0,0.4);
+      padding: 2px 8px;
+      border-radius: 999px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .mood-card:hover .swatch:hover .hex-code {
+      opacity: 1;
+    }
+    .mood-footer-cta {
+      text-align: center;
+      max-width: 500px;
+      margin: 32px auto 0;
+      padding: 24px;
+      background: var(--gold-bg);
+      border: 1.5px solid var(--gold);
+      border-radius: 20px;
+    }
+    .mood-footer-cta p {
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      color: #8B7A2E;
+      margin-bottom: 14px;
+    }
+  </style>
 </head>
-<body>
+<body data-theme="meadow">
 
-<div class="bg-blobs">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-</div>
+  <!-- ═══ Hero ═══ -->
+  <section class="moods-hero">
+    <span class="pill pill-brand">🎨 color theory lab</span>
+    <h1>Color Recipes</h1>
+    <p class="moods-script">six moods, six formulas ✨</p>
+    <p>Every mood has a color story. Here are the exact slider recipes that create each one — study them, remix them, make them your own.</p>
+  </section>
 
-<div class="wrap">
-  <h1 class="page-title">Mood Lab 🎨</h1>
-  <p class="page-sub">tap a mood. feel how colors change emotions.</p>
-</div>
+  <!-- ═══ Mood Grid ═══ -->
+  <div class="mood-grid">
 
-<div class="preview-wrap">
-  <div class="photo-frame">
-    <img id="prevImg" src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80" alt="landscape"/>
+    <!-- 1. GOLDEN HOUR -->
+    <div class="mood-card">
+      <div class="mood-swatches">
+        <div class="swatch" style="background:#F5C56A;"><span class="hex-code">#F5C56A</span></div>
+        <div class="swatch" style="background:#E89158;"><span class="hex-code">#E89158</span></div>
+        <div class="swatch" style="background:#C45E38;"><span class="hex-code">#C45E38</span></div>
+        <div class="swatch" style="background:#6B3828;"><span class="hex-code">#6B3828</span></div>
+      </div>
+      <div class="mood-body">
+        <div class="mood-head">
+          <span class="mood-emoji">🌅</span>
+          <span class="mood-title">Golden Hour</span>
+        </div>
+        <p class="mood-poetic">warm honey light pouring across everything ✨</p>
+        <p class="mood-desc">That last magic hour before the sun sets — soft, amber, forgiving. Everything looks like a memory.</p>
+        <div class="mood-recipe">
+          <div class="mood-recipe-heading">🧪 The Recipe</div>
+          <div class="recipe-item"><span class="recipe-label">Exposure</span><span class="recipe-val">+20</span></div>
+          <div class="recipe-item"><span class="recipe-label">Temperature</span><span class="recipe-val">+40</span></div>
+          <div class="recipe-item"><span class="recipe-label">Vibrance</span><span class="recipe-val">+15</span></div>
+          <div class="recipe-item"><span class="recipe-label">Shadows</span><span class="recipe-val">+10</span></div>
+          <div class="recipe-item"><span class="recipe-label">Vignette</span><span class="recipe-val">+20</span></div>
+          <div class="recipe-item"><span class="recipe-label">Blend</span><span class="recipe-val" style="font-size:0.95rem;">Overlay</span></div>
+        </div>
+        <div class="mood-cta">
+          <a href="challenge.html?c=horizon" class="btn btn-accent">✨ Try Golden Hour</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. MIDNIGHT -->
+    <div class="mood-card">
+      <div class="mood-swatches">
+        <div class="swatch" style="background:#1A2638;"><span class="hex-code">#1A2638</span></div>
+        <div class="swatch" style="background:#2E4057;"><span class="hex-code">#2E4057</span></div>
+        <div class="swatch" style="background:#5D6D82;"><span class="hex-code">#5D6D82</span></div>
+        <div class="swatch" style="background:#8FA3BC;"><span class="hex-code">#8FA3BC</span></div>
+      </div>
+      <div class="mood-body">
+        <div class="mood-head">
+          <span class="mood-emoji">🌙</span>
+          <span class="mood-title">Midnight</span>
+        </div>
+        <p class="mood-poetic">deep blue hush of a sleeping world 🌊</p>
+        <p class="mood-desc">Shadowed, cool, and quietly powerful. For photos that need to feel like a secret.</p>
+        <div class="mood-recipe">
+          <div class="mood-recipe-heading">🧪 The Recipe</div>
+          <div class="recipe-item"><span class="recipe-label">Exposure</span><span class="recipe-val neg">−20</span></div>
+          <div class="recipe-item"><span class="recipe-label">Contrast</span><span class="recipe-val">+30</span></div>
+          <div class="recipe-item"><span class="recipe-label">Temperature</span><span class="recipe-val neg">−15</span></div>
+          <div class="recipe-item"><span class="recipe-label">Shadows</span><span class="recipe-val neg">−30</span></div>
+          <div class="recipe-item"><span class="recipe-label">Vignette</span><span class="recipe-val">+35</span></div>
+          <div class="recipe-item"><span class="recipe-label">Blend</span><span class="recipe-val" style="font-size:0.95rem;">Multiply</span></div>
+        </div>
+        <div class="mood-cta">
+          <a href="challenge.html?c=mask" class="btn btn-accent">✨ Try Midnight</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. DREAMSCAPE -->
+    <div class="mood-card">
+      <div class="mood-swatches">
+        <div class="swatch" style="background:#F7E6EC;"><span class="hex-code">#F7E6EC</span></div>
+        <div class="swatch" style="background:#E8D4E0;"><span class="hex-code">#E8D4E0</span></div>
+        <div class="swatch" style="background:#C7B8DB;"><span class="hex-code">#C7B8DB</span></div>
+        <div class="swatch" style="background:#9FB4D4;"><span class="hex-code">#9FB4D4</span></div>
+      </div>
+      <div class="mood-body">
+        <div class="mood-head">
+          <span class="mood-emoji">☁️</span>
+          <span class="mood-title">Dreamscape</span>
+        </div>
+        <p class="mood-poetic">soft focus, soft heart, soft everything 💛</p>
+        <p class="mood-desc">A gentle haze over the world. Like looking at reality through sun-warmed glass.</p>
+        <div class="mood-recipe">
+          <div class="mood-recipe-heading">🧪 The Recipe</div>
+          <div class="recipe-item"><span class="recipe-label">Exposure</span><span class="recipe-val">+15</span></div>
+          <div class="recipe-item"><span class="recipe-label">Contrast</span><span class="recipe-val neg">−20</span></div>
+          <div class="recipe-item"><span class="recipe-label">Saturation</span><span class="recipe-val neg">−25</span></div>
+          <div class="recipe-item"><span class="recipe-label">Highlights</span><span class="recipe-val">+10</span></div>
+          <div class="recipe-item"><span class="recipe-label">Clarity</span><span class="recipe-val neg">−15</span></div>
+          <div class="recipe-item"><span class="recipe-label">Blend</span><span class="recipe-val" style="font-size:0.95rem;">Screen</span></div>
+        </div>
+        <div class="mood-cta">
+          <a href="challenge.html?c=prism" class="btn btn-accent">✨ Try Dreamscape</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. STORM -->
+    <div class="mood-card">
+      <div class="mood-swatches">
+        <div class="swatch" style="background:#2C3539;"><span class="hex-code">#2C3539</span></div>
+        <div class="swatch" style="background:#4A5A62;"><span class="hex-code">#4A5A62</span></div>
+        <div class="swatch" style="background:#7C8A94;"><span class="hex-code">#7C8A94</span></div>
+        <div class="swatch" style="background:#B0BAC2;"><span class="hex-code">#B0BAC2</span></div>
+      </div>
+      <div class="mood-body">
+        <div class="mood-head">
+          <span class="mood-emoji">⛈️</span>
+          <span class="mood-title">Storm</span>
+        </div>
+        <p class="mood-poetic">everything grey, everything alive 🌊</p>
+        <p class="mood-desc">Overcast skies, dramatic clouds, moody weather. Desaturated but never dead — just quietly electric.</p>
+        <div class="mood-recipe">
+          <div class="mood-recipe-heading">🧪 The Recipe</div>
+          <div class="recipe-item"><span class="recipe-label">Exposure</span><span class="recipe-val neg">−10</span></div>
+          <div class="recipe-item"><span class="recipe-label">Contrast</span><span class="recipe-val">+25</span></div>
+          <div class="recipe-item"><span class="recipe-label">Temperature</span><span class="recipe-val neg">−25</span></div>
+          <div class="recipe-item"><span class="recipe-label">Saturation</span><span class="recipe-val neg">−35</span></div>
+          <div class="recipe-item"><span class="recipe-label">Clarity</span><span class="recipe-val">+20</span></div>
+          <div class="recipe-item"><span class="recipe-label">Blend</span><span class="recipe-val" style="font-size:0.95rem;">Multiply</span></div>
+        </div>
+        <div class="mood-cta">
+          <a href="free-edit.html" class="btn btn-accent">✨ Try Storm</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. ELECTRIC -->
+    <div class="mood-card">
+      <div class="mood-swatches">
+        <div class="swatch" style="background:#FF4D6D;"><span class="hex-code">#FF4D6D</span></div>
+        <div class="swatch" style="background:#F7B500;"><span class="hex-code">#F7B500</span></div>
+        <div class="swatch" style="background:#00C2A8;"><span class="hex-code">#00C2A8</span></div>
+        <div class="swatch" style="background:#4A3AFF;"><span class="hex-code">#4A3AFF</span></div>
+      </div>
+      <div class="mood-body">
+        <div class="mood-head">
+          <span class="mood-emoji">⚡</span>
+          <span class="mood-title">Electric</span>
+        </div>
+        <p class="mood-poetic">colors turned all the way up, no apologies ⚡</p>
+        <p class="mood-desc">Bold, saturated, confident. For when your photo deserves to shout, not whisper.</p>
+        <div class="mood-recipe">
+          <div class="mood-recipe-heading">🧪 The Recipe</div>
+          <div class="recipe-item"><span class="recipe-label">Exposure</span><span class="recipe-val">+10</span></div>
+          <div class="recipe-item"><span class="recipe-label">Contrast</span><span class="recipe-val">+35</span></div>
+          <div class="recipe-item"><span class="recipe-label">Saturation</span><span class="recipe-val">+40</span></div>
+          <div class="recipe-item"><span class="recipe-label">Vibrance</span><span class="recipe-val">+35</span></div>
+          <div class="recipe-item"><span class="recipe-label">Clarity</span><span class="recipe-val">+25</span></div>
+          <div class="recipe-item"><span class="recipe-label">Blend</span><span class="recipe-val" style="font-size:0.95rem;">Overlay</span></div>
+        </div>
+        <div class="mood-cta">
+          <a href="challenge.html?c=frame" class="btn btn-accent">✨ Try Electric</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. NOSTALGIA -->
+    <div class="mood-card">
+      <div class="mood-swatches">
+        <div class="swatch" style="background:#E8C9A4;"><span class="hex-code">#E8C9A4</span></div>
+        <div class="swatch" style="background:#C4956A;"><span class="hex-code">#C4956A</span></div>
+        <div class="swatch" style="background:#8A6B4F;"><span class="hex-code">#8A6B4F</span></div>
+        <div class="swatch" style="background:#4D3D2E;"><span class="hex-code">#4D3D2E</span></div>
+      </div>
+      <div class="mood-body">
+        <div class="mood-head">
+          <span class="mood-emoji">📼</span>
+          <span class="mood-title">Nostalgia</span>
+        </div>
+        <p class="mood-poetic">yesterday's light caught in amber 🌿</p>
+        <p class="mood-desc">That faded film-camera feeling. Warm, slightly washed, a little sad in the best way.</p>
+        <div class="mood-recipe">
+          <div class="mood-recipe-heading">🧪 The Recipe</div>
+          <div class="recipe-item"><span class="recipe-label">Contrast</span><span class="recipe-val neg">−10</span></div>
+          <div class="recipe-item"><span class="recipe-label">Temperature</span><span class="recipe-val">+20</span></div>
+          <div class="recipe-item"><span class="recipe-label">Saturation</span><span class="recipe-val neg">−30</span></div>
+          <div class="recipe-item"><span class="recipe-label">Highlights</span><span class="recipe-val neg">−15</span></div>
+          <div class="recipe-item"><span class="recipe-label">Vignette</span><span class="recipe-val">+30</span></div>
+          <div class="recipe-item"><span class="recipe-label">Blend</span><span class="recipe-val" style="font-size:0.95rem;">Overlay</span></div>
+        </div>
+        <div class="mood-cta">
+          <a href="challenge.html?c=reel" class="btn btn-accent">✨ Try Nostalgia</a>
+        </div>
+      </div>
+    </div>
+
   </div>
-</div>
 
-<div class="recipe-card" id="recipeBox">
-  <div class="recipe-inner">
-    <h4 id="recipeName"></h4>
-    <p id="recipeDesc"></p>
-    <div class="chips" id="recipeChips"></div>
+  <!-- ═══ Footer CTA ═══ -->
+  <div class="mood-footer-cta">
+    <p>mix your own mood ✨</p>
+    <a href="free-edit.html" class="btn btn-brand">📸 Open Free Editor</a>
   </div>
-</div>
 
-<div class="mood-grid" id="moodGrid"></div>
+  <!-- ═══ Pretty Footer ═══ -->
+  <footer class="pretty-footer">
+    <span class="footer-emoji">🎨</span>
+    <span class="footer-script">color is a feeling, not a formula</span>
+    <span class="footer-copy">© 2024 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
+  </footer>
 
-<div class="tip-box">
-  <div class="tip-inner">
-    <h4>💡 Why does this matter?</h4>
-    <p>Colors aren't just pretty — they're emotional. Movies use color grading to make you feel scared, happy, or sad without you even noticing. When you learn to control color, you learn to control how people FEEL when they look at your photos. That's a superpower.</p>
-  </div>
-</div>
+  <!-- ═══ Bottom Nav ═══ -->
+  <nav class="bottom-nav">
+    <a href="index.html"><span class="nav-icon">🏠</span><span>Home</span></a>
+    <a href="challenge.html"><span class="nav-icon">✨</span><span>Edit</span></a>
+    <a href="free-edit.html"><span class="nav-icon">📸</span><span>Free</span></a>
+    <a href="room.html"><span class="nav-icon">⚡</span><span>Room</span></a>
+    <a href="constellation.html"><span class="nav-icon">🌌</span><span>Sky</span></a>
+    <a href="about.html"><span class="nav-icon">💛</span><span>About</span></a>
+  </nav>
 
-<div style="height:2rem"></div>
+  <script>
+    (function(){
+      var t = localStorage.getItem('rivlum_theme') || 'meadow';
+      document.body.setAttribute('data-theme', t);
+      if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
+      if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
+    })();
+  </script>
 
-<div class="pixel"><div class="pixel-eye"></div><div class="pixel-eye"></div></div>
-
-<nav class="nav">
-  <a href="index.html"><span>🏠</span>Home</a>
-  <a href="challenge.html"><span>✨</span>Edit</a>
-  <a href="free-edit.html"><span>📸</span>Free</a>
-  <a href="constellation.html"><span>🌌</span>Sky</a>
-  <a href="about.html"><span>💛</span>About</a>
-</nav>
-
-<script>
-var savedTheme = localStorage.getItem('rivlum_theme');
-if(savedTheme && savedTheme !== 'meadow') document.body.classList.add('theme-' + savedTheme);
-
-var moods=[
-{id:'golden',name:'Golden Hour 🌅',desc:'Mimics the quiet minutes right before sunset. The light is warm and soft. It lifts warmth, reduces harsh contrast, and adds a gentle glow. Perfect for making any memory feel cozy.',filter:'brightness(110%) contrast(90%) sepia(45%) saturate(120%)',chips:['Warmth +45%','Contrast -10%','Vibrance +20%']},
-{id:'midnight',name:'Midnight 🌑',desc:'Turns daylight into a cold, cinematic movie still. Removes warm oranges, forces cool blue tones, and makes shadows deep and secretive. This is how thriller movies look.',filter:'brightness(75%) contrast(140%) hue-rotate(190deg) saturate(70%)',chips:['Brightness -25%','Contrast +40%','Blue Shift 190°']},
-{id:'dream',name:'Dreamscape ☁️',desc:'Washes everything in pastel mist. Soft contrast removes harsh shadows, saturation goes up for a candy-like fantasy look, and a tiny blur makes it feel unreal.',filter:'brightness(105%) contrast(80%) saturate(150%) blur(1.5px)',chips:['Contrast -20%','Saturate +50%','Soft Blur']},
-{id:'storm',name:'Storm ⛈️',desc:'Heavy and nostalgic. Drains most of the color and dials up contrast. Mimics vintage black and white film but keeps just a tiny drop of warmth so it doesn\'t feel dead.',filter:'contrast(150%) saturate(30%) grayscale(40%) sepia(10%)',chips:['Contrast +50%','Desaturate -70%','Grayscale 40%']},
-{id:'electric',name:'Electric ⚡',desc:'Loud and unapologetic. Ramps colors to 200% and shifts hues toward teals and magentas. Use this when realism doesn\'t matter — only raw energy.',filter:'contrast(120%) saturate(220%) hue-rotate(270deg)',chips:['Saturate +120%','Hue Shift 270°']},
-{id:'nostalgia',name:'Nostalgia 📼',desc:'Like finding an old polaroid inside a book. Washes out the dark areas, adds a faded yellow tint, and flattens out the sharp digital look. Instant memory.',filter:'contrast(85%) sepia(30%) brightness(95%)',chips:['Faded Contrast','Vintage Sepia +30%']}
-];
-var grid=document.getElementById('moodGrid');
-var img=document.getElementById('prevImg');
-moods.forEach(function(m){
-var b=document.createElement('button');b.className='mood-btn';
-b.innerHTML='<h3>'+m.name+'</h3><p>'+m.desc.split('.')[0]+'.</p>';
-b.onclick=function(){
-document.querySelectorAll('.mood-btn').forEach(function(x){x.classList.remove('active')});
-b.classList.add('active');
-img.style.filter=m.filter;
-var rb=document.getElementById('recipeBox');rb.classList.add('show');
-document.getElementById('recipeName').textContent=m.name+' Recipe';
-document.getElementById('recipeDesc').textContent=m.desc;
-var ch=document.getElementById('recipeChips');ch.innerHTML='';
-m.chips.forEach(function(c){var s=document.createElement('span');s.className='chip';s.textContent=c;ch.appendChild(s)})};
-grid.appendChild(b)});
-</script>
 </body>
 </html>
