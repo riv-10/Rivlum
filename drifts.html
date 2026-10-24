@@ -1,192 +1,499 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RIVLUM — Portfolio & Drifts</title>
-<link rel="stylesheet" href="styles.css">
-<style>
-  body { font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#FBF8F3; color:#2D312E; margin:0; padding:0; padding-bottom:80px; }
-  .wrap { max-width:800px; margin:0 auto; padding:16px; }
-  .header-card { background:#FFFFFF; border:1px solid #EAE4DC; border-radius:12px; padding:16px; margin-bottom:16px; text-align:center; }
-  .header-card h1 { margin:0 0 6px 0; color:#5B8266; font-size:1.4rem; }
-  .header-card p { margin:0 0 12px 0; color:#6E7570; font-size:0.9rem; }
-  .share-bar { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
-  .btn { padding:8px 16px; border-radius:8px; border:none; cursor:pointer; font-size:0.85rem; font-weight:bold; font-family:inherit; }
-  .btn-primary { background:#5B8266; color:#fff; }
-  .btn-accent { background:#D97D54; color:#fff; }
-  .btn-secondary { background:#f5f5f5; border:1px solid #ddd; color:#2D312E; }
-  .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:14px; margin-top:16px; }
-  .drift-card { background:#FFFFFF; border:1px solid #EAE4DC; border-radius:12px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.03); }
-  .drift-card img { width:100%; height:180px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
-  .shared-banner { background:#FFF6D6; border:1px solid #F2C94C; padding:10px 14px; border-radius:10px; margin-bottom:16px; font-size:0.85rem; color:#2D312E; text-align:center; }
-  .nav { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #EAE4DC; display:flex; justify-content:space-around; padding:8px 0; z-index:100; }
-  .nav a { text-decoration:none; color:#5B8266; font-size:0.75rem; display:flex; flex-direction:column; align-items:center; gap:2px; }
-  .nav a span { font-size:1.2rem; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RIVLUM — Your Drifts</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .drifts-hero {
+      text-align: center;
+      padding: 40px 20px 24px;
+    }
+    .drifts-hero .logo-text {
+      font-size: 2.6rem;
+      margin: 10px 0 4px;
+    }
+    .drifts-hero .logo-tagline {
+      margin-bottom: 14px;
+    }
+    .portfolio-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px auto 32px;
+      max-width: 600px;
+      padding: 0 20px;
+    }
+    .shared-banner {
+      background: var(--gold-bg);
+      border: 1.5px solid var(--gold);
+      color: #8B7A2E;
+      padding: 14px 20px;
+      border-radius: 16px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      max-width: 600px;
+      margin: 0 auto 24px;
+    }
+    .drift-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      padding: 0 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .drift-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px var(--shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .drift-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px var(--shadow-hover);
+    }
+    .drift-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--bg2);
+      object-fit: cover;
+      display: block;
+    }
+    .drift-body {
+      padding: 14px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .drift-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .drift-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(91,130,102,0.1);
+      color: var(--accent);
+    }
+    .drift-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: auto;
+    }
+    .drift-actions button {
+      flex: 1;
+      padding: 8px 6px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text);
+    }
+    .drift-actions button:hover {
+      border-color: var(--accent);
+      background: var(--bg2);
+    }
+    .drift-actions .btn-delete:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+      background: rgba(208,114,81,0.05);
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    .empty-state .empty-emoji {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 16px;
+    }
+    .empty-state h3 {
+      font-size: 1.4rem;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .empty-state p {
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+    .empty-state .empty-script {
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      color: var(--script);
+      margin-bottom: 24px;
+    }
+    .empty-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .drifts-count {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .drifts-count strong {
+      color: var(--accent);
+    }
+  </style>
 </head>
-<body>
+<body data-theme="meadow">
 
-<div class="wrap">
-  
-  <div id="sharedBanner" class="shared-banner" style="display:none;">
-    ✨ <strong>Viewing Shared Portfolio</strong> — Created with RIVLUM! No account needed.
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══ Hero ═══ -->
+  <section class="drifts-hero">
+    <span class="pill pill-gold">🧭 your creative portfolio</span>
+    <h1 class="logo-text">RIVLUM</h1>
+    <p class="logo-tagline">your drifts, your way 🌿</p>
+    <p style="color:var(--muted);max-width:460px;margin:0 auto;font-size:0.95rem;">
+      Every edit you save lives here — on your device, nowhere else. Share your portfolio with a single link whenever you want.
+    </p>
+  </section>
+
+  <!-- ═══ Shared Portfolio Banner (hidden by default) ═══ -->
+  <div class="shared-banner hidden" id="sharedBanner">
+    ✨ Viewing Shared Portfolio — these drifts were created by someone else
   </div>
 
-  <div class="header-card">
-    <h1 id="portfolioTitle">🧭 My Drift Portfolio</h1>
-    <p id="portfolioSubtitle">Your collected creative photo edits saved locally in your browser.</p>
-    
-    <div class="share-bar">
-      <button class="btn btn-primary" onclick="sharePortfolio()">🔗 Share Portfolio Link</button>
-      <a href="free-edit.html" class="btn btn-accent" style="text-decoration:none; display:inline-block;">📸 Create New Edit</a>
+  <!-- ═══ Portfolio Actions ═══ -->
+  <div class="portfolio-actions" id="portfolioActions">
+    <button class="btn btn-accent" onclick="sharePortfolio()">🔗 Share Portfolio Link</button>
+    <a href="free-edit.html" class="btn btn-outline">📸 Make Another</a>
+    <button class="btn btn-ghost btn-sm" onclick="clearAllDrifts()">🗑 Clear All</button>
+  </div>
+
+  <!-- Count -->
+  <div class="drifts-count" id="driftsCount"></div>
+
+  <!-- ═══ Grid ═══ -->
+  <div class="drift-grid" id="driftGrid"></div>
+
+  <!-- ═══ Empty State ═══ -->
+  <div class="empty-state hidden" id="emptyState">
+    <span class="empty-emoji">🌊</span>
+    <h3>Your river hasn't started yet</h3>
+    <p class="empty-script">every edit becomes a drift ✨</p>
+    <p>Make your first edit and tap <strong>💾 Save</strong> — it'll show up here like a little treasure.</p>
+    <div class="empty-actions">
+      <a href="challenge.html" class="btn btn-accent">✨ Try a Challenge</a>
+      <a href="free-edit.html" class="btn btn-outline">📸 Free Edit</a>
     </div>
   </div>
 
-  <div id="driftGallery" class="gallery-grid"></div>
+  <!-- ═══ Pretty Footer ═══ -->
+  <footer class="pretty-footer">
+    <span class="footer-emoji">🧭</span>
+    <span class="footer-script">every drift is a discovery</span>
+    <span class="footer-copy">© 2024 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
+  </footer>
 
-</div>
+  <!-- ═══ Bottom Nav ═══ -->
+  <nav class="bottom-nav">
+    <a href="index.html"><span class="nav-icon">🏠</span><span>Home</span></a>
+    <a href="challenge.html"><span class="nav-icon">✨</span><span>Edit</span></a>
+    <a href="free-edit.html"><span class="nav-icon">📸</span><span>Free</span></a>
+    <a href="room.html"><span class="nav-icon">⚡</span><span>Room</span></a>
+    <a href="constellation.html"><span class="nav-icon">🌌</span><span>Sky</span></a>
+    <a href="about.html"><span class="nav-icon">💛</span><span>About</span></a>
+  </nav>
 
-<!-- MASTER NAV -->
-<nav class="nav">
-  <a href="index.html"><span>🏠</span>Home</a>
-  <a href="challenge.html"><span>✨</span>Edit</a>
-  <a href="free-edit.html"><span>📸</span>Free</a>
-  <a href="constellation.html"><span>🌌</span>Sky</a>
-  <a href="about.html"><span>💛</span>About</a>
-</nav>
+  <script>
+    /* ══════════════════════════════════════════
+       RIVLUM Drifts Portfolio
+       ══════════════════════════════════════════ */
 
-<script>
-// ==========================================
-// ZERO-LOGIN PORTFOLIO ENGINE (TIER 2)
-// ==========================================
+    (function(){
+      var t = localStorage.getItem('rivlum_theme') || 'meadow';
+      document.body.setAttribute('data-theme', t);
+      if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
+      if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
+    })();
 
-let isSharedView = false;
+    var isSharedMode = false;
+    var currentDrifts = [];
 
-function initGallery() {
-  const hash = window.location.hash;
-  
-  // Check if opening a shared portfolio URL link
-  if (hash.startsWith('#portfolio=')) {
-    isSharedView = true;
-    document.getElementById('sharedBanner').style.display = 'block';
-    document.getElementById('portfolioTitle').textContent = '🎨 Shared Creative Portfolio';
-    document.getElementById('portfolioSubtitle').textContent = 'Explore these edits created on RIVLUM.';
-    
-    try {
-      const encodedData = hash.replace('#portfolio=', '');
-      const decodedJson = decodeURIComponent(atob(encodedData));
-      const sharedDrifts = JSON.parse(decodedJson);
-      renderDriftsList(sharedDrifts, true);
-    } catch (e) {
-      alert('Unable to load shared portfolio link.');
-      loadLocalGallery();
+    function formatDate(iso) {
+      try {
+        var d = new Date(iso);
+        var opts = { month: 'short', day: 'numeric' };
+        return d.toLocaleDateString(undefined, opts);
+      } catch(e) {
+        return 'recent';
+      }
     }
-  } else {
-    loadLocalGallery();
-  }
-}
 
-function loadLocalGallery() {
-  const localDrifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
-  renderDriftsList(localDrifts, false);
-}
+    function formatChallenge(key) {
+      if (!key || key === 'free') return 'Free Edit';
+      if (key.indexOf('room-') === 0) return 'Room #' + key.substring(5);
+      var map = { prism:'Prism', horizon:'Horizon', mask:'Mask', frame:'Frame', grove:'Grove', reel:'Reel' };
+      return map[key] || key;
+    }
 
-function renderDriftsList(drifts, readOnly) {
-  const gallery = document.getElementById('driftGallery');
-  
-  if (!drifts || drifts.length === 0) {
-    gallery.innerHTML = `
-      <div style="grid-column:1/-1; text-align:center; padding:40px 20px; color:#6E7570;">
-        <p style="font-size:1.1rem; margin-bottom:8px;">✨ No saved edits in this portfolio yet!</p>
-        <p style="font-size:0.85rem; margin-bottom:14px;">Edit a photo and hit <strong>Save</strong> to add your work here.</p>
-        <a href="free-edit.html" class="btn btn-primary" style="text-decoration:none;">📸 Start Editing</a>
-      </div>`;
-    return;
-  }
-  
-  gallery.innerHTML = drifts.map((drift, index) => `
-    <div class="drift-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <strong style="color:#5B8266;">Drift #${index + 1}</strong>
-        <small style="color:#6E7570;">${new Date(drift.date || Date.now()).toLocaleDateString()}</small>
-      </div>
-      ${drift.image ? `<img src="${drift.image}" alt="Saved Edit">` : ''}
-      <div style="display:flex; gap:6px; flex-wrap:wrap;">
-        <button onclick="reEditDrift(${index}, ${readOnly})" class="btn btn-primary" style="flex:1; padding:6px; font-size:0.8rem;">🎨 Re-Edit</button>
-        <button onclick="downloadDriftImage('${drift.image}')" class="btn btn-secondary" style="padding:6px 10px; font-size:0.8rem;">⬇</button>
-        ${!readOnly ? `<button onclick="deleteDrift(${index})" class="btn btn-secondary" style="padding:6px 10px; font-size:0.8rem; color:#D97D54;">🗑</button>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
+    function renderDrifts(drifts) {
+      currentDrifts = drifts || [];
+      var grid = document.getElementById('driftGrid');
+      var empty = document.getElementById('emptyState');
+      var count = document.getElementById('driftsCount');
+      var actions = document.getElementById('portfolioActions');
 
-// Generate Zero-Login Portfolio URL
-async function sharePortfolio() {
-  const localDrifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
-  if (localDrifts.length === 0) {
-    return alert('Your portfolio is currently empty! Create and save an edit first.');
-  }
+      grid.innerHTML = '';
 
-  // Sanitize drifts payload (keep images clean for lightweight URL)
-  const minimalDrifts = localDrifts.map(d => ({
-    date: d.date,
-    sliders: d.sliders,
-    image: d.image // compressed base64 thumbnail
-  }));
+      if (!currentDrifts.length) {
+        empty.classList.remove('hidden');
+        count.textContent = '';
+        if (!isSharedMode) actions.classList.remove('hidden');
+        return;
+      }
 
-  try {
-    const jsonString = JSON.stringify(minimalDrifts);
-    const encoded = btoa(encodeURIComponent(jsonString));
-    const portfolioUrl = `${window.location.origin}${window.location.pathname}#portfolio=${encoded}`;
+      empty.classList.add('hidden');
+      count.innerHTML = '<strong>' + currentDrifts.length + '</strong> drift' + (currentDrifts.length === 1 ? '' : 's') + ' saved';
 
-    if (navigator.share) {
-      await navigator.share({
-        title: 'My RIVLUM Photo Portfolio',
-        text: 'Check out my creative photo edits on RIVLUM! (No signup needed):',
-        url: portfolioUrl
+      currentDrifts.forEach(function(drift, idx) {
+        var card = document.createElement('div');
+        card.className = 'drift-card';
+
+        var img = document.createElement('img');
+        img.className = 'drift-image';
+        img.src = drift.image || '';
+        img.alt = 'Drift from ' + formatDate(drift.date);
+        img.loading = 'lazy';
+        card.appendChild(img);
+
+        var body = document.createElement('div');
+        body.className = 'drift-body';
+
+        var meta = document.createElement('div');
+        meta.className = 'drift-meta';
+        meta.innerHTML = '<span>' + formatDate(drift.date) + '</span><span class="drift-tag">' + formatChallenge(drift.challenge) + '</span>';
+        body.appendChild(meta);
+
+        var actions = document.createElement('div');
+        actions.className = 'drift-actions';
+
+        if (!isSharedMode) {
+          var reEdit = document.createElement('button');
+          reEdit.innerHTML = '🎨 Re-Edit';
+          reEdit.onclick = function() { reEditDrift(idx); };
+          actions.appendChild(reEdit);
+        } else {
+          var save = document.createElement('button');
+          save.innerHTML = '💾 Save';
+          save.onclick = function() { saveSharedDrift(idx); };
+          actions.appendChild(save);
+        }
+
+        var download = document.createElement('button');
+        download.innerHTML = '⬇ Download';
+        download.onclick = function() { downloadDrift(idx); };
+        actions.appendChild(download);
+
+        if (!isSharedMode) {
+          var del = document.createElement('button');
+          del.className = 'btn-delete';
+          del.innerHTML = '🗑';
+          del.title = 'Delete';
+          del.onclick = function() { deleteDrift(idx); };
+          del.style.flex = '0 0 44px';
+          actions.appendChild(del);
+        }
+
+        body.appendChild(actions);
+        card.appendChild(body);
+        grid.appendChild(card);
       });
-    } else {
-      await navigator.clipboard.writeText(portfolioUrl);
-      alert('📋 Portfolio Link Copied to Clipboard! Share it on WhatsApp or Instagram.');
     }
-  } catch (err) {
-    alert('Share dismissed or portfolio data too large for single URL.');
-  }
-}
 
-function reEditDrift(index, readOnly) {
-  let drifts = [];
-  if (readOnly) {
-    const hash = window.location.hash.replace('#portfolio=', '');
-    drifts = JSON.parse(decodeURIComponent(atob(hash)));
-  } else {
-    drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
-  }
-  
-  if (!drifts[index]) return;
-  localStorage.setItem('rivlum_restore', JSON.stringify(drifts[index]));
-  window.location.href = 'free-edit.html?restore=1';
-}
+    function reEditDrift(idx) {
+      var drift = currentDrifts[idx];
+      if (!drift) return;
+      localStorage.setItem('rivlum_restore', JSON.stringify(drift));
+      window.location.href = 'free-edit.html?restore=1';
+    }
 
-function downloadDriftImage(imgSrc) {
-  if (!imgSrc) return alert('No image data found.');
-  const link = document.createElement('a');
-  link.download = `rivlum-drift-${Date.now()}.png`;
-  link.href = imgSrc;
-  link.click();
-}
+    function saveSharedDrift(idx) {
+      var drift = currentDrifts[idx];
+      if (!drift) return;
+      var mine = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+      drift.date = new Date().toISOString();
+      drift.challenge = (drift.challenge || 'free') + '-shared';
+      mine.unshift(drift);
+      if (mine.length > 50) mine = mine.slice(0, 50);
+      localStorage.setItem('rivlum_drifts', JSON.stringify(mine));
+      if (!localStorage.getItem('rivlum_born')) localStorage.setItem('rivlum_born', Date.now().toString());
+      showToast('💾 Saved to your drifts!');
+    }
 
-function deleteDrift(index) {
-  if (!confirm('Delete this Drift from your local gallery?')) return;
-  const drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
-  drifts.splice(index, 1);
-  localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
-  loadLocalGallery();
-}
+    function downloadDrift(idx) {
+      var drift = currentDrifts[idx];
+      if (!drift || !drift.image) return;
+      var link = document.createElement('a');
+      link.download = 'rivlum-drift-' + idx + '.jpg';
+      link.href = drift.image;
+      link.click();
+      showToast('⬇ Downloaded!');
+    }
 
-window.addEventListener('load', initGallery);
-</script>
+    function deleteDrift(idx) {
+      if (!confirm('Delete this drift? This cannot be undone.')) return;
+      var drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+      drifts.splice(idx, 1);
+      localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
+      renderDrifts(drifts);
+      showToast('🗑 Drift deleted');
+    }
+
+    function clearAllDrifts() {
+      if (!currentDrifts.length) { showToast('Nothing to clear!'); return; }
+      if (!confirm('Clear ALL ' + currentDrifts.length + ' drifts? This cannot be undone.')) return;
+      localStorage.setItem('rivlum_drifts', '[]');
+      renderDrifts([]);
+      showToast('🌊 All drifts cleared');
+    }
+
+    /* ── Share Portfolio ── */
+    function sharePortfolio() {
+      if (!currentDrifts.length) {
+        showToast('Save some drifts first!');
+        return;
+      }
+
+      /* Pick up to 6 most recent drifts and shrink thumbnails hard */
+      var toShare = currentDrifts.slice(0, 6).map(function(d) {
+        var shrunk = shrinkThumbnail(d.image, 180, 0.45);
+        return {
+          d: d.date,
+          c: d.challenge,
+          s: d.sliders,
+          b: d.blendMode,
+          t: d.textOverlay,
+          k: d.stickers,
+          r: d.rotation,
+          image: shrunk || d.image
+        };
+      });
+
+      try {
+        var json = JSON.stringify(toShare);
+        var encoded = btoa(unescape(encodeURIComponent(json)));
+        var url = window.location.origin + window.location.pathname + '#portfolio=' + encoded;
+
+        /* Warn if link is huge */
+        if (url.length > 6000) {
+          showToast('⚠️ Portfolio too big — sharing most recent 3');
+          toShare = toShare.slice(0, 3);
+          json = JSON.stringify(toShare);
+          encoded = btoa(unescape(encodeURIComponent(json)));
+          url = window.location.origin + window.location.pathname + '#portfolio=' + encoded;
+        }
+
+        if (navigator.share) {
+          navigator.share({
+            title: 'My RIVLUM Portfolio',
+            text: 'Check out my photo edits! ✨🌊',
+            url: url
+          }).catch(function(){
+            copyPortfolioLink(url);
+          });
+        } else {
+          copyPortfolioLink(url);
+        }
+      } catch(e) {
+        showToast('⚠️ Could not create share link');
+      }
+    }
+
+    function copyPortfolioLink(url) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function(){
+          showToast('🔗 Portfolio link copied!');
+        }).catch(function(){
+          window.prompt('Copy this link:', url);
+        });
+      } else {
+        window.prompt('Copy this link:', url);
+      }
+    }
+
+    function shrinkThumbnail(dataUrl, maxWidth, quality) {
+      try {
+        var img = new Image();
+        img.src = dataUrl;
+        if (!img.complete || !img.naturalWidth) {
+          /* synchronous shrink only if already loaded */
+          return dataUrl;
+        }
+        var scale = Math.min(1, maxWidth / img.naturalWidth);
+        var w = Math.round(img.naturalWidth * scale);
+        var h = Math.round(img.naturalHeight * scale);
+        var c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        return c.toDataURL('image/jpeg', quality);
+      } catch(e) {
+        return dataUrl;
+      }
+    }
+
+    /* ── Toast ── */
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(t._timeout);
+      t._timeout = setTimeout(function(){ t.classList.remove('show'); }, 2500);
+    }
+
+    /* ── Init ── */
+    (function init() {
+      var hash = window.location.hash;
+      if (hash && hash.indexOf('#portfolio=') === 0) {
+        try {
+          var encoded = hash.substring(11);
+          var json = decodeURIComponent(escape(atob(encoded)));
+          var shared = JSON.parse(json);
+          if (Array.isArray(shared) && shared.length) {
+            isSharedMode = true;
+            document.getElementById('sharedBanner').classList.remove('hidden');
+            document.getElementById('portfolioActions').classList.add('hidden');
+            renderDrifts(shared);
+            return;
+          }
+        } catch(e) {
+          showToast('⚠️ Could not load shared portfolio');
+        }
+      }
+
+      var drifts = [];
+      try {
+        drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+      } catch(e) {}
+      renderDrifts(drifts);
+    })();
+  </script>
 
 </body>
 </html>
