@@ -3,932 +3,910 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RIVLUM — Challenge Editor</title>
+  <title>Challenge · RIVLUM</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    .target-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 18px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      margin: 8px;
-      background: var(--gold-bg);
-      color: #8B7A2E;
-      border: 1.5px solid var(--gold);
-    }
-    .upload-area {
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Atkinson Hyperlegible', sans-serif; padding-bottom: 5rem; }
+
+    .challenge-close {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 200;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1.5px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px;
-      flex-wrap: wrap;
       justify-content: center;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 1.2rem;
+      box-shadow: 0 2px 10px var(--shadow);
     }
-    .action-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 6px 8px;
-      justify-content: center;
-      background: var(--bg);
+    .challenge-close:active { transform: scale(0.95); }
+
+    .challenge-header {
+      text-align: center;
+      padding: 3.5rem 1rem 1rem;
+      background: var(--bg2);
       border-bottom: 1px solid var(--border);
     }
-    .action-bar .btn-icon {
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      color: var(--text);
-      font-size: 0.85rem;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s ease;
+    .challenge-header h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.8rem;
+      color: var(--accent);
+      margin: 0 0 0.25rem;
     }
-    .action-bar .btn-icon:hover {
+    .challenge-header .target-name {
+      display: inline-block;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-top: 0.25rem;
+    }
+
+    .chip-row {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      padding: 0.75rem 1rem;
+      scrollbar-width: none;
+    }
+    .chip-row::-webkit-scrollbar { display: none; }
+    .chip {
+      flex-shrink: 0;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+    }
+    .chip.active {
       border-color: var(--accent);
       background: var(--bg2);
+      color: var(--accent);
+      font-weight: 700;
     }
-    .action-bar .btn-icon.accent-bg {
+
+    .compare-row {
+      display: flex;
+      gap: 0.5rem;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .compare-tile {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .compare-tile canvas, .compare-tile img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .compare-label {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(45,49,46,0.75);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+    }
+
+    .controls {
+      max-width: 500px;
+      margin: 0.75rem auto;
+      padding: 0 1rem;
+    }
+    .control-group {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .control-group h4 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.15rem;
+      color: var(--accent);
+      margin: 0 0 0.6rem;
+    }
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .slider-row:last-child { margin-bottom: 0; }
+    .slider-row label {
+      width: 72px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .slider-row input[type="range"] {
+      flex: 1;
+      accent-color: var(--accent);
+      height: 6px;
+    }
+    .slider-row .val {
+      width: 32px;
+      text-align: right;
+      font-size: 0.78rem;
+      color: var(--text);
+      font-family: monospace;
+    }
+    .blend-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .blend-row label {
+      width: 72px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .blend-row select {
+      flex: 1;
+      padding: 0.35rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.85rem;
+    }
+
+    .sticker-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .sticker-btn {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .sticker-btn:active { transform: scale(0.95); }
+
+    .text-controls { display: flex; flex-direction: column; gap: 0.5rem; }
+    .text-controls input {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    .color-dots { display: flex; gap: 0.4rem; }
+    .color-dot {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      cursor: pointer;
+    }
+    .color-dot.active { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+
+    .action-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      max-width: 500px;
+      margin: 1rem auto;
+      padding: 0 1rem;
+    }
+    .action-btn {
+      flex: 1;
+      min-width: 90px;
+      padding: 0.7rem 0.4rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: var(--card);
+      color: var(--text);
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-align: center;
+    }
+    .action-btn.primary {
       background: var(--accent);
-      color: #fff;
+      color: white;
       border-color: var(--accent);
     }
-    .action-bar .btn-icon.brand-bg {
-      background: var(--brand);
-      color: #fff;
-      border-color: var(--brand);
+    .action-btn.gold {
+      background: var(--gold);
+      color: var(--text);
+      border-color: var(--gold);
     }
-    .text-overlay-panel, .sticker-panel-wrap {
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 20px;
-    }
-    .text-overlay-panel h4, .sticker-panel-wrap h4 {
-      font-size: 0.85rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--accent);
-    }
-    .text-controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: flex-end;
-    }
-    .text-controls .field {
-      flex: 1;
-      min-width: 120px;
-    }
-    .text-controls .field label {
-      display: block;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    .section-divider {
-      width: 100%;
-      height: 1px;
-      background: var(--border);
-      margin: 16px 0;
-    }
+    .action-btn:active { transform: scale(0.97); }
+
     .drift-result {
+      max-width: 500px;
+      margin: 0.75rem auto;
+      padding: 1rem 1.5rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
       text-align: center;
-      padding: 20px;
-      margin: 16px 0;
-      border-radius: 18px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      line-height: 1.6;
+      display: none;
     }
-    .drift-result.star {
-      background: var(--gold-bg);
-      border: 1.5px solid var(--gold);
-      color: #8B7A2E;
-    }
-    .drift-result.drift {
-      background: rgba(108,142,164,0.1);
-      border: 1.5px solid var(--cool);
-      color: var(--cool);
-    }
-    .canvas-wrapper {
-      position: relative;
-      display: inline-block;
-    }
-    #mainCanvas {
+    .drift-result.show { display: block; }
+    .drift-result .result-emoji {
+      font-size: 2rem;
       display: block;
-      max-width: 100%;
-      max-height: 100%;
+      margin-bottom: 0.3rem;
     }
-    .rotate-info {
-      font-size: 0.75rem;
+    .drift-result .result-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+    .drift-result .result-msg {
+      font-size: 0.9rem;
       color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ========== TOAST ========== */
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--accent);
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 999px;
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      z-index: 500;
+      max-width: 90%;
       text-align: center;
-      margin-top: 4px;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .streak-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: var(--gold-bg);
+      border: 1px solid var(--gold);
+      color: var(--text);
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      margin-top: 0.5rem;
     }
   </style>
 </head>
-<body data-theme="meadow">
+<body>
+
+  <script>
+    (function(){
+      var t = localStorage.getItem('rivlum_theme') || 'meadow';
+      document.body.setAttribute('data-theme', t);
+      if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
+      if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
+    })();
+  </script>
+
+  <a href="index.html" class="challenge-close" aria-label="Leave challenge">✕</a>
+
+  <header class="challenge-header">
+    <h2>challenge mode ✨</h2>
+    <div class="target-name" id="targetName">loading challenge...</div>
+    <div id="streakWrap"></div>
+  </header>
+
+  <!-- Challenge chips -->
+  <div class="chip-row" id="chipRow">
+    <button class="chip" data-key="prism">☁️ Prism</button>
+    <button class="chip" data-key="horizon">🌅 Horizon</button>
+    <button class="chip" data-key="mask">🌙 Mask</button>
+    <button class="chip" data-key="frame">⚡ Frame</button>
+    <button class="chip" data-key="grove">🌿 Grove</button>
+    <button class="chip" data-key="reel">📼 Reel</button>
+  </div>
+
+  <!-- Target vs Your -->
+  <div class="compare-row">
+    <div class="compare-tile">
+      <span class="compare-label">target</span>
+      <canvas id="targetCanvas" width="400" height="300"></canvas>
+    </div>
+    <div class="compare-tile">
+      <span class="compare-label">yours</span>
+      <canvas id="userCanvas" width="400" height="300"></canvas>
+    </div>
+  </div>
+
+  <!-- Drift Result -->
+  <div class="drift-result" id="driftResult">
+    <span class="result-emoji" id="resultEmoji">✨</span>
+    <div class="result-title" id="resultTitle">Getting Closer!</div>
+    <div class="result-msg" id="resultMsg">Keep adjusting those sliders...</div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+
+    <div class="control-group">
+      <h4>☀️ Light</h4>
+      <div class="slider-row"><label>Exposure</label><input type="range" min="-100" max="100" value="0" data-key="exposure"><span class="val">0</span></div>
+      <div class="slider-row"><label>Contrast</label><input type="range" min="-100" max="100" value="0" data-key="contrast"><span class="val">0</span></div>
+      <div class="slider-row"><label>Highlights</label><input type="range" min="-100" max="100" value="0" data-key="highlights"><span class="val">0</span></div>
+      <div class="slider-row"><label>Shadows</label><input type="range" min="-100" max="100" value="0" data-key="shadows"><span class="val">0</span></div>
+    </div>
+
+    <div class="control-group">
+      <h4>🎨 Color</h4>
+      <div class="slider-row"><label>Temperature</label><input type="range" min="-100" max="100" value="0" data-key="temperature"><span class="val">0</span></div>
+      <div class="slider-row"><label>Tint</label><input type="range" min="-100" max="100" value="0" data-key="tint"><span class="val">0</span></div>
+      <div class="slider-row"><label>Saturation</label><input type="range" min="-100" max="100" value="0" data-key="saturation"><span class="val">0</span></div>
+      <div class="slider-row"><label>Vibrance</label><input type="range" min="-100" max="100" value="0" data-key="vibrance"><span class="val">0</span></div>
+      <div class="blend-row"><label>Blend</label>
+        <select id="blendMode">
+          <option value="normal">Normal</option>
+          <option value="overlay" selected>Overlay</option>
+          <option value="multiply">Multiply</option>
+          <option value="screen">Screen</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <h4>🧶 Texture</h4>
+      <div class="slider-row"><label>Clarity</label><input type="range" min="-100" max="100" value="0" data-key="clarity"><span class="val">0</span></div>
+      <div class="slider-row"><label>Vignette</label><input type="range" min="0" max="100" value="0" data-key="vignette"><span class="val">0</span></div>
+      <div class="slider-row"><label>Grain</label><input type="range" min="0" max="100" value="0" data-key="grain"><span class="val">0</span></div>
+    </div>
+
+    <div class="control-group">
+      <h4>✨ Stickers</h4>
+      <div class="sticker-bar">
+        <button class="sticker-btn" data-sticker="⭐">⭐</button>
+        <button class="sticker-btn" data-sticker="🌅">🌅</button>
+        <button class="sticker-btn" data-sticker="🌿">🌿</button>
+        <button class="sticker-btn" data-sticker="⚡">⚡</button>
+        <button class="sticker-btn" data-sticker="🕶️">🕶️</button>
+        <button class="sticker-btn" data-sticker="☁️">☁️</button>
+        <button class="sticker-btn" data-sticker="🔥">🔥</button>
+        <button class="sticker-btn" data-sticker="🎨">🎨</button>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <h4>💬 Text</h4>
+      <div class="text-controls">
+        <input type="text" id="textInput" placeholder="type something..." maxlength="40">
+        <div class="color-dots">
+          <span class="color-dot active" data-color="#FFFFFF" style="background:#FFFFFF;"></span>
+          <span class="color-dot" data-color="#2D312E" style="background:#2D312E;"></span>
+          <span class="color-dot" data-color="#F2C94C" style="background:#F2C94C;"></span>
+          <span class="color-dot" data-color="#5B8266" style="background:#5B8266;"></span>
+          <span class="color-dot" data-color="#D07251" style="background:#D07251;"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <h4>🔄 Rotation</h4>
+      <div class="slider-row"><label>Angle</label><input type="range" min="-180" max="180" value="0" data-key="rotation"><span class="val">0°</span></div>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="action-btn" id="undoBtn">↩️ Undo</button>
+    <button class="action-btn" id="checkBtn">🎯 Check</button>
+    <button class="action-btn primary" id="saveBtn">💾 Save</button>
+    <button class="action-btn gold" id="exportBtn">⬇️ Export</button>
+  </div>
 
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-  <div class="editor-wrap">
-    <!-- ═══ Left: Canvas Area ═══ -->
-    <div class="editor-canvas-area">
-      <div class="text-center">
-        <span class="target-badge" id="targetBadge">🎯 Target: Golden Hour</span>
-      </div>
-      <div class="editor-canvas-container" id="canvasContainer">
-        <canvas id="mainCanvas" width="800" height="600"></canvas>
-      </div>
-      <div class="upload-area">
-        <label class="btn btn-outline btn-sm" style="cursor:pointer;">
-          📁 Upload Photo
-          <input type="file" accept="image/*" id="uploadInput" style="display:none;">
-        </label>
-        <span style="font-size:0.78rem;color:var(--muted);">or use the default image</span>
-      </div>
-      <div class="action-bar" id="actionBar">
-        <button class="btn-icon" onclick="undo()" title="Undo">↺</button>
-        <button class="btn-icon" onclick="redo()" title="Redo">↻</button>
-        <button class="btn-icon" onclick="resetAll()" title="Reset">⟲</button>
-        <button class="btn-icon accent-bg" onclick="checkDrift()" title="Check Drift">✨</button>
-        <button class="btn-icon" onclick="saveDrift()" title="Save">💾</button>
-        <button class="btn-icon" onclick="downloadImage()" title="Download">⬇</button>
-        <button class="btn-icon" onclick="rotateImage()" title="Rotate">🔄</button>
-        <button class="btn-icon" onclick="toggleStickers()" title="Stickers">😍</button>
-        <button class="btn-icon brand-bg" onclick="shareImage()" title="Share">📱</button>
-      </div>
-    </div>
-
-    <!-- ═══ Right: Sliders ═══ -->
-    <div class="editor-sliders" id="sliderPanel">
-
-      <!-- Drift Result (hidden initially) -->
-      <div class="drift-result hidden" id="driftResult"></div>
-
-      <!-- Text Overlay -->
-      <div class="text-overlay-panel">
-        <h4>🔤 Text Overlay</h4>
-        <div class="text-controls">
-          <div class="field" style="flex:2;min-width:180px;">
-            <label>Text</label>
-            <input type="text" id="overlayText" placeholder="Type something…" maxlength="80">
-          </div>
-          <div class="field">
-            <label>Size</label>
-            <div class="select-wrap">
-              <select id="overlaySize">
-                <option value="small">Small</option>
-                <option value="medium" selected>Medium</option>
-                <option value="large">Large</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label>Position</label>
-            <div class="select-wrap">
-              <select id="overlayPos">
-                <option value="top">Top</option>
-                <option value="center" selected>Center</option>
-                <option value="bottom">Bottom</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div style="margin-top:12px;">
-          <label style="font-size:0.78rem;font-weight:700;color:var(--muted);display:block;margin-bottom:6px;">Color</label>
-          <div class="color-chips" id="textColorChips">
-            <button class="color-chip active" data-color="#FFFFFF" style="background:#FFFFFF;" title="White"></button>
-            <button class="color-chip" data-color="#2D312E" style="background:#2D312E;" title="Charcoal"></button>
-            <button class="color-chip" data-color="#F2C94C" style="background:#F2C94C;" title="Gold"></button>
-            <button class="color-chip" data-color="#5B8266" style="background:#5B8266;" title="Sage"></button>
-            <button class="color-chip" data-color="#D07251" style="background:#D07251;" title="Terracotta"></button>
-          </div>
-        </div>
-        <div style="margin-top:12px;">
-          <button class="btn btn-ghost btn-sm" onclick="clearText()">Clear Text ✕</button>
-        </div>
-      </div>
-
-      <!-- Stickers -->
-      <div class="sticker-panel-wrap hidden" id="stickerPanelWrap">
-        <h4>😍 Stickers <button class="btn btn-ghost btn-sm" onclick="clearStickers()" style="float:right;">Clear All</button></h4>
-        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Tap a sticker, then tap on the canvas to place it.</p>
-        <div class="sticker-panel" id="stickerPanel">
-          <button class="sticker-btn" data-sticker="⭐">⭐</button>
-          <button class="sticker-btn" data-sticker="🌅">🌅</button>
-          <button class="sticker-btn" data-sticker="🌿">🌿</button>
-          <button class="sticker-btn" data-sticker="⚡">⚡</button>
-          <button class="sticker-btn" data-sticker="🕶️">🕶️</button>
-          <button class="sticker-btn" data-sticker="☁️">☁️</button>
-          <button class="sticker-btn" data-sticker="🔥">🔥</button>
-          <button class="sticker-btn" data-sticker="🎨">🎨</button>
-        </div>
-      </div>
-
-      <!-- LIGHT -->
-      <div class="slider-group">
-        <h3>☀️ Light</h3>
-        <div class="slider-row">
-          <label>Exposure <span id="valExposure">0</span></label>
-          <input type="range" id="sliderExposure" min="-100" max="100" value="0">
-        </div>
-        <div class="slider-row">
-          <label>Contrast <span id="valContrast">0</span></label>
-          <input type="range" id="sliderContrast" min="-100" max="100" value="0">
-        </div>
-        <div class="slider-row">
-          <label>Highlights <span id="valHighlights">0</span></label>
-          <input type="range" id="sliderHighlights" min="-100" max="100" value="0">
-        </div>
-        <div class="slider-row">
-          <label>Shadows <span id="valShadows">0</span></label>
-          <input type="range" id="sliderShadows" min="-100" max="100" value="0">
-        </div>
-      </div>
-
-      <!-- COLOR -->
-      <div class="slider-group">
-        <h3>🎨 Color</h3>
-        <div class="slider-row" style="margin-bottom:16px;">
-          <label>Blend Mode</label>
-          <div class="select-wrap">
-            <select id="blendMode">
-              <option value="normal">Normal</option>
-              <option value="overlay" selected>Overlay</option>
-              <option value="multiply">Multiply</option>
-              <option value="screen">Screen</option>
-            </select>
-          </div>
-        </div>
-        <div class="slider-row">
-          <label>Temperature <span id="valTemperature">0</span></label>
-          <input type="range" id="sliderTemperature" min="-100" max="100" value="0">
-        </div>
-        <div class="slider-row">
-          <label>Tint <span id="valTint">0</span></label>
-          <input type="range" id="sliderTint" min="-100" max="100" value="0">
-        </div>
-        <div class="slider-row">
-          <label>Saturation <span id="valSaturation">0</span></label>
-          <input type="range" id="sliderSaturation" min="-100" max="100" value="0">
-        </div>
-        <div class="slider-row">
-          <label>Vibrance <span id="valVibrance">0</span></label>
-          <input type="range" id="sliderVibrance" min="-100" max="100" value="0">
-        </div>
-      </div>
-
-      <!-- TEXTURE -->
-      <div class="slider-group">
-        <h3>✨ Texture</h3>
-        <div class="slider-row">
-          <label>Clarity <span id="valClarity">0</span></label>
-          <input type="range" id="sliderClarity" min="-100" max="100" value="0">
-        </div>
-        <div class="slider-row">
-          <label>Vignette <span id="valVignette">0</span></label>
-          <input type="range" id="sliderVignette" min="0" max="100" value="0">
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ═══ Bottom Nav ═══ -->
-  <nav class="bottom-nav" aria-label="Main navigation">
-    <a href="index.html"><span class="nav-icon">🏠</span><span>Home</span></a>
-    <a href="challenge.html" class="active" aria-current="page"><span class="nav-icon">✨</span><span>Edit</span></a>
-    <a href="free-edit.html"><span class="nav-icon">📸</span><span>Free</span></a>
-    <a href="room.html"><span class="nav-icon">⚡</span><span>Room</span></a>
-    <a href="constellation.html"><span class="nav-icon">🌌</span><span>Sky</span></a>
-    <a href="about.html"><span class="nav-icon">💛</span><span>About</span></a>
+  <!-- Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+    <a href="challenge.html" class="nav-item active" aria-current="page"><span class="nav-icon">✨</span><span class="nav-label">Edit</span></a>
+    <a href="free-edit.html" class="nav-item"><span class="nav-icon">📸</span><span class="nav-label">Free</span></a>
+    <a href="room.html" class="nav-item"><span class="nav-icon">⚡</span><span class="nav-label">Room</span></a>
+    <a href="constellation.html" class="nav-item"><span class="nav-icon">🌌</span><span class="nav-label">Sky</span></a>
+    <a href="about.html" class="nav-item"><span class="nav-icon">💛</span><span class="nav-label">About</span></a>
   </nav>
 
   <script>
-    /* ══════════════════════════════════════════
-       RIVLUM Challenge Editor — Full Logic
-       ══════════════════════════════════════════ */
-
-    /* ── Theme + A11y Init ── */
-    (function(){
-      var t=localStorage.getItem('rivlum_theme')||'meadow';
-      document.body.setAttribute('data-theme',t);
-      if(localStorage.getItem('rivlum_dys')==='1') document.body.classList.add('dyslexia-font');
-      if(localStorage.getItem('rivlum_motion')==='1') document.body.classList.add('reduced-motion');
+    /* ========== GRAIN TEXTURE (shared) ========== */
+    var grainCanvas = (function() {
+      var c = document.createElement('canvas');
+      c.width = 256; c.height = 256;
+      var cx = c.getContext('2d');
+      var d = cx.createImageData(256, 256);
+      for (var i = 0; i < d.data.length; i += 4) {
+        var v = Math.random() * 255;
+        d.data[i] = v; d.data[i+1] = v; d.data[i+2] = v; d.data[i+3] = 255;
+      }
+      cx.putImageData(d, 0, 0);
+      return c;
     })();
 
-    /* ── Challenge Targets ── */
-    var challenges = {
+    /* ========== CHALLENGES ========== */
+    var CHALLENGES = {
       prism: {
-        name: 'The Prism',
-        mood: 'Dreamy',
-        emoji: '☁️',
-        target: {exposure:15,contrast:-20,highlights:10,shadows:15,temperature:-10,tint:10,saturation:-25,vibrance:10,clarity:-15,vignette:15},
-        image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80'
+        name: '☁️ Prism — Dreamy',
+        hint: 'soft, pastel, floaty',
+        img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+        target: { exposure: 30, contrast: -15, highlights: 40, shadows: 25, temperature: -10, tint: 15, saturation: -20, vibrance: 30, clarity: -30, vignette: 10, grain: 15 }
       },
       horizon: {
-        name: 'The Horizon',
-        mood: 'Golden Hour',
-        emoji: '🌅',
-        target: {exposure:20,contrast:10,highlights:-10,shadows:10,temperature:40,tint:5,saturation:15,vibrance:15,clarity:5,vignette:20},
-        image: 'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=800&q=80'
+        name: '🌅 Horizon — Golden Hour',
+        hint: 'warm, glowing, honey light',
+        img: 'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=800&q=80',
+        target: { exposure: 15, contrast: 25, highlights: -20, shadows: 20, temperature: 50, tint: -5, saturation: 25, vibrance: 35, clarity: 15, vignette: 25, grain: 10 }
       },
       mask: {
-        name: 'The Mask',
-        mood: 'Moody',
-        emoji: '🌙',
-        target: {exposure:-20,contrast:30,highlights:-25,shadows:-30,temperature:-15,tint:-5,saturation:-10,vibrance:-5,clarity:20,vignette:35},
-        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80'
+        name: '🌙 Mask — Moody',
+        hint: 'dark, cinematic, dramatic',
+        img: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80',
+        target: { exposure: -20, contrast: 50, highlights: -40, shadows: 60, temperature: -25, tint: -10, saturation: -15, vibrance: 10, clarity: 40, vignette: 55, grain: 25 }
       },
       frame: {
-        name: 'The Frame',
-        mood: 'Electric',
-        emoji: '⚡',
-        target: {exposure:10,contrast:35,highlights:10,shadows:5,temperature:5,tint:0,saturation:40,vibrance:35,clarity:25,vignette:10},
-        image: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=800&q=80'
+        name: '⚡ Frame — Electric',
+        hint: 'punchy, vibrant, bold',
+        img: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=800&q=80',
+        target: { exposure: 10, contrast: 55, highlights: 20, shadows: 30, temperature: 15, tint: 20, saturation: 60, vibrance: 50, clarity: 45, vignette: 20, grain: 5 }
       },
       grove: {
-        name: 'The Grove',
-        mood: 'Nature',
-        emoji: '🌿',
-        target: {exposure:10,contrast:5,highlights:-5,shadows:15,temperature:10,tint:-15,saturation:20,vibrance:25,clarity:10,vignette:15},
-        image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80'
+        name: '🌿 Grove — Nature',
+        hint: 'earthy, lush, grounded',
+        img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80',
+        target: { exposure: 5, contrast: 20, highlights: -10, shadows: 15, temperature: -5, tint: 25, saturation: 20, vibrance: 40, clarity: 25, vignette: 15, grain: 12 }
       },
       reel: {
-        name: 'The Reel',
-        mood: 'Vintage',
-        emoji: '📼',
-        target: {exposure:5,contrast:-10,highlights:-15,shadows:10,temperature:20,tint:10,saturation:-30,vibrance:-15,clarity:-10,vignette:30},
-        image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80'
+        name: '📼 Reel — Vintage',
+        hint: 'faded, nostalgic, 70s film',
+        img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80',
+        target: { exposure: -5, contrast: -20, highlights: -25, shadows: -15, temperature: 25, tint: 10, saturation: -30, vibrance: -10, clarity: -15, vignette: 35, grain: 40 }
       }
     };
 
-    /* ── Parse challenge from URL ── */
-    var params = new URLSearchParams(window.location.search);
-    var challengeKey = params.get('c') || 'horizon';
-    if (!challenges[challengeKey]) challengeKey = 'horizon';
-    var challenge = challenges[challengeKey];
+    var COMPLIMENTS = [
+      '✨ saved! this one is beautiful',
+      '🌿 oh wow, that\'s a mood',
+      '💛 ur eye for light is unreal',
+      '🌊 saved to your drifts — gorgeous',
+      '🌅 the colors in this one... stunning',
+      '✨ this one feels like a feeling',
+      '🎨 saved! you\'re cooking',
+      '🌙 effortlessly cinematic — nice',
+      '⭐ saved, and it\'s a vibe',
+      '🌸 soft, strong, perfect — saved'
+    ];
 
-    /* ── Set target badge ── */
-    document.getElementById('targetBadge').textContent = '🎯 Target: ' + challenge.mood;
-    document.title = 'RIVLUM — ' + challenge.name;
-
-    /* ── Canvas Setup ── */
-    var canvas = document.getElementById('mainCanvas');
-    var ctx = canvas.getContext('2d');
-    var originalImage = new Image();
-    originalImage.crossOrigin = 'anonymous';
-    var imageLoaded = false;
-    var rotationDeg = 0;
-    var stickers = [];
-    var selectedSticker = null;
-    var textOverlay = { text: '', size: 'medium', pos: 'center', color: '#FFFFFF' };
-
-    /* ── Slider References ── */
-    var sliderNames = ['Exposure','Contrast','Highlights','Shadows','Temperature','Tint','Saturation','Vibrance','Clarity','Vignette'];
-    var sliderIds = sliderNames.map(function(n){return 'slider'+n;});
-    var valIds = sliderNames.map(function(n){return 'val'+n;});
-
-    function getSliderValues() {
-      var obj = {};
-      sliderNames.forEach(function(n){
-        obj[n.toLowerCase()] = parseInt(document.getElementById('slider'+n).value, 10);
-      });
-      return obj;
-    }
-
-    function setSliderValues(obj) {
-      sliderNames.forEach(function(n){
-        var key = n.toLowerCase();
-        if (obj[key] !== undefined) {
-          document.getElementById('slider'+n).value = obj[key];
-          document.getElementById('val'+n).textContent = obj[key];
-        }
-      });
-    }
-
-    /* ── History (Undo/Redo) ── */
+    /* ========== STATE ========== */
+    var currentChallenge = 'prism';
+    var state = {
+      exposure: 0, contrast: 0, highlights: 0, shadows: 0,
+      temperature: 0, tint: 0, saturation: 0, vibrance: 0,
+      clarity: 0, vignette: 0, grain: 0,
+      blendMode: 'overlay', rotation: 0,
+      stickers: [], textOverlay: '', textColor: '#FFFFFF'
+    };
     var history = [];
     var historyIndex = -1;
-    var MAX_HISTORY = 20;
 
-    function captureState() {
-      return {
-        sliders: getSliderValues(),
-        blendMode: document.getElementById('blendMode').value,
-        stickers: JSON.parse(JSON.stringify(stickers)),
-        textOverlay: JSON.parse(JSON.stringify(textOverlay)),
-        rotation: rotationDeg
+    var userCanvas = document.getElementById('userCanvas');
+    var userCtx = userCanvas.getContext('2d');
+    var targetCanvas = document.getElementById('targetCanvas');
+    var targetCtx = targetCanvas.getContext('2d');
+    var baseImg = new Image();
+    baseImg.crossOrigin = 'anonymous';
+
+    /* ========== LOAD CHALLENGE ========== */
+    function loadChallenge(key) {
+      currentChallenge = key;
+      var ch = CHALLENGES[key];
+      document.getElementById('targetName').textContent = ch.name + ' — ' + ch.hint;
+      document.querySelectorAll('.chip').forEach(function(c) {
+        c.classList.toggle('active', c.getAttribute('data-key') === key);
+      });
+
+      baseImg.onload = function() {
+        userCanvas.width = baseImg.naturalWidth;
+        userCanvas.height = baseImg.naturalHeight;
+        targetCanvas.width = baseImg.naturalWidth;
+        targetCanvas.height = baseImg.naturalHeight;
+        renderTarget();
+        requestAnimationFrame(renderUser);
+        setTimeout(renderUser, 50);
       };
-    }
-
-    function pushHistory() {
-      var state = captureState();
-      if (historyIndex < history.length - 1) {
-        history = history.slice(0, historyIndex + 1);
-      }
-      history.push(state);
-      if (history.length > MAX_HISTORY) {
-        history.shift();
-      }
-      historyIndex = history.length - 1;
-    }
-
-    function restoreState(state) {
-      setSliderValues(state.sliders);
-      document.getElementById('blendMode').value = state.blendMode;
-      stickers = JSON.parse(JSON.stringify(state.stickers));
-      textOverlay = JSON.parse(JSON.stringify(state.textOverlay));
-      rotationDeg = state.rotation || 0;
-      document.getElementById('overlayText').value = textOverlay.text;
-      document.getElementById('overlaySize').value = textOverlay.size;
-      document.getElementById('overlayPos').value = textOverlay.pos;
-      updateColorChipActive(textOverlay.color);
-      renderCanvas();
-    }
-
-    function undo() {
-      if (historyIndex > 0) {
-        historyIndex--;
-        restoreState(history[historyIndex]);
-        showToast('↺ Undo');
-      }
-    }
-
-    function redo() {
-      if (historyIndex < history.length - 1) {
-        historyIndex++;
-        restoreState(history[historyIndex]);
-        showToast('↻ Redo');
-      }
-    }
-
-    /* ── Load Image ── */
-    function loadImage(src) {
-      imageLoaded = false;
-      originalImage = new Image();
-      originalImage.crossOrigin = 'anonymous';
-      originalImage.onload = function() {
-        imageLoaded = true;
-        canvas.width = originalImage.naturalWidth;
-        canvas.height = originalImage.naturalHeight;
-        rotationDeg = 0;
-        stickers = [];
-        resetSliders();
-        pushHistory();
-        renderCanvas();
+      baseImg.onerror = function() {
+        [userCtx, targetCtx].forEach(function(c) {
+          c.canvas.width = 400; c.canvas.height = 300;
+          c.fillStyle = '#EAE4DC';
+          c.fillRect(0, 0, 400, 300);
+          c.fillStyle = '#6E7570';
+          c.font = '16px Atkinson Hyperlegible';
+          c.textAlign = 'center';
+          c.fillText('image could not load', 200, 150);
+        });
       };
-      originalImage.onerror = function() {
-        showToast('⚠️ Could not load image. Try uploading your own!');
-      };
-      originalImage.src = src;
+      baseImg.src = ch.img;
     }
 
-    loadImage(challenge.image);
-
-    /* ── Upload ── */
-    document.getElementById('uploadInput').addEventListener('change', function(e) {
-      var file = e.target.files[0];
-      if (!file) return;
-      var reader = new FileReader();
-      reader.onload = function(ev) {
-        loadImage(ev.target.result);
-      };
-      reader.readAsDataURL(file);
-    });
-
-    /* ── Render Canvas ── */
-    function renderCanvas() {
-      if (!imageLoaded) return;
-      var sv = getSliderValues();
-
-      var w = originalImage.naturalWidth;
-      var h = originalImage.naturalHeight;
-      var needsSwap = (rotationDeg === 90 || rotationDeg === 270);
-      canvas.width = needsSwap ? h : w;
-      canvas.height = needsSwap ? w : h;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    /* ========== RENDER (shared engine) ========== */
+    function applyEdits(ctx, canvas, s) {
+      if (!baseImg.complete || !baseImg.naturalWidth) return;
+      var w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
       ctx.save();
 
-      if (rotationDeg !== 0) {
-        ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate(rotationDeg * Math.PI / 180);
-        ctx.translate(-w / 2, -h / 2);
+      if (s.rotation !== 0) {
+        ctx.translate(w/2, h/2);
+        ctx.rotate(s.rotation * Math.PI / 180);
+        ctx.translate(-w/2, -h/2);
       }
 
-      /* Build CSS filter string */
-      var brightness = 100 + sv.exposure;
-      var contrast = 100 + sv.contrast;
-      var saturate = 100 + sv.saturation + Math.round(sv.vibrance * 0.5);
-      var blur = sv.clarity < 0 ? Math.abs(sv.clarity) * 0.03 : 0;
-      var hueShift = sv.tint;
-      var sepia = sv.temperature > 0 ? sv.temperature * 0.4 : 0;
-
-      var filterStr = 'brightness(' + brightness + '%) contrast(' + contrast + '%) saturate(' + saturate + '%) blur(' + blur + 'px) hue-rotate(' + hueShift + 'deg) sepia(' + sepia + '%)';
-      ctx.filter = filterStr;
-
-      ctx.drawImage(originalImage, 0, 0, w, h);
+      var brightness = 1 + (s.exposure / 100) * 0.5;
+      var contrast = 1 + (s.contrast / 100) * 0.5;
+      var saturate = 1 + (s.saturation / 100) * 0.8;
+      var hueRotate = (s.temperature / 100) * 30;
+      var blur = Math.abs(s.clarity) > 50 ? (Math.abs(s.clarity) - 50) / 100 : 0;
+      var fs = 'brightness('+brightness+') contrast('+contrast+') saturate('+saturate+') hue-rotate('+hueRotate+'deg)';
+      if (blur > 0) fs += ' blur('+blur+'px)';
+      ctx.filter = fs;
+      ctx.drawImage(baseImg, 0, 0, w, h);
       ctx.filter = 'none';
 
-      /* Highlights / Shadows overlay */
-      if (sv.highlights !== 0 || sv.shadows !== 0) {
-        var imgData = ctx.getImageData(0, 0, w, h);
-        var d = imgData.data;
-        for (var i = 0; i < d.length; i += 4) {
-          var lum = (d[i] * 0.299 + d[i+1] * 0.587 + d[i+2] * 0.114);
-          if (lum > 170 && sv.highlights !== 0) {
-            var hFac = sv.highlights * 0.5;
-            d[i] = Math.min(255, Math.max(0, d[i] + hFac));
-            d[i+1] = Math.min(255, Math.max(0, d[i+1] + hFac));
-            d[i+2] = Math.min(255, Math.max(0, d[i+2] + hFac));
-          }
-          if (lum < 85 && sv.shadows !== 0) {
-            var sFac = sv.shadows * 0.5;
-            d[i] = Math.min(255, Math.max(0, d[i] + sFac));
-            d[i+1] = Math.min(255, Math.max(0, d[i+1] + sFac));
-            d[i+2] = Math.min(255, Math.max(0, d[i+2] + sFac));
-          }
-        }
-        ctx.putImageData(imgData, 0, 0);
-      }
-
-      /* Temperature cool shift (negative temp → blue overlay) */
-      if (sv.temperature < 0) {
+      if (Math.abs(s.tint) > 2) {
         ctx.globalCompositeOperation = 'overlay';
-        ctx.fillStyle = 'rgba(60,130,200,' + (Math.abs(sv.temperature) * 0.003) + ')';
+        ctx.globalAlpha = Math.abs(s.tint) / 100 * 0.3;
+        ctx.fillStyle = s.tint > 0 ? '#ff66cc' : '#66ff99';
         ctx.fillRect(0, 0, w, h);
+        ctx.globalAlpha = 1;
         ctx.globalCompositeOperation = 'source-over';
       }
-
-      /* Blend Mode color wash */
-      var blendVal = document.getElementById('blendMode').value;
-      if (blendVal !== 'normal') {
-        ctx.globalCompositeOperation = blendVal;
-        var warmth = sv.temperature > 0 ? sv.temperature : 0;
-        ctx.fillStyle = 'rgba(' + (180 + warmth) + ',' + (140 + Math.round(warmth * 0.5)) + ',80,0.08)';
+      if (s.highlights > 5) {
+        ctx.globalCompositeOperation = 'screen';
+        ctx.globalAlpha = s.highlights / 100 * 0.25;
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, w, h);
-        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
       }
-
-      /* Clarity positive → sharpen approximation using contrast overlay */
-      if (sv.clarity > 0) {
+      if (s.shadows > 5) {
+        ctx.globalCompositeOperation = 'multiply';
+        ctx.globalAlpha = s.shadows / 100 * 0.3;
+        ctx.fillStyle = '#1a1a2e';
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+      }
+      if (Math.abs(s.vibrance) > 5) {
+        ctx.globalCompositeOperation = 'saturation';
+        ctx.globalAlpha = Math.abs(s.vibrance) / 100 * 0.3;
+        ctx.fillStyle = s.vibrance > 0 ? '#808080' : '#404040';
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+      }
+      if (s.vignette > 2) {
+        var vA = s.vignette / 100 * 0.7;
+        var g = ctx.createRadialGradient(w/2, h/2, w*0.25, w/2, h/2, w*0.75);
+        g.addColorStop(0, 'rgba(0,0,0,0)');
+        g.addColorStop(1, 'rgba(0,0,0,'+vA+')');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, w, h);
+      }
+      if (s.grain > 2) {
+        ctx.save();
         ctx.globalCompositeOperation = 'overlay';
-        ctx.fillStyle = 'rgba(128,128,128,' + (sv.clarity * 0.002) + ')';
+        ctx.globalAlpha = (s.grain / 100) * 0.3;
+        ctx.fillStyle = ctx.createPattern(grainCanvas, 'repeat');
         ctx.fillRect(0, 0, w, h);
-        ctx.globalCompositeOperation = 'source-over';
-      }
-
-      /* Vignette */
-      if (sv.vignette > 0) {
-        var grad = ctx.createRadialGradient(w/2, h/2, w*0.25, w/2, h/2, w*0.75);
-        grad.addColorStop(0, 'rgba(0,0,0,0)');
-        grad.addColorStop(1, 'rgba(0,0,0,' + (sv.vignette * 0.008) + ')');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
+        ctx.restore();
       }
 
       ctx.restore();
 
-      /* ── Draw Stickers ── */
-      stickers.forEach(function(s) {
-        ctx.font = s.size + 'px serif';
+      if (s.stickers && s.stickers.length) {
+        var ss = Math.max(w, h) * 0.08;
+        ctx.font = ss + 'px serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(s.emoji, s.x, s.y);
-      });
-
-      /* ── Draw Text Overlay ── */
-      if (textOverlay.text) {
-        var fontSize;
-        if (textOverlay.size === 'small') fontSize = Math.round(canvas.width * 0.04);
-        else if (textOverlay.size === 'large') fontSize = Math.round(canvas.width * 0.08);
-        else fontSize = Math.round(canvas.width * 0.06);
-
-        ctx.font = '700 ' + fontSize + 'px "Atkinson Hyperlegible", sans-serif';
+        s.stickers.forEach(function(st) {
+          ctx.fillText(st.emoji, st.x * w, st.y * h);
+        });
+      }
+      if (s.textOverlay) {
+        var fsz = Math.max(w, h) * 0.05;
+        ctx.font = 'bold '+fsz+'px Atkinson Hyperlegible, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillStyle = textOverlay.color;
-        ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-        ctx.lineWidth = Math.max(2, fontSize * 0.06);
-
-        var tx = canvas.width / 2;
-        var ty;
-        if (textOverlay.pos === 'top') ty = fontSize * 1.5;
-        else if (textOverlay.pos === 'bottom') ty = canvas.height - fontSize * 1.2;
-        else ty = canvas.height / 2;
-
-        ctx.strokeText(textOverlay.text, tx, ty);
-        ctx.fillText(textOverlay.text, tx, ty);
+        ctx.textBaseline = 'bottom';
+        ctx.fillStyle = 'rgba(0,0,0,0.4)';
+        ctx.fillText(s.textOverlay, w/2 + 2, h - 30 + 2);
+        ctx.fillStyle = s.textColor;
+        ctx.fillText(s.textOverlay, w/2, h - 30);
       }
     }
 
-    /* ── Slider Event Listeners ── */
-    sliderNames.forEach(function(n) {
-      var slider = document.getElementById('slider' + n);
-      var val = document.getElementById('val' + n);
-      slider.addEventListener('input', function() {
-        val.textContent = slider.value;
-        renderCanvas();
-      });
-      slider.addEventListener('change', function() {
-        pushHistory();
-      });
-    });
-
-    document.getElementById('blendMode').addEventListener('change', function() {
-      renderCanvas();
-      pushHistory();
-    });
-
-    /* ── Text Overlay Events ── */
-    document.getElementById('overlayText').addEventListener('input', function() {
-      textOverlay.text = this.value;
-      renderCanvas();
-    });
-    document.getElementById('overlayText').addEventListener('change', function() {
-      pushHistory();
-    });
-    document.getElementById('overlaySize').addEventListener('change', function() {
-      textOverlay.size = this.value;
-      renderCanvas();
-      pushHistory();
-    });
-    document.getElementById('overlayPos').addEventListener('change', function() {
-      textOverlay.pos = this.value;
-      renderCanvas();
-      pushHistory();
-    });
-
-    /* ── Color Chips ── */
-    var chips = document.querySelectorAll('#textColorChips .color-chip');
-    chips.forEach(function(chip) {
-      chip.addEventListener('click', function() {
-        chips.forEach(function(c){ c.classList.remove('active'); });
-        chip.classList.add('active');
-        textOverlay.color = chip.getAttribute('data-color');
-        renderCanvas();
-        pushHistory();
-      });
-    });
-
-    function updateColorChipActive(color) {
-      chips.forEach(function(c) {
-        c.classList.toggle('active', c.getAttribute('data-color') === color);
-      });
+    function renderTarget() {
+      var t = CHALLENGES[currentChallenge].target;
+      var targetState = Object.assign({}, t, { blendMode: 'overlay', rotation: 0, stickers: [], textOverlay: '', textColor: '#FFFFFF' });
+      applyEdits(targetCtx, targetCanvas, targetState);
     }
 
-    function clearText() {
-      textOverlay.text = '';
-      document.getElementById('overlayText').value = '';
-      renderCanvas();
-      pushHistory();
-      showToast('Text cleared');
+    function renderUser() {
+      applyEdits(userCtx, userCanvas, state);
     }
 
-    /* ── Stickers ── */
-    function toggleStickers() {
-      var panel = document.getElementById('stickerPanelWrap');
-      panel.classList.toggle('hidden');
-    }
-
-    document.querySelectorAll('#stickerPanel .sticker-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        selectedSticker = btn.getAttribute('data-sticker');
-        showToast('Tap canvas to place ' + selectedSticker);
-      });
-    });
-
-    canvas.addEventListener('click', function(e) {
-      if (!selectedSticker) return;
-      var rect = canvas.getBoundingClientRect();
-      var scaleX = canvas.width / rect.width;
-      var scaleY = canvas.height / rect.height;
-      var x = (e.clientX - rect.left) * scaleX;
-      var y = (e.clientY - rect.top) * scaleY;
-      stickers.push({
-        emoji: selectedSticker,
-        x: x,
-        y: y,
-        size: Math.round(canvas.width * 0.07)
-      });
-      selectedSticker = null;
-      renderCanvas();
-      pushHistory();
-    });
-
-    function clearStickers() {
-      stickers = [];
-      renderCanvas();
-      pushHistory();
-      showToast('Stickers cleared');
-    }
-
-    /* ── Rotate ── */
-    function rotateImage() {
-      rotationDeg = (rotationDeg + 90) % 360;
-      renderCanvas();
-      pushHistory();
-      showToast('🔄 Rotated ' + rotationDeg + '°');
-    }
-
-    /* ── Reset ── */
-    function resetSliders() {
-      sliderNames.forEach(function(n) {
-        var slider = document.getElementById('slider' + n);
-        slider.value = n === 'Vignette' ? 0 : 0;
-        document.getElementById('val' + n).textContent = '0';
-      });
-      document.getElementById('blendMode').value = 'overlay';
-      textOverlay = { text: '', size: 'medium', pos: 'center', color: '#FFFFFF' };
-      document.getElementById('overlayText').value = '';
-      document.getElementById('overlaySize').value = 'medium';
-      document.getElementById('overlayPos').value = 'center';
-      updateColorChipActive('#FFFFFF');
-      stickers = [];
-      rotationDeg = 0;
-    }
-
-    function resetAll() {
-      resetSliders();
-      renderCanvas();
-      pushHistory();
-      showToast('⟲ Reset to original');
-      document.getElementById('driftResult').classList.add('hidden');
-    }
-
-    /* ── Drift Engine ── */
+    /* ========== DRIFT ENGINE ========== */
     function checkDrift() {
-      var sv = getSliderValues();
-      var target = challenge.target;
-      var totalVariance = 0;
-      var keys = Object.keys(target);
-
-      keys.forEach(function(key) {
-        var diff = Math.abs(sv[key] - target[key]);
-        totalVariance += (diff / 100);
+      var t = CHALLENGES[currentChallenge].target;
+      var keys = ['exposure','contrast','highlights','shadows','temperature','tint','saturation','vibrance','clarity','vignette','grain'];
+      var totalDiff = 0;
+      keys.forEach(function(k) {
+        totalDiff += Math.abs((state[k] || 0) - (t[k] || 0));
       });
+      var avgDiff = totalDiff / keys.length / 100;
+      var result = document.getElementById('driftResult');
+      result.classList.add('show');
 
-      var avgVariance = totalVariance / keys.length;
-      var resultEl = document.getElementById('driftResult');
-      resultEl.classList.remove('hidden', 'star', 'drift');
-
-      if (avgVariance < 0.25) {
-        resultEl.className = 'drift-result star';
-        resultEl.innerHTML = '⭐ Star Unlocked!<br><span style="font-size:0.85rem;font-weight:400;">You nailed the ' + challenge.mood + ' mood! Beautiful work.</span>';
-
+      if (avgDiff < 0.25) {
+        document.getElementById('resultEmoji').textContent = '⭐';
+        document.getElementById('resultTitle').textContent = 'Star Unlocked!';
+        document.getElementById('resultMsg').textContent = 'you nailed it — this edit perfectly matches the vibe. constellation updated 🌌';
         var stars = JSON.parse(localStorage.getItem('rivlum_stars') || '[]');
-        if (stars.indexOf(challengeKey) === -1) {
-          stars.push(challengeKey);
+        if (stars.indexOf(currentChallenge) === -1) {
+          stars.push(currentChallenge);
           localStorage.setItem('rivlum_stars', JSON.stringify(stars));
         }
-        if (!localStorage.getItem('rivlum_born')) {
-          localStorage.setItem('rivlum_born', Date.now().toString());
-        }
-        showToast('⭐ Star earned for ' + challenge.name + '!');
-      } else if (avgVariance > 1.2) {
-        resultEl.className = 'drift-result drift';
-        resultEl.innerHTML = '🧭 Creative Drift Discovered!<br><span style="font-size:0.85rem;font-weight:400;">You wandered far from the target — and found something uniquely yours. Save it!</span>';
-        showToast('🧭 What a beautiful drift!');
+      } else if (avgDiff > 1.2) {
+        document.getElementById('resultEmoji').textContent = '🌊';
+        document.getElementById('resultTitle').textContent = 'Creative Drift Discovered';
+        document.getElementById('resultMsg').textContent = 'you went your own way — and honestly? that\'s what RIVLUM is for. save it to your drifts';
       } else {
-        resultEl.className = 'drift-result drift';
-        resultEl.innerHTML = '🌊 Getting Closer…<br><span style="font-size:0.85rem;font-weight:400;">Variance: ' + (avgVariance * 100).toFixed(0) + '%. Keep adjusting, or save this as a drift!</span>';
+        document.getElementById('resultEmoji').textContent = '✨';
+        document.getElementById('resultTitle').textContent = 'Getting Closer!';
+        document.getElementById('resultMsg').textContent = 'you\'re in the right neighborhood — tweak a bit more and you\'ll match it';
       }
-
-      resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    /* ── Save Drift ── */
-    function saveDrift() {
-      if (!imageLoaded) return;
-
-      var tempCanvas = document.createElement('canvas');
-      tempCanvas.width = 320;
-      tempCanvas.height = Math.round(320 * (canvas.height / canvas.width));
-      var tCtx = tempCanvas.getContext('2d');
-      tCtx.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
-      var thumb = tempCanvas.toDataURL('image/jpeg', 0.6);
-
-      var drift = {
-        date: new Date().toISOString(),
-        challenge: challengeKey,
-        sliders: getSliderValues(),
-        blendMode: document.getElementById('blendMode').value,
-        stickers: stickers,
-        textOverlay: textOverlay,
-        rotation: rotationDeg,
-        image: thumb
-      };
-
-      var drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
-      drifts.unshift(drift);
-      if (drifts.length > 50) drifts = drifts.slice(0, 50);
-      localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
-
-      if (!localStorage.getItem('rivlum_born')) {
-        localStorage.setItem('rivlum_born', Date.now().toString());
-      }
-
-      showToast('💾 Drift saved to your portfolio!');
-    }
-
-    /* ── Download with Watermark ── */
-    function downloadImage() {
-      if (!imageLoaded) return;
-
-      var exportCanvas = document.createElement('canvas');
-      exportCanvas.width = canvas.width;
-      exportCanvas.height = canvas.height;
-      var eCtx = exportCanvas.getContext('2d');
-      eCtx.drawImage(canvas, 0, 0);
-
-      /* Watermark pill */
-      var pillText = '✨ Made with RIVLUM';
-      var pillH = Math.round(canvas.height * 0.035);
-      var pillFont = Math.max(12, pillH * 0.65);
-      eCtx.font = '700 ' + pillFont + 'px "Atkinson Hyperlegible", sans-serif';
-      var textW = eCtx.measureText(pillText).width;
-      var pillW = textW + pillH * 1.5;
-      var px = canvas.width - pillW - pillH * 0.5;
-      var py = canvas.height - pillH * 2;
-
-      eCtx.globalAlpha = 0.55;
-      eCtx.fillStyle = '#2D312E';
-      eCtx.beginPath();
-      var r = pillH * 0.55;
-      eCtx.roundRect(px, py, pillW, pillH, r);
-      eCtx.fill();
-
-      eCtx.globalAlpha = 0.9;
-      eCtx.fillStyle = '#FFFFFF';
-      eCtx.textAlign = 'center';
-      eCtx.textBaseline = 'middle';
-      eCtx.fillText(pillText, px + pillW / 2, py + pillH / 2);
-      eCtx.globalAlpha = 1;
-
-      var link = document.createElement('a');
-      link.download = 'rivlum-edit-' + challengeKey + '.png';
-      link.href = exportCanvas.toDataURL('image/png');
-      link.click();
-      showToast('⬇ Downloaded!');
-    }
-
-    /* ── Share ── */
-    function shareImage() {
-      if (!imageLoaded) return;
-
-      canvas.toBlob(function(blob) {
-        if (navigator.share && navigator.canShare) {
-          var file = new File([blob], 'rivlum-edit.png', { type: 'image/png' });
-          var shareData = { title: 'My RIVLUM Edit', text: 'Check out my photo edit from RIVLUM! ✨🌊', files: [file] };
-          if (navigator.canShare(shareData)) {
-            navigator.share(shareData).catch(function(){});
-            return;
-          }
-        }
-        /* Fallback: WhatsApp */
-        var url = 'https://wa.me/?text=' + encodeURIComponent('Check out my photo edit from RIVLUM! ✨🌊 https://rivlum.onrender.com');
-        window.open(url, '_blank');
-      }, 'image/png');
-    }
-
-    /* ── Toast ── */
+    /* ========== TOAST ========== */
+    var toast = document.getElementById('toast');
+    var toastTimer;
     function showToast(msg) {
-      var t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      clearTimeout(t._timeout);
-      t._timeout = setTimeout(function() {
-        t.classList.remove('show');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() {
+        toast.classList.remove('show');
       }, 2500);
     }
 
-    /* ── roundRect polyfill ── */
-    if (!CanvasRenderingContext2D.prototype.roundRect) {
-      CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-        if (typeof r === 'number') r = [r, r, r, r];
-        this.moveTo(x + r[0], y);
-        this.lineTo(x + w - r[1], y);
-        this.quadraticCurveTo(x + w, y, x + w, y + r[1]);
-        this.lineTo(x + w, y + h - r[2]);
-        this.quadraticCurveTo(x + w, y + h, x + w - r[2], y + h);
-        this.lineTo(x + r[3], y + h);
-        this.quadraticCurveTo(x, y + h, x, y + h - r[3]);
-        this.lineTo(x, y + r[0]);
-        this.quadraticCurveTo(x, y, x + r[0], y);
-        this.closePath();
-      };
+    /* ========== DRIFT CHAIN ========== */
+    function updateStreak() {
+      var today = new Date().toDateString();
+      var last = localStorage.getItem('rivlum_last_edit');
+      var streak = parseInt(localStorage.getItem('rivlum_streak') || '0');
+      if (last === today) {
+        // same day, no change
+      } else {
+        var yesterday = new Date(Date.now() - 86400000).toDateString();
+        if (last === yesterday) {
+          streak += 1;
+        } else {
+          streak = 1;
+        }
+        localStorage.setItem('rivlum_streak', streak);
+        localStorage.setItem('rivlum_last_edit', today);
+      }
+      renderStreak();
     }
+    function renderStreak() {
+      var streak = parseInt(localStorage.getItem('rivlum_streak') || '0');
+      var wrap = document.getElementById('streakWrap');
+      if (streak > 0) {
+        wrap.innerHTML = '<div class="streak-pill">🔥 ' + streak + '-day drift chain</div>';
+      } else {
+        wrap.innerHTML = '';
+      }
+    }
+    renderStreak();
+
+    /* ========== SAVE DRIFT ========== */
+    function saveDrift() {
+      try {
+        var drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
+        drifts.unshift({
+          date: new Date().toISOString(),
+          challenge: currentChallenge,
+          sliders: {
+            exposure: state.exposure, contrast: state.contrast,
+            highlights: state.highlights, shadows: state.shadows,
+            temperature: state.temperature, tint: state.tint,
+            saturation: state.saturation, vibrance: state.vibrance,
+            clarity: state.clarity, vignette: state.vignette, grain: state.grain
+          },
+          blendMode: state.blendMode,
+          rotation: state.rotation,
+          stickers: state.stickers,
+          textOverlay: state.textOverlay,
+          textColor: state.textColor,
+          image: userCanvas.toDataURL('image/jpeg', 0.7)
+        });
+        if (drifts.length > 30) drifts = drifts.slice(0, 30);
+        localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
+        if (!localStorage.getItem('rivlum_born')) {
+          localStorage.setItem('rivlum_born', Date.now());
+        }
+        updateStreak();
+        var msg = COMPLIMENTS[Math.floor(Math.random() * COMPLIMENTS.length)];
+        showToast(msg);
+      } catch(e) {
+        showToast('💛 saved! (storage almost full tho)');
+      }
+    }
+
+    /* ========== HISTORY ========== */
+    function pushHistory() {
+      var snap = JSON.parse(JSON.stringify(state));
+      if (historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
+      history.push(snap);
+      if (history.length > 20) history.shift();
+      historyIndex = history.length - 1;
+    }
+    function undo() {
+      if (historyIndex > 0) {
+        historyIndex--;
+        state = JSON.parse(JSON.stringify(history[historyIndex]));
+        syncUIFromState();
+        renderUser();
+      }
+    }
+
+    /* ========== UI SYNC ========== */
+    function syncUIFromState() {
+      document.querySelectorAll('input[type="range"]').forEach(function(sl) {
+        var k = sl.getAttribute('data-key');
+        if (state.hasOwnProperty(k)) {
+          sl.value = state[k];
+          var v = sl.parentElement.querySelector('.val');
+          if (v) v.textContent = k === 'rotation' ? state[k] + '°' : state[k];
+        }
+      });
+      document.getElementById('blendMode').value = state.blendMode;
+      document.getElementById('textInput').value = state.textOverlay;
+      document.querySelectorAll('.color-dot').forEach(function(d) {
+        d.classList.toggle('active', d.getAttribute('data-color') === state.textColor);
+      });
+    }
+    function readUI() {
+      document.querySelectorAll('input[type="range"]').forEach(function(sl) {
+        var k = sl.getAttribute('data-key');
+        if (state.hasOwnProperty(k)) state[k] = parseInt(sl.value);
+      });
+      state.blendMode = document.getElementById('blendMode').value;
+      state.textOverlay = document.getElementById('textInput').value;
+    }
+
+    /* ========== EVENTS ========== */
+    document.querySelectorAll('.chip').forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        loadChallenge(this.getAttribute('data-key'));
+        document.getElementById('driftResult').classList.remove('show');
+      });
+    });
+
+    document.querySelectorAll('input[type="range"]').forEach(function(sl) {
+      sl.addEventListener('input', function() {
+        var k = this.getAttribute('data-key');
+        var v = this.parentElement.querySelector('.val');
+        if (v) v.textContent = k === 'rotation' ? this.value + '°' : this.value;
+        readUI();
+        renderUser();
+      });
+      sl.addEventListener('change', pushHistory);
+    });
+
+    document.getElementById('blendMode').addEventListener('change', function() {
+      readUI(); renderUser(); pushHistory();
+    });
+    document.getElementById('textInput').addEventListener('input', function() {
+      readUI(); renderUser();
+    });
+    document.getElementById('textInput').addEventListener('change', pushHistory);
+
+    document.querySelectorAll('.color-dot').forEach(function(d) {
+      d.addEventListener('click', function() {
+        document.querySelectorAll('.color-dot').forEach(function(x) { x.classList.remove('active'); });
+        this.classList.add('active');
+        state.textColor = this.getAttribute('data-color');
+        renderUser();
+        pushHistory();
+      });
+    });
+
+    document.querySelectorAll('.sticker-btn').forEach(function(b) {
+      b.addEventListener('click', function() {
+        state.stickers.push({
+          emoji: this.getAttribute('data-sticker'),
+          x: 0.3 + Math.random() * 0.4,
+          y: 0.3 + Math.random() * 0.4
+        });
+        renderUser();
+        pushHistory();
+      });
+    });
+
+    userCanvas.addEventListener('click', function(e) {
+      if (!state.stickers.length) return;
+      var r = userCanvas.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width;
+      var y = (e.clientY - r.top) / r.height;
+      state.stickers[state.stickers.length - 1].x = x;
+      state.stickers[state.stickers.length - 1].y = y;
+      renderUser();
+    });
+
+    document.getElementById('undoBtn').addEventListener('click', undo);
+    document.getElementById('checkBtn').addEventListener('click', checkDrift);
+    document.getElementById('saveBtn').addEventListener('click', saveDrift);
+
+    document.getElementById('exportBtn').addEventListener('click', function() {
+      var ec = document.createElement('canvas');
+      ec.width = userCanvas.width; ec.height = userCanvas.height;
+      var ex = ec.getContext('2d');
+      ex.drawImage(userCanvas, 0, 0);
+      var w = ec.width, h = ec.height;
+      var pH = Math.max(28, h * 0.04);
+      var pP = pH * 0.5;
+      ex.font = 'bold ' + (pH * 0.55) + 'px Atkinson Hyperlegible, sans-serif';
+      var tw = ex.measureText('✨ Made with RIVLUM').width;
+      var pW = tw + pP * 2;
+      var px = w - pW - pP, py = h - pH - pP;
+      ex.save();
+      ex.globalAlpha = 0.6;
+      if (ex.roundRect) {
+        ex.beginPath(); ex.roundRect(px, py, pW, pH, pH / 2);
+        ex.fillStyle = '#2D312E'; ex.fill();
+      } else {
+        ex.fillStyle = '#2D312E'; ex.fillRect(px, py, pW, pH);
+      }
+      ex.globalAlpha = 0.9;
+      ex.fillStyle = '#FFFFFF';
+      ex.textAlign = 'left'; ex.textBaseline = 'middle';
+      ex.fillText('✨ Made with RIVLUM', px + pP, py + pH / 2);
+      ex.restore();
+      var link = document.createElement('a');
+      link.download = 'rivlum-' + currentChallenge + '.png';
+      link.href = ec.toDataURL('image/png');
+      link.click();
+      showToast('⬇️ exported — looks amazing');
+    });
+
+    /* ========== INIT ========== */
+    var params = new URLSearchParams(window.location.search);
+    var startKey = params.get('c') || 'prism';
+    if (!CHALLENGES[startKey]) startKey = 'prism';
+    loadChallenge(startKey);
+    pushHistory();
   </script>
 
 </body>
