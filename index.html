@@ -6,321 +6,447 @@
   <title>RIVLUM — the river of light</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    .hero-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    .hero-buttons .btn {
-      min-width: 200px;
-    }
-    .hero-secondary {
-      margin-bottom: 40px;
-    }
-    .challenges-heading {
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Atkinson Hyperlegible', sans-serif; padding-bottom: 5rem; }
+
+    /* Hero */
+    .hero {
       text-align: center;
-      margin-bottom: 8px;
-      font-size: 1.6rem;
+      padding: 3rem 1.5rem 2rem;
+      background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+    }
+    .hero .logo-text {
+      font-size: 3rem;
+      letter-spacing: -1.5px;
       color: var(--text);
+      margin: 0;
+      text-decoration: none;
+      display: block;
     }
-    .challenges-sub {
-      text-align: center;
+    .hero .logo-tagline {
       font-family: 'Caveat', cursive;
-      font-size: 1.2rem;
-      color: var(--script);
-      margin-bottom: 32px;
-    }
-    .challenge-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    @media (min-width: 560px) {
-      .challenge-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    .tag-dreamy {
-      background: rgba(108, 142, 164, 0.12);
-      color: var(--cool);
-      border: 1px solid rgba(108, 142, 164, 0.3);
-    }
-    .tag-golden {
-      background: var(--gold-bg);
-      color: #8B7A2E;
-      border: 1px solid var(--gold);
-    }
-    .tag-moody {
-      background: rgba(139, 126, 200, 0.12);
-      color: #8B7EC8;
-      border: 1px solid rgba(139, 126, 200, 0.3);
-    }
-    .tag-electric {
-      background: rgba(208, 114, 81, 0.1);
-      color: var(--brand);
-      border: 1px solid rgba(208, 114, 81, 0.3);
-    }
-    .tag-nature {
-      background: rgba(91, 130, 102, 0.1);
+      font-size: 1.3rem;
       color: var(--accent);
-      border: 1px solid rgba(91, 130, 102, 0.3);
+      margin: 0.25rem 0 0.75rem;
     }
-    .tag-vintage {
-      background: rgba(196, 149, 106, 0.12);
-      color: #A07850;
-      border: 1px solid rgba(196, 149, 106, 0.3);
+    .hero p.hero-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 420px;
+      margin: 0 auto 1rem;
+      line-height: 1.6;
     }
+
+    /* Mood + Streak Row */
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+    .mood-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text);
+      text-decoration: none;
+      transition: border-color 0.15s;
+    }
+    .mood-pill:hover { border-color: var(--accent); }
+    .mood-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .streak-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: var(--gold-bg);
+      border: 1px solid var(--gold);
+      color: var(--text);
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+
+    /* Stats Bar */
     .stats-bar {
       display: flex;
       justify-content: center;
-      gap: 24px;
+      gap: 0.75rem;
+      padding: 1rem;
       flex-wrap: wrap;
-      margin: 32px auto;
       max-width: 500px;
+      margin: 0 auto;
     }
-    .stat-item {
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
       text-align: center;
+      min-width: 90px;
+      box-shadow: 0 1px 6px var(--shadow);
     }
-    .stat-num {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--brand);
+    .stat-card .stat-num {
+      font-family: 'Caveat', cursive;
+      font-size: 1.6rem;
+      color: var(--accent);
       display: block;
     }
-    .stat-label {
-      font-size: 0.8rem;
+    .stat-card .stat-label {
+      font-size: 0.72rem;
       color: var(--muted);
-      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .extra-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin: 40px auto;
-      max-width: 600px;
-      padding: 0 20px;
+
+    /* Section Titles */
+    .section-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.6rem;
+      color: var(--text);
+      text-align: center;
+      margin: 1.5rem 0 0.75rem;
     }
-    .extra-link-card {
+
+    /* Challenge Grid */
+    .challenge-grid {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.85rem;
+    }
+    .challenge-card {
       background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 18px 22px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: 0 2px 10px var(--shadow);
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: block;
+    }
+    .challenge-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 16px var(--shadow);
+    }
+    .challenge-card:active { transform: scale(0.98); }
+    .challenge-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      display: block;
+      background: var(--bg2);
+    }
+    .challenge-info {
+      padding: 0.75rem 0.85rem;
+    }
+    .challenge-info h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.2rem;
+      margin: 0 0 0.15rem;
+      color: var(--text);
+    }
+    .challenge-info p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.4;
+    }
+    .challenge-star {
+      display: inline-block;
+      font-size: 0.75rem;
+      margin-top: 0.3rem;
+      color: var(--gold);
+    }
+
+    /* Extra Links */
+    .extra-grid {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 1rem 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.75rem;
+    }
+    .extra-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
       text-align: center;
       text-decoration: none;
       color: var(--text);
-      transition: all 0.25s ease;
-      flex: 1;
-      min-width: 150px;
-      box-shadow: 0 6px 20px var(--shadow);
+      box-shadow: 0 1px 6px var(--shadow);
+      transition: transform 0.15s;
     }
-    .extra-link-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px var(--shadow-hover);
-      border-color: var(--accent);
-      opacity: 1;
-    }
-    .extra-link-card .link-emoji {
-      font-size: 1.6rem;
+    .extra-card:hover { transform: translateY(-2px); }
+    .extra-card .extra-emoji {
+      font-size: 1.8rem;
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 0.35rem;
     }
-    .extra-link-card .link-title {
-      font-weight: 700;
-      font-size: 0.9rem;
+    .extra-card .extra-label {
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      color: var(--text);
     }
-    .extra-link-card .link-desc {
-      font-size: 0.78rem;
+    .extra-card .extra-sub {
+      font-size: 0.72rem;
       color: var(--muted);
-      margin-top: 4px;
+      margin-top: 0.15rem;
+    }
+
+    /* CTA Buttons */
+    .cta-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.2rem;
+      border-radius: 999px;
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: transform 0.1s, opacity 0.15s;
+    }
+    .cta-btn:active { transform: scale(0.97); }
+    .cta-btn.primary {
+      background: var(--accent);
+      color: white;
+    }
+    .cta-btn.secondary {
+      background: var(--card);
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+    .cta-btn:hover { opacity: 0.9; }
+
+    .footer-spacer { height: 2rem; }
+
+    @media (max-width: 400px) {
+      .challenge-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero .logo-text {
+        font-size: 2.4rem;
+      }
     }
   </style>
 </head>
-<body data-theme="meadow">
+<body>
 
-  <!-- ═══ Hero ═══ -->
+  <script>
+    (function(){
+      var t = localStorage.getItem('rivlum_theme') || 'meadow';
+      document.body.setAttribute('data-theme', t);
+      if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
+      if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
+    })();
+  </script>
+
+  <!-- Hero -->
   <section class="hero">
-    <span class="pill pill-gold">✨ 100% free · no login · zero data</span>
     <h1 class="logo-text">RIVLUM</h1>
     <p class="logo-tagline">the river of light 🌊</p>
-    <p>
-      A cozy creative playground where you learn photo editing, color, and light — no accounts, no ads, no rules. 
-      Just you and your imagination.
-    </p>
-    <div class="hero-buttons">
-      <a href="#challenges" class="btn btn-accent btn-lg">Pick a Challenge ✨</a>
-      <a href="free-edit.html" class="btn btn-outline btn-lg">Upload Your Photo 📸</a>
+    <p class="hero-desc">a cozy little photo-editing playground for young creators. no accounts, no ads, no noise — just you, the light, and your imagination.</p>
+
+    <div class="cta-row">
+      <a href="challenge.html" class="cta-btn primary">✨ Start a Challenge</a>
+      <a href="free-edit.html" class="cta-btn secondary">📸 Free Edit</a>
     </div>
-    <div class="hero-secondary">
-      <a href="room.html" class="btn btn-brand btn-sm">⚡ Co-Edit Room</a>
-    </div>
+
+    <div class="hero-pills" id="heroPills"></div>
   </section>
 
-  <!-- ═══ Stats Bar ═══ -->
+  <!-- Stats -->
   <div class="stats-bar" id="statsBar">
-    <div class="stat-item">
-      <span class="stat-num" id="statStars">0</span>
-      <span class="stat-label">⭐ Stars Earned</span>
-    </div>
-    <div class="stat-item">
+    <div class="stat-card">
       <span class="stat-num" id="statDrifts">0</span>
-      <span class="stat-label">🧭 Drifts Saved</span>
+      <span class="stat-label">drifts</span>
     </div>
-    <div class="stat-item">
+    <div class="stat-card">
+      <span class="stat-num" id="statStars">0</span>
+      <span class="stat-label">stars</span>
+    </div>
+    <div class="stat-card">
       <span class="stat-num" id="statDays">0</span>
-      <span class="stat-label">🌿 Days Creating</span>
+      <span class="stat-label">days</span>
     </div>
   </div>
 
-  <!-- ═══ Challenges ═══ -->
-  <section class="section" id="challenges">
-    <h2 class="challenges-heading">Pick a Challenge</h2>
-    <p class="challenges-sub">six moods to explore ✨</p>
+  <!-- Challenges -->
+  <h2 class="section-title">today's challenges ✨</h2>
+  <div class="challenge-grid" id="challengeGrid"></div>
 
-    <div class="challenge-grid">
-
-      <!-- 1. The Prism -->
-      <a href="challenge.html?c=prism" class="challenge-card" data-mood="dreamy">
-        <span class="card-emoji">☁️</span>
-        <div class="card-title">The Prism</div>
-        <p class="card-desc">Soften reality into a pastel daydream. Think misty mornings, faded colors, and gentle light leaks.</p>
-        <span class="card-tag tag-dreamy">☁️ Dreamy</span>
-      </a>
-
-      <!-- 2. The Horizon -->
-      <a href="challenge.html?c=horizon" class="challenge-card" data-mood="golden">
-        <span class="card-emoji">🌅</span>
-        <div class="card-title">The Horizon</div>
-        <p class="card-desc">Bathe your photo in warm golden hour light. Amber tones, long shadows, and that magic-hour glow.</p>
-        <span class="card-tag tag-golden">🌅 Golden Hour</span>
-      </a>
-
-      <!-- 3. The Mask -->
-      <a href="challenge.html?c=mask" class="challenge-card" data-mood="moody">
-        <span class="card-emoji">🌙</span>
-        <div class="card-title">The Mask</div>
-        <p class="card-desc">Pull your image into shadow. Deepen the contrast, cool the tones, and create a moody atmosphere.</p>
-        <span class="card-tag tag-moody">🌙 Moody</span>
-      </a>
-
-      <!-- 4. The Frame -->
-      <a href="challenge.html?c=frame" class="challenge-card" data-mood="electric">
-        <span class="card-emoji">⚡</span>
-        <div class="card-title">The Frame</div>
-        <p class="card-desc">Crank up the energy. Bold saturation, punchy contrast, and electric vibrancy that pops off screen.</p>
-        <span class="card-tag tag-electric">⚡ Electric</span>
-      </a>
-
-      <!-- 5. The Grove -->
-      <a href="challenge.html?c=grove" class="challenge-card" data-mood="nature">
-        <span class="card-emoji">🌿</span>
-        <div class="card-title">The Grove</div>
-        <p class="card-desc">Celebrate the natural world. Lush greens, earthy tones, and the soft light filtering through leaves.</p>
-        <span class="card-tag tag-nature">🌿 Nature</span>
-      </a>
-
-      <!-- 6. The Reel -->
-      <a href="challenge.html?c=reel" class="challenge-card" data-mood="vintage">
-        <span class="card-emoji">📼</span>
-        <div class="card-title">The Reel</div>
-        <p class="card-desc">Step back in time. Faded film tones, warm grain, and the nostalgic haze of old analog cameras.</p>
-        <span class="card-tag tag-vintage">📼 Vintage</span>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- ═══ Extra Links ═══ -->
-  <div class="extra-links">
-    <a href="moods.html" class="extra-link-card">
-      <span class="link-emoji">🎨</span>
-      <div class="link-title">Color Recipes</div>
-      <p class="link-desc">Learn the slider combos behind every mood</p>
+  <!-- Extra Links -->
+  <h2 class="section-title">explore more 🌿</h2>
+  <div class="extra-grid">
+    <a href="drifts.html" class="extra-card">
+      <span class="extra-emoji">🌊</span>
+      <span class="extra-label">My Drifts</span>
+      <span class="extra-sub">saved edits gallery</span>
     </a>
-    <a href="compare.html" class="extra-link-card">
-      <span class="link-emoji">👁️</span>
-      <div class="link-title">Eye Trainer</div>
-      <p class="link-desc">Swipe to compare before & after edits</p>
+    <a href="compare.html" class="extra-card">
+      <span class="extra-emoji">🔍</span>
+      <span class="extra-label">Compare</span>
+      <span class="extra-sub">before & after</span>
     </a>
-    <a href="constellation.html" class="extra-link-card">
-      <span class="link-emoji">🌌</span>
-      <div class="link-title">Sky Map</div>
-      <p class="link-desc">See your constellation of completed challenges</p>
+    <a href="moods.html" class="extra-card">
+      <span class="extra-emoji">🎨</span>
+      <span class="extra-label">Moods</span>
+      <span class="extra-sub">color recipes</span>
     </a>
-    <a href="drifts.html" class="extra-link-card">
-      <span class="link-emoji">🧭</span>
-      <div class="link-title">My Drifts</div>
-      <p class="link-desc">Your personal portfolio of creative discoveries</p>
+    <a href="constellation.html" class="extra-card">
+      <span class="extra-emoji">🌌</span>
+      <span class="extra-label">Sky Map</span>
+      <span class="extra-sub">your star chart</span>
+    </a>
+    <a href="room.html" class="extra-card">
+      <span class="extra-emoji">⚡</span>
+      <span class="extra-label">Co-Edit</span>
+      <span class="extra-sub">edit with a friend</span>
+    </a>
+    <a href="about.html" class="extra-card">
+      <span class="extra-emoji">💛</span>
+      <span class="extra-label">About</span>
+      <span class="extra-sub">themes & settings</span>
     </a>
   </div>
 
-  <!-- ═══ Pretty Footer ═══ -->
+  <div class="footer-spacer"></div>
+
+  <!-- Footer -->
   <footer class="pretty-footer">
     <span class="footer-emoji">🌿</span>
     <span class="footer-script">made with care for young creators</span>
-    <span class="footer-copy">© 2024 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
+    <span class="footer-copy">© 2026 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
   </footer>
 
-  <!-- ═══ Bottom Nav ═══ -->
+  <!-- Nav -->
   <nav class="bottom-nav" aria-label="Main navigation">
-    <a href="index.html" class="active" aria-current="page">
+    <a href="index.html" class="nav-item active" aria-current="page">
       <span class="nav-icon">🏠</span>
-      <span>Home</span>
+      <span class="nav-label">Home</span>
     </a>
-    <a href="challenge.html">
+    <a href="challenge.html" class="nav-item">
       <span class="nav-icon">✨</span>
-      <span>Edit</span>
+      <span class="nav-label">Edit</span>
     </a>
-    <a href="free-edit.html">
+    <a href="free-edit.html" class="nav-item">
       <span class="nav-icon">📸</span>
-      <span>Free</span>
+      <span class="nav-label">Free</span>
     </a>
-    <a href="room.html">
+    <a href="room.html" class="nav-item">
       <span class="nav-icon">⚡</span>
-      <span>Room</span>
+      <span class="nav-label">Room</span>
     </a>
-    <a href="constellation.html">
+    <a href="constellation.html" class="nav-item">
       <span class="nav-icon">🌌</span>
-      <span>Sky</span>
+      <span class="nav-label">Sky</span>
     </a>
-    <a href="about.html">
+    <a href="about.html" class="nav-item">
       <span class="nav-icon">💛</span>
-      <span>About</span>
+      <span class="nav-label">About</span>
     </a>
   </nav>
 
   <script>
-    /* ── Theme + Accessibility Init ── */
-    (function() {
-      var theme = localStorage.getItem('rivlum_theme') || 'meadow';
-      document.body.setAttribute('data-theme', theme);
+    /* ========== CHALLENGES DATA ========== */
+    var CHALLENGES = [
+      { key: 'prism', name: '☁️ Prism', desc: 'soft, pastel, floaty light', img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80' },
+      { key: 'horizon', name: '🌅 Horizon', desc: 'warm golden hour glow', img: 'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=800&q=80' },
+      { key: 'mask', name: '🌙 Mask', desc: 'dark, cinematic, moody', img: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80' },
+      { key: 'frame', name: '⚡ Frame', desc: 'punchy, vibrant, electric', img: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=800&q=80' },
+      { key: 'grove', name: '🌿 Grove', desc: 'earthy, lush, grounded', img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80' },
+      { key: 'reel', name: '📼 Reel', desc: 'faded, nostalgic, 70s film', img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80' }
+    ];
 
-      if (localStorage.getItem('rivlum_dys') === '1') {
-        document.body.classList.add('dyslexia-font');
-      }
-      if (localStorage.getItem('rivlum_motion') === '1') {
-        document.body.classList.add('reduced-motion');
-      }
+    /* ========== DAILY MOOD ========== */
+    var MOODS = [
+      { name: 'Golden Hour', emoji: '🌅', color: '#F2C94C' },
+      { name: 'Midnight Blue', emoji: '🌙', color: '#6C8EA4' },
+      { name: 'Dreamscape', emoji: '☁️', color: '#C4A8D4' },
+      { name: 'Storm', emoji: '⛈️', color: '#5A6672' },
+      { name: 'Electric', emoji: '⚡', color: '#E86B6B' },
+      { name: 'Nostalgia', emoji: '📼', color: '#C4956A' },
+      { name: 'Spring Meadow', emoji: '🌿', color: '#5B8266' }
+    ];
 
-      /* Stats */
-      try {
-        var stars = JSON.parse(localStorage.getItem('rivlum_stars') || '[]');
-        var drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
-        var born = localStorage.getItem('rivlum_born');
-        var days = 0;
-        if (born) {
-          days = Math.max(1, Math.ceil((Date.now() - parseInt(born, 10)) / 86400000));
-        }
-        document.getElementById('statStars').textContent = stars.length;
-        document.getElementById('statDrifts').textContent = drifts.length;
-        document.getElementById('statDays').textContent = days;
-      } catch(e) {}
-    })();
+    function getDailyMood() {
+      var d = new Date();
+      var dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+      return MOODS[dayOfYear % MOODS.length];
+    }
+
+    /* ========== RENDER HERO PILLS ========== */
+    function renderHeroPills() {
+      var mood = getDailyMood();
+      var streak = parseInt(localStorage.getItem('rivlum_streak') || '0');
+      var html = '<a href="moods.html" class="mood-pill"><span class="mood-dot" style="background:' + mood.color + '"></span>today: ' + mood.emoji + ' ' + mood.name + '</a>';
+      if (streak > 0) {
+        html += '<span class="streak-pill">🔥 ' + streak + '-day chain</span>';
+      }
+      document.getElementById('heroPills').innerHTML = html;
+    }
+    renderHeroPills();
+
+    /* ========== RENDER STATS ========== */
+    function renderStats() {
+      var drifts = [];
+      try { drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]'); } catch(e) {}
+      var stars = [];
+      try { stars = JSON.parse(localStorage.getItem('rivlum_stars') || '[]'); } catch(e) {}
+      var born = localStorage.getItem('rivlum_born');
+      var days = born ? Math.max(1, Math.floor((Date.now() - parseInt(born)) / 86400000)) : 0;
+
+      document.getElementById('statDrifts').textContent = drifts.length;
+      document.getElementById('statStars').textContent = stars.length;
+      document.getElementById('statDays').textContent = days;
+    }
+    renderStats();
+
+    /* ========== RENDER CHALLENGE CARDS ========== */
+    function renderChallenges() {
+      var stars = [];
+      try { stars = JSON.parse(localStorage.getItem('rivlum_stars') || '[]'); } catch(e) {}
+      var grid = document.getElementById('challengeGrid');
+      var html = '';
+
+      CHALLENGES.forEach(function(ch) {
+        var hasStar = stars.indexOf(ch.key) !== -1;
+        html +=
+          '<a href="challenge.html?c=' + ch.key + '" class="challenge-card">' +
+            '<img class="challenge-thumb" src="' + ch.img + '" alt="' + ch.name + '" loading="lazy">' +
+            '<div class="challenge-info">' +
+              '<h3>' + ch.name + '</h3>' +
+              '<p>' + ch.desc + '</p>' +
+              (hasStar ? '<span class="challenge-star">⭐ unlocked</span>' : '') +
+            '</div>' +
+          '</a>';
+      });
+
+      grid.innerHTML = html;
+    }
+    renderChallenges();
   </script>
 
 </body>
