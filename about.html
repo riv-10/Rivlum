@@ -6,124 +6,301 @@
   <title>About · RIVLUM</title>
   <link rel="stylesheet" href="styles.css">
   <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Atkinson Hyperlegible', sans-serif; padding-bottom: 7rem; }
+
+    /* ========== HERO ========== */
     .about-hero {
       text-align: center;
-      padding: 3rem 1.5rem 2rem;
-      background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+      padding: 4rem 1.5rem 3rem;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(91,130,102,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(242,201,76,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(208,114,81,0.05) 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero::before {
+      content: '🌊';
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 3rem;
+      opacity: 0.12;
+      transform: rotate(-15deg);
+    }
+    .about-hero::after {
+      content: '🌿';
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      font-size: 2.5rem;
+      opacity: 0.1;
+      transform: rotate(10deg);
+    }
+    .about-hero .hero-eyebrow {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin: 0 0 0.75rem;
     }
     .about-hero h2 {
       font-family: 'Caveat', cursive;
-      font-size: 2.4rem;
+      font-size: 2.8rem;
       color: var(--accent);
-      margin-bottom: 0.5rem;
+      margin: 0 0 0.5rem;
+      line-height: 1.1;
     }
-    .about-hero p {
-      color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 520px;
-      margin: 0 auto;
-      line-height: 1.7;
-    }
-    .about-section {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 1.5rem;
-    }
-    .about-section h3 {
+    .about-hero .hero-sub {
       font-family: 'Caveat', cursive;
-      font-size: 1.6rem;
+      font-size: 1.2rem;
       color: var(--text);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      opacity: 0.6;
+      margin: 0 0 1rem;
     }
-    .about-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 2px 12px var(--shadow);
-    }
-    .about-card p {
+    .about-hero p.hero-desc {
       color: var(--muted);
-      line-height: 1.7;
       font-size: 0.95rem;
-      margin-bottom: 0.75rem;
-    }
-    .about-card p:last-child {
-      margin-bottom: 0;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.75;
     }
 
-    /* Theme Switcher */
+    /* ========== LAYOUT ========== */
+    .about-section {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 1rem 1.25rem;
+    }
+
+    /* ========== DECORATIVE DIVIDER ========== */
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1.5rem 0;
+      color: var(--muted);
+      opacity: 0.4;
+      font-size: 0.8rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ========== SECTION HEADER ========== */
+    .section-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin: 0 0 0.5rem;
+    }
+    .section-heading {
+      font-family: 'Caveat', cursive;
+      font-size: 1.7rem;
+      color: var(--text);
+      margin: 0 0 1rem;
+      line-height: 1.2;
+    }
+
+    /* ========== PROMISE CARD ========== */
+    .promise-card {
+      background:
+        linear-gradient(135deg, rgba(91,130,102,0.04) 0%, rgba(242,201,76,0.04) 100%);
+      border: 1.5px solid var(--accent);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .promise-card::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(242,201,76,0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .promise-card .promise-icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .promise-card h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.8rem;
+      color: var(--accent);
+      margin: 0 0 0.5rem;
+    }
+    .promise-card .promise-lead {
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin: 0 0 1.25rem;
+    }
+    .promise-card .promise-lead strong {
+      color: var(--accent);
+    }
+    .promise-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: left;
+    }
+    .promise-list li {
+      padding: 0.55rem 0;
+      color: var(--text);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      line-height: 1.55;
+      border-bottom: 1px solid rgba(91,130,102,0.08);
+    }
+    .promise-list li:last-child { border-bottom: none; }
+    .promise-list li .li-icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      background: rgba(91,130,102,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      margin-top: 0.1rem;
+    }
+
+    /* ========== THEME SWITCHER ========== */
+    .theme-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: 0 2px 16px var(--shadow);
+    }
     .theme-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
-      margin-top: 0.5rem;
+      gap: 0.65rem;
+      margin-top: 0.25rem;
     }
     .theme-btn {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      padding: 0.85rem 1rem;
+      gap: 0.65rem;
+      padding: 0.9rem 1rem;
       border: 2px solid var(--border);
-      border-radius: 12px;
-      background: var(--card);
+      border-radius: 14px;
+      background: var(--bg);
       cursor: pointer;
       font-family: 'Atkinson Hyperlegible', sans-serif;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text);
-      transition: border-color 0.2s, transform 0.15s;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .theme-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
     }
     .theme-btn:hover {
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--shadow);
     }
     .theme-btn.active {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(91,130,102,0.12);
+      background: var(--card);
+      box-shadow: 0 0 0 3px rgba(91,130,102,0.1), 0 4px 12px var(--shadow);
+    }
+    .theme-btn.active::before {
+      content: '✓';
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 0.7rem;
+      color: var(--accent);
+      font-weight: 700;
     }
     .theme-swatch {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 2px solid rgba(0,0,0,0.08);
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 2px solid rgba(0,0,0,0.06);
       flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
-    .swatch-meadow { background: linear-gradient(135deg, #FBF8F3 50%, #5B8266 50%); }
-    .swatch-ocean { background: linear-gradient(135deg, #F0F6F9 50%, #3A7CA5 50%); }
-    .swatch-sunset { background: linear-gradient(135deg, #FDF6F0 50%, #D96B43 50%); }
-    .swatch-midnight { background: linear-gradient(135deg, #12161A 50%, #64B5F6 50%); }
+    .swatch-meadow { background: linear-gradient(135deg, #FBF8F3 40%, #5B8266 40%, #5B8266 60%, #D07251 60%); }
+    .swatch-ocean { background: linear-gradient(135deg, #F0F6F9 40%, #3A7CA5 40%, #3A7CA5 60%, #89CFF0 60%); }
+    .swatch-sunset { background: linear-gradient(135deg, #FDF6F0 40%, #D96B43 40%, #D96B43 60%, #F2C94C 60%); }
+    .swatch-midnight { background: linear-gradient(135deg, #12161A 40%, #64B5F6 40%, #64B5F6 60%, #1a1a2e 60%); }
+    .theme-name {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .theme-name strong {
+      font-size: 0.88rem;
+      line-height: 1.2;
+    }
+    .theme-name small {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
 
-    /* Comfort Toggles */
+    /* ========== COMFORT CARD ========== */
+    .comfort-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: 0 2px 16px var(--shadow);
+    }
     .comfort-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.85rem 0;
+      padding: 1rem 0;
       border-bottom: 1px solid var(--border);
+      gap: 1rem;
     }
-    .comfort-row:last-child {
-      border-bottom: none;
-    }
+    .comfort-row:first-of-type { padding-top: 0; }
+    .comfort-row:last-of-type { border-bottom: none; padding-bottom: 0; }
     .comfort-label {
       display: flex;
       flex-direction: column;
-      gap: 0.15rem;
+      gap: 0.2rem;
     }
     .comfort-label strong {
       font-size: 0.95rem;
       color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
     .comfort-label small {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--muted);
+      line-height: 1.4;
     }
     .toggle-switch {
       position: relative;
-      width: 48px;
-      height: 26px;
+      width: 50px;
+      height: 28px;
       flex-shrink: 0;
     }
     .toggle-switch input {
@@ -136,21 +313,21 @@
       position: absolute;
       inset: 0;
       background: var(--border);
-      border-radius: 13px;
+      border-radius: 14px;
       cursor: pointer;
-      transition: background 0.25s;
+      transition: background 0.3s;
     }
     .toggle-track::after {
       content: '';
       position: absolute;
       top: 3px;
       left: 3px;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       background: white;
       border-radius: 50%;
-      transition: transform 0.25s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
     }
     .toggle-switch input:checked + .toggle-track {
       background: var(--accent);
@@ -160,59 +337,62 @@
     }
     .toggle-switch input:focus-visible + .toggle-track {
       outline: 2px solid var(--accent);
-      outline-offset: 2px;
+      outline-offset: 3px;
     }
 
-    /* Promise Card */
-    .promise-card {
-      background: linear-gradient(135deg, var(--bg2) 0%, var(--card) 100%);
-      border: 2px solid var(--accent);
-      border-radius: 16px;
-      padding: 1.75rem;
-      text-align: center;
-      margin-bottom: 1.5rem;
+    /* ========== INFO CARDS ========== */
+    .info-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: 0 2px 16px var(--shadow);
+      position: relative;
+      overflow: hidden;
+      border-left: 4px solid transparent;
     }
-    .promise-card .promise-emoji {
-      font-size: 2.5rem;
+    .info-card.sage { border-left-color: var(--accent); }
+    .info-card.terra { border-left-color: #D07251; }
+    .info-card.gold { border-left-color: var(--gold); }
+    .info-card.blue { border-left-color: #6C8EA4; }
+
+    .info-card .card-emoji {
+      font-size: 1.5rem;
       margin-bottom: 0.5rem;
+      display: block;
     }
-    .promise-card h3 {
-      justify-content: center;
-      font-size: 1.8rem;
-      color: var(--accent);
-    }
-    .promise-card p {
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-    .promise-list {
-      list-style: none;
-      padding: 0;
-      margin: 1rem 0 0;
-      text-align: left;
-    }
-    .promise-list li {
-      padding: 0.4rem 0;
+    .info-card h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
       color: var(--text);
-      font-size: 0.95rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
+      margin: 0 0 0.75rem;
     }
-    .promise-list li::before {
-      content: '🌱';
-      flex-shrink: 0;
+    .info-card p {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 0.92rem;
+      margin: 0 0 0.65rem;
+    }
+    .info-card p:last-child { margin-bottom: 0; }
+    .info-card em {
+      color: var(--accent);
+      font-style: normal;
+      font-weight: 700;
     }
 
-    .about-footer-spacer {
-      height: 5rem;
-    }
+    /* ========== FOOTER ========== */
+    .about-footer-spacer { height: 2rem; }
 
-    @media (min-width: 600px) {
+    @media (min-width: 500px) {
       .theme-grid {
         grid-template-columns: repeat(4, 1fr);
       }
+      .theme-btn {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem 0.5rem;
+        gap: 0.5rem;
+      }
+      .theme-name { align-items: center; }
     }
   </style>
 </head>
@@ -227,67 +407,84 @@
     })();
   </script>
 
-  <!-- Header -->
-  <header class="site-header">
-    <a href="index.html" class="logo-text" style="text-decoration:none;">RIVLUM</a>
-    <p class="logo-tagline">the river of light 🌊</p>
-  </header>
-
   <!-- Hero -->
   <section class="about-hero">
-    <h2>hey, welcome to the quiet corner 💛</h2>
-    <p>RIVLUM is a tiny photo-editing playground built for young creators who just want to make beautiful things — no accounts, no ads, no noise.</p>
+    <p class="hero-eyebrow">about this little corner of the internet</p>
+    <h2>hey, welcome to<br>the quiet corner 💛</h2>
+    <p class="hero-sub">— where the light is soft and the edits are yours —</p>
+    <p class="hero-desc">RIVLUM is a tiny photo-editing playground built for young creators who just want to make beautiful things. No accounts, no ads, no noise. Just you, a photo, and a river of light.</p>
   </section>
 
   <div class="about-section">
 
-    <!-- Our Little Promise -->
+    <!-- Promise -->
     <div class="promise-card">
-      <div class="promise-emoji">🤝</div>
+      <span class="promise-icon">🤝</span>
       <h3>Our Little Promise</h3>
-      <p>We built this space with a very simple rule: <strong>your creativity belongs to you, and your privacy is not for sale.</strong></p>
+      <p class="promise-lead">We built this space with one very simple rule: <strong>your creativity belongs to you, and your privacy is not for sale.</strong></p>
       <ul class="promise-list">
-        <li>Everything you edit stays on your device — we never see your photos</li>
-        <li>No signups, no emails, no passwords, no tracking pixels</li>
-        <li>No ads, no sponsored content, no "recommended for you" algorithms</li>
-        <li>Your saved edits live in your browser's localStorage — clear your browser data and it's all gone, just like that</li>
-        <li>We don't even have a database. There's literally nothing to leak</li>
+        <li>
+          <span class="li-icon">📸</span>
+          <span>Everything you edit stays on your device — we never see your photos, not even for a second</span>
+        </li>
+        <li>
+          <span class="li-icon">🚫</span>
+          <span>No signups, no emails, no passwords, no tracking pixels, no "we value your privacy" popups (because we just… do it)</span>
+        </li>
+        <li>
+          <span class="li-icon">📢</span>
+          <span>No ads, no sponsored content, no "recommended for you" algorithms deciding what you should see</span>
+        </li>
+        <li>
+          <span class="li-icon">🧹</span>
+          <span>Your saved edits live in your browser's localStorage — clear your browser data and it's all gone, just like that</span>
+        </li>
+        <li>
+          <span class="li-icon">🗄️</span>
+          <span>We don't even have a database. There is literally nothing to leak. The server is just a folder of HTML files</span>
+        </li>
       </ul>
     </div>
 
+    <div class="divider">🌿</div>
+
     <!-- Theme Switcher -->
-    <div class="about-card">
-      <h3>🎨 Pick Your Vibe</h3>
-      <p>Choose a color theme that feels right. It saves automatically and follows you across every page.</p>
+    <p class="section-label">personalize</p>
+    <h3 class="section-heading">🎨 Pick Your Vibe</h3>
+    <div class="theme-card">
+      <p style="color: var(--muted); font-size: 0.9rem; margin: 0 0 1rem; line-height: 1.6;">Choose a color theme that feels right for you right now. It saves automatically and follows you across every page like a little companion.</p>
       <div class="theme-grid">
         <button class="theme-btn" data-theme="meadow" aria-label="Meadow theme">
           <span class="theme-swatch swatch-meadow"></span>
-          Meadow
+          <span class="theme-name"><strong>Meadow</strong><small>soft & earthy</small></span>
         </button>
         <button class="theme-btn" data-theme="ocean" aria-label="Ocean theme">
           <span class="theme-swatch swatch-ocean"></span>
-          Ocean
+          <span class="theme-name"><strong>Ocean</strong><small>cool & calm</small></span>
         </button>
         <button class="theme-btn" data-theme="sunset" aria-label="Sunset theme">
           <span class="theme-swatch swatch-sunset"></span>
-          Sunset
+          <span class="theme-name"><strong>Sunset</strong><small>warm & glowing</small></span>
         </button>
         <button class="theme-btn" data-theme="midnight" aria-label="Midnight theme">
           <span class="theme-swatch swatch-midnight"></span>
-          Midnight
+          <span class="theme-name"><strong>Midnight</strong><small>dark & cozy</small></span>
         </button>
       </div>
     </div>
 
-    <!-- Comfort Settings -->
-    <div class="about-card">
-      <h3>🧸 Comfort Settings</h3>
-      <p>Small tweaks that can make a big difference. These save to your browser too.</p>
+    <div class="divider">✨</div>
+
+    <!-- Comfort -->
+    <p class="section-label">accessibility</p>
+    <h3 class="section-heading">🧸 Comfort Settings</h3>
+    <div class="comfort-card">
+      <p style="color: var(--muted); font-size: 0.9rem; margin: 0 0 0.75rem; line-height: 1.6;">Small tweaks that can make a big difference. These save to your browser too, so you only have to set them once.</p>
 
       <div class="comfort-row">
         <div class="comfort-label">
-          <strong>OpenDyslexic Font</strong>
-          <small>A font designed to be easier to read for some people with dyslexia</small>
+          <strong>🔤 OpenDyslexic Font</strong>
+          <small>A specially designed font that can be easier to read for some people with dyslexia. It gives each letter a unique shape so they don't flip or float.</small>
         </div>
         <label class="toggle-switch">
           <input type="checkbox" id="dysToggle" aria-label="Toggle OpenDyslexic font">
@@ -297,8 +494,8 @@
 
       <div class="comfort-row">
         <div class="comfort-label">
-          <strong>Reduce Motion</strong>
-          <small>Tones down animations and transitions across the site</small>
+          <strong>🌙 Reduce Motion</strong>
+          <small>Tones down animations and transitions across the entire site. Great if movement makes you dizzy or distracted.</small>
         </div>
         <label class="toggle-switch">
           <input type="checkbox" id="motionToggle" aria-label="Toggle reduced motion">
@@ -307,67 +504,65 @@
       </div>
     </div>
 
+    <div class="divider">🌊</div>
+
     <!-- What is RIVLUM -->
-    <div class="about-card">
-      <h3>🌊 What is RIVLUM?</h3>
+    <p class="section-label">the story</p>
+    <h3 class="section-heading">🌊 What is RIVLUM?</h3>
+    <div class="info-card sage">
       <p>RIVLUM is a free, open photo-editing playground for kids and teens (ages 8–16). Think of it as a gentle first step into the world of color grading, light editing, and visual storytelling.</p>
-      <p>It runs entirely in your browser — no downloads, no installs, no servers storing your work. Every edit you make uses your device's own processing power, and every saved "drift" lives in a tiny pocket of browser storage called localStorage.</p>
+      <p>It runs entirely in your browser — no downloads, no installs, no servers storing your work. Every edit you make uses your device's own processing power, and every saved "drift" lives in a tiny pocket of browser storage called <em>localStorage</em>.</p>
       <p>The name comes from the idea of a <em>river of light</em> — how light flows through a photograph and how you can gently redirect it to tell your own story. 🌊✨</p>
     </div>
 
+    <div class="divider">🛠️</div>
+
     <!-- How It Works -->
-    <div class="about-card">
-      <h3>🛠️ How It Works</h3>
-      <p><strong>Challenges:</strong> Try to match a target edit by adjusting 10 real photo-editing sliders. Our Drift Engine compares your result and tells you how close you got.</p>
-      <p><strong>Free Edit:</strong> No targets, no pressure. Just you, a photo, and all the sliders. Save your drift to your portfolio whenever you want.</p>
-      <p><strong>Co-Edit Rooms:</strong> Share a link with a friend and take turns editing the same photo. Everything happens through the URL — no servers involved.</p>
-      <p><strong>Portfolio:</strong> Your saved drifts live in a little gallery you can share with anyone via a link.</p>
+    <p class="section-label">the tools</p>
+    <h3 class="section-heading">🛠️ How It Works</h3>
+    <div class="info-card terra">
+      <p><strong>✨ Challenges:</strong> Try to match a target edit by adjusting 10 real photo-editing sliders — exposure, contrast, temperature, grain, and more. Our Drift Engine compares your result and tells you how close you got.</p>
+      <p><strong>📸 Free Edit:</strong> No targets, no pressure. Just you, a photo, and all the sliders. Save your drift to your portfolio whenever the mood strikes.</p>
+      <p><strong>⚡ Co-Edit Rooms:</strong> Share a link with a friend and take turns editing the same photo. Everything happens through the URL — no servers, no accounts, no chat.</p>
+      <p><strong>🌊 Portfolio:</strong> Your saved drifts live in a little gallery you can share with anyone via a link. It's your creative diary, and it's entirely yours.</p>
     </div>
 
-    <!-- Built With Love -->
-    <div class="about-card">
-      <h3>💻 Built With</h3>
-      <p>Plain HTML, CSS, and vanilla JavaScript. No frameworks, no build tools, no npm packages. Just the web, the way it was meant to be — fast, simple, and accessible on a cheap phone over a slow connection.</p>
-      <p>The only external resources we load are two Google Fonts (<em>Atkinson Hyperlegible</em> for readability and <em>Caveat</em> for that handwritten feel) and some sample photos from Unsplash so you have something to edit right away.</p>
+    <div class="divider">💻</div>
+
+    <!-- Built With -->
+    <p class="section-label">under the hood</p>
+    <h3 class="section-heading">💻 Built With Love (and HTML)</h3>
+    <div class="info-card gold">
+      <p>Plain HTML, CSS, and vanilla JavaScript. No frameworks, no build tools, no npm packages, no React, no Tailwind. Just the web, the way it was meant to be — fast, simple, and accessible on a cheap phone over a slow 3G connection.</p>
+      <p>The only external resources we load are two Google Fonts (<em>Atkinson Hyperlegible</em> for readability and <em>Caveat</em> for that handwritten feel) and some sample photos from Unsplash so you have something beautiful to edit right away.</p>
+    </div>
+
+    <div class="divider">💛</div>
+
+    <!-- A Note -->
+    <div class="info-card blue" style="text-align: center; border-left: none; border: 1.5px solid #6C8EA4;">
+      <span class="card-emoji">🌱</span>
+      <h3>a little note from the creator</h3>
+      <p style="max-width: 420px; margin: 0 auto;">this whole thing was built by a 16-year-old who's been editing photos since they were 9 and believes every young person deserves a safe, beautiful space to be creative. if RIVLUM makes even one person feel like an artist today, it's worth it. thank you for being here. 💛</p>
     </div>
 
   </div>
 
   <div class="about-footer-spacer"></div>
 
-  <!-- Pretty Footer -->
   <footer class="pretty-footer">
     <span class="footer-emoji">🌿</span>
     <span class="footer-script">made with care for young creators</span>
     <span class="footer-copy">© 2026 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
   </footer>
 
-  <!-- Bottom Nav -->
   <nav class="bottom-nav" aria-label="Main navigation">
-    <a href="index.html" class="nav-item">
-      <span class="nav-icon">🏠</span>
-      <span class="nav-label">Home</span>
-    </a>
-    <a href="challenge.html" class="nav-item">
-      <span class="nav-icon">✨</span>
-      <span class="nav-label">Edit</span>
-    </a>
-    <a href="free-edit.html" class="nav-item">
-      <span class="nav-icon">📸</span>
-      <span class="nav-label">Free</span>
-    </a>
-    <a href="room.html" class="nav-item">
-      <span class="nav-icon">⚡</span>
-      <span class="nav-label">Room</span>
-    </a>
-    <a href="constellation.html" class="nav-item">
-      <span class="nav-icon">🌌</span>
-      <span class="nav-label">Sky</span>
-    </a>
-    <a href="about.html" class="nav-item active" aria-current="page">
-      <span class="nav-icon">💛</span>
-      <span class="nav-label">About</span>
-    </a>
+    <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+    <a href="challenge.html" class="nav-item"><span class="nav-icon">✨</span><span class="nav-label">Edit</span></a>
+    <a href="free-edit.html" class="nav-item"><span class="nav-icon">📸</span><span class="nav-label">Free</span></a>
+    <a href="room.html" class="nav-item"><span class="nav-icon">⚡</span><span class="nav-label">Room</span></a>
+    <a href="constellation.html" class="nav-item"><span class="nav-icon">🌌</span><span class="nav-label">Sky</span></a>
+    <a href="about.html" class="nav-item active" aria-current="page"><span class="nav-icon">💛</span><span class="nav-label">About</span></a>
   </nav>
 
   <script>
