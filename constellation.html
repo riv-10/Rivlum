@@ -3,438 +3,431 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RIVLUM — Sky Map</title>
+  <title>Sky Map · RIVLUM</title>
   <link rel="stylesheet" href="styles.css">
   <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #0B0E14; color: #E8E4DF; font-family: 'Atkinson Hyperlegible', sans-serif; padding-bottom: 5rem; overflow-x: hidden; }
+
+    .sky-close {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 200;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #E8E4DF;
+      font-size: 1.2rem;
+      backdrop-filter: blur(8px);
+    }
+    .sky-close:active { transform: scale(0.95); }
+
     .sky-hero {
       text-align: center;
-      padding: 32px 20px 16px;
+      padding: 3.5rem 1.5rem 1rem;
+      position: relative;
+      z-index: 10;
     }
-    .sky-hero h1 {
-      font-size: 2rem;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-    .sky-hero .sky-script {
+    .sky-hero h2 {
       font-family: 'Caveat', cursive;
-      font-size: 1.4rem;
-      color: var(--script);
-      margin-bottom: 14px;
+      font-size: 2.2rem;
+      color: #F2C94C;
+      margin: 0 0 0.25rem;
     }
     .sky-hero p {
-      color: var(--muted);
-      max-width: 460px;
-      margin: 0 auto;
-      font-size: 0.92rem;
+      color: rgba(232,228,223,0.6);
+      font-size: 0.9rem;
+      margin: 0;
     }
-    .sky-stats {
+
+    .sky-pills {
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
       flex-wrap: wrap;
-      margin: 20px auto;
-      max-width: 420px;
     }
-    .sky-stat {
-      text-align: center;
-    }
-    .sky-stat strong {
-      display: block;
-      font-size: 1.8rem;
-      color: var(--brand);
-      font-weight: 800;
-    }
-    .sky-stat span {
-      font-size: 0.78rem;
-      color: var(--muted);
-      font-weight: 700;
-    }
-    .sky-canvas-wrap {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 0 16px;
-      position: relative;
-    }
-    .sky-canvas {
-      width: 100%;
-      height: 440px;
-      background: linear-gradient(180deg, #0F1824 0%, #1A2638 50%, #243448 100%);
-      border-radius: 22px;
-      border: 1.5px solid var(--border);
-      box-shadow: 0 16px 40px rgba(30, 50, 80, 0.15);
-      display: block;
-      cursor: pointer;
-      touch-action: manipulation;
-    }
-    [data-theme="midnight"] .sky-canvas {
-      background: linear-gradient(180deg, #050810 0%, #0F1824 50%, #1A2638 100%);
-    }
-    .node-panel {
-      max-width: 600px;
-      margin: 24px auto;
-      padding: 0 20px;
-    }
-    .node-card {
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 28px var(--shadow);
-      text-align: center;
-      animation: fadeIn 0.4s ease;
-    }
-    .node-card .node-emoji {
-      font-size: 2.4rem;
-      display: block;
-      margin-bottom: 8px;
-    }
-    .node-card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 6px;
-      font-style: italic;
-    }
-    .node-card .node-mood {
-      font-family: 'Caveat', cursive;
-      color: var(--script);
-      font-size: 1.1rem;
-      margin-bottom: 12px;
-    }
-    .node-card .node-status {
+    .sky-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 16px;
+      gap: 0.3rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
       border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-    .status-lit {
-      background: var(--gold-bg);
-      color: #8B7A2E;
-      border: 1.5px solid var(--gold);
-    }
-    .status-dim {
-      background: var(--bg2);
-      color: var(--muted);
-      border: 1.5px solid var(--border);
-    }
-    .node-card p {
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin-bottom: 16px;
-      line-height: 1.6;
-    }
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin: 16px auto 0;
+      padding: 0.25rem 0.7rem;
       font-size: 0.78rem;
-      color: var(--muted);
+      color: #E8E4DF;
     }
-    .legend-item {
+    .sky-pill.gold {
+      background: rgba(242,201,76,0.15);
+      border-color: rgba(242,201,76,0.4);
+      color: #F2C94C;
+    }
+
+    /* Starfield Canvas */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Constellation Map */
+    .constellation-map {
+      position: relative;
+      z-index: 10;
+      max-width: 500px;
+      margin: 1rem auto;
+      padding: 1rem;
+      min-height: 420px;
+    }
+
+    .star-node {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+      text-decoration: none;
+    }
+    .star-node:hover { transform: scale(1.1); }
+    .star-node:active { transform: scale(0.95); }
+
+    .star-glow {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      font-size: 1.5rem;
+      position: relative;
     }
-    .legend-dot {
-      width: 10px;
-      height: 10px;
+    .star-glow.locked {
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.15);
+    }
+    .star-glow.unlocked {
+      background: rgba(242,201,76,0.2);
+      border: 2px solid #F2C94C;
+      box-shadow: 0 0 20px rgba(242,201,76,0.3), 0 0 40px rgba(242,201,76,0.1);
+    }
+    .star-glow.unlocked::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
       border-radius: 50%;
+      border: 1px solid rgba(242,201,76,0.15);
+      animation: pulse-ring 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 0; }
+    }
+
+    .star-label {
+      margin-top: 0.35rem;
+      font-family: 'Caveat', cursive;
+      font-size: 0.95rem;
+      color: rgba(232,228,223,0.7);
+      white-space: nowrap;
+    }
+    .star-node.unlocked .star-label {
+      color: #F2C94C;
+    }
+    .star-status {
+      font-size: 0.68rem;
+      color: rgba(232,228,223,0.4);
+      margin-top: 0.1rem;
+    }
+    .star-node.unlocked .star-status {
+      color: rgba(242,201,76,0.6);
+    }
+
+    /* Connecting Lines (SVG) */
+    .constellation-lines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .constellation-lines line {
+      stroke: rgba(255,255,255,0.08);
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+    .constellation-lines line.lit {
+      stroke: rgba(242,201,76,0.25);
+      stroke-dasharray: none;
+    }
+
+    /* Progress Section */
+    .progress-section {
+      position: relative;
+      z-index: 10;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 1rem 1.5rem;
+    }
+    .progress-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 1.25rem;
+      backdrop-filter: blur(8px);
+    }
+    .progress-card h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      color: #F2C94C;
+      margin: 0 0 0.75rem;
+    }
+    .progress-bar-wrap {
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #F2C94C, #D07251);
+      transition: width 0.6s ease;
+    }
+    .progress-text {
+      font-size: 0.82rem;
+      color: rgba(232,228,223,0.5);
+      text-align: center;
+    }
+
+    .sky-footer-spacer { height: 2rem; }
+
+    /* Override footer colors for dark sky */
+    .pretty-footer {
+      background: rgba(255,255,255,0.03) !important;
+      border-top: 1px solid rgba(255,255,255,0.08) !important;
+    }
+    .pretty-footer .footer-script,
+    .pretty-footer .footer-copy,
+    .pretty-footer .footer-copy a {
+      color: rgba(232,228,223,0.4) !important;
+    }
+
+    /* Bottom nav override for dark bg */
+    .bottom-nav {
+      background: rgba(11,14,20,0.95) !important;
+      border-top: 1px solid rgba(255,255,255,0.08) !important;
+      backdrop-filter: blur(12px);
+    }
+    .bottom-nav .nav-label {
+      color: rgba(232,228,223,0.5) !important;
+    }
+    .bottom-nav .nav-item.active .nav-label {
+      color: #F2C94C !important;
+    }
+
+    @media (prefers-reduced-motion: reduce), (.reduced-motion *) {
+      .star-glow.unlocked::after { animation: none; }
     }
   </style>
 </head>
-<body data-theme="meadow">
-
-  <!-- ═══ Hero ═══ -->
-  <section class="sky-hero">
-    <span class="pill pill-cool">🌌 your sky, your journey</span>
-    <h1>The Sky Map</h1>
-    <p class="sky-script">every star is a challenge completed ✨</p>
-    <p>Tap a constellation node to see what each star represents. Complete a challenge to light it up forever.</p>
-  </section>
-
-  <!-- ═══ Stats ═══ -->
-  <div class="sky-stats">
-    <div class="sky-stat">
-      <strong id="statLit">0</strong>
-      <span>⭐ Stars Lit</span>
-    </div>
-    <div class="sky-stat">
-      <strong>6</strong>
-      <span>🌌 Total Nodes</span>
-    </div>
-    <div class="sky-stat">
-      <strong id="statPct">0%</strong>
-      <span>🌊 Sky Mapped</span>
-    </div>
-  </div>
-
-  <!-- ═══ Starfield Canvas ═══ -->
-  <div class="sky-canvas-wrap">
-    <canvas id="skyCanvas" class="sky-canvas"></canvas>
-    <div class="legend">
-      <div class="legend-item"><span class="legend-dot" style="background:#F2C94C;box-shadow:0 0 8px #F2C94C;"></span> Earned</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#6E7570;"></span> Locked</div>
-      <div class="legend-item"><span class="legend-dot" style="background:#FFFFFF;opacity:0.6;"></span> Background Star</div>
-    </div>
-  </div>
-
-  <!-- ═══ Node Panel ═══ -->
-  <div class="node-panel hidden" id="nodePanel"></div>
-
-  <!-- ═══ Pretty Footer ═══ -->
-  <footer class="pretty-footer">
-    <span class="footer-emoji">🌌</span>
-    <span class="footer-script">keep drifting, keep lighting up the sky</span>
-    <span class="footer-copy">© 2024 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
-  </footer>
-
-  <!-- ═══ Bottom Nav ═══ -->
-  <nav class="bottom-nav">
-    <a href="index.html"><span class="nav-icon">🏠</span><span>Home</span></a>
-    <a href="challenge.html"><span class="nav-icon">✨</span><span>Edit</span></a>
-    <a href="free-edit.html"><span class="nav-icon">📸</span><span>Free</span></a>
-    <a href="room.html"><span class="nav-icon">⚡</span><span>Room</span></a>
-    <a href="constellation.html" class="active" aria-current="page"><span class="nav-icon">🌌</span><span>Sky</span></a>
-    <a href="about.html"><span class="nav-icon">💛</span><span>About</span></a>
-  </nav>
+<body>
 
   <script>
-    /* ══════════════════════════════════════════
-       RIVLUM Constellation — Interactive Sky Map
-       ══════════════════════════════════════════ */
-
     (function(){
       var t = localStorage.getItem('rivlum_theme') || 'meadow';
       document.body.setAttribute('data-theme', t);
       if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
       if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
     })();
+  </script>
 
-    var reducedMotion = localStorage.getItem('rivlum_motion') === '1';
+  <a href="index.html" class="sky-close" aria-label="Go home">✕</a>
 
-    /* ── Challenge Nodes (positioned as a loose constellation) ── */
-    var nodes = [
-      { key:'prism',   name:'The Prism',   mood:'Dreamy',      emoji:'☁️', x:0.18, y:0.28, desc:'Soften reality into a pastel daydream — misty mornings, faded light leaks.' },
-      { key:'horizon', name:'The Horizon', mood:'Golden Hour', emoji:'🌅', x:0.42, y:0.18, desc:'Bathe your photo in warm amber tones and that magic-hour glow.' },
-      { key:'mask',    name:'The Mask',    mood:'Moody',       emoji:'🌙', x:0.72, y:0.32, desc:'Pull your image into shadow. Deepen contrast, cool the tones, build atmosphere.' },
-      { key:'frame',   name:'The Frame',   mood:'Electric',    emoji:'⚡', x:0.82, y:0.62, desc:'Crank up the energy with bold saturation and punchy, vivid color.' },
-      { key:'grove',   name:'The Grove',   mood:'Nature',      emoji:'🌿', x:0.52, y:0.75, desc:'Celebrate the natural world — lush greens, earthy tones, soft dappled light.' },
-      { key:'reel',    name:'The Reel',    mood:'Vintage',     emoji:'📼', x:0.22, y:0.62, desc:'Step back in time — faded film tones, warm grain, nostalgic analog haze.' }
-    ];
+  <canvas id="starfield"></canvas>
 
-    /* ── Connection pairs (constellation lines) ── */
-    var lines = [
-      [0,1],[1,2],[2,3],[3,4],[4,5],[5,0], // outer hexagon
-      [0,3],[1,4],[2,5]                     // inner crossing
-    ];
+  <section class="sky-hero">
+    <h2>your sky map 🌌</h2>
+    <p>every challenge you complete lights up a new star</p>
+    <div class="sky-pills" id="skyPills"></div>
+  </section>
 
-    /* ── Canvas Setup ── */
-    var canvas = document.getElementById('skyCanvas');
-    var ctx = canvas.getContext('2d');
-    var W = 0, H = 0, dpr = window.devicePixelRatio || 1;
-    var bgStars = [];
+  <div class="constellation-map" id="constellationMap">
+    <svg class="constellation-lines" id="constellationLines" viewBox="0 0 500 420" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
 
-    function resize() {
-      var rect = canvas.getBoundingClientRect();
-      W = rect.width;
-      H = rect.height;
-      canvas.width = W * dpr;
-      canvas.height = H * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      generateBackgroundStars();
-    }
+  <div class="progress-section">
+    <div class="progress-card">
+      <h3>✨ constellation progress</h3>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+      <p class="progress-text" id="progressText">0 of 6 stars lit</p>
+    </div>
+  </div>
 
-    function generateBackgroundStars() {
-      bgStars = [];
-      var count = Math.round((W * H) / 2800);
-      for (var i = 0; i < count; i++) {
-        bgStars.push({
-          x: Math.random() * W,
-          y: Math.random() * H,
-          r: Math.random() * 1.4 + 0.3,
-          a: Math.random() * 0.6 + 0.2,
-          speed: Math.random() * 0.015 + 0.005,
+  <div class="sky-footer-spacer"></div>
+
+  <footer class="pretty-footer">
+    <span class="footer-emoji">🌿</span>
+    <span class="footer-script">the sky grows brighter with every edit</span>
+    <span class="footer-copy">© 2026 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
+  </footer>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+    <a href="challenge.html" class="nav-item"><span class="nav-icon">✨</span><span class="nav-label">Edit</span></a>
+    <a href="free-edit.html" class="nav-item"><span class="nav-icon">📸</span><span class="nav-label">Free</span></a>
+    <a href="room.html" class="nav-item"><span class="nav-icon">⚡</span><span class="nav-label">Room</span></a>
+    <a href="constellation.html" class="nav-item active" aria-current="page"><span class="nav-icon">🌌</span><span class="nav-label">Sky</span></a>
+    <a href="about.html" class="nav-item"><span class="nav-icon">💛</span><span class="nav-label">About</span></a>
+  </nav>
+
+  <script>
+    /* ========== STARFIELD ANIMATION ========== */
+    (function() {
+      var c = document.getElementById('starfield');
+      var ctx = c.getContext('2d');
+      var stars = [];
+      var NUM_STARS = 120;
+
+      function resize() {
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      for (var i = 0; i < NUM_STARS; i++) {
+        stars.push({
+          x: Math.random() * c.width,
+          y: Math.random() * c.height,
+          r: Math.random() * 1.5 + 0.3,
+          alpha: Math.random() * 0.7 + 0.3,
+          speed: Math.random() * 0.005 + 0.002,
           phase: Math.random() * Math.PI * 2
         });
       }
-    }
 
-    /* ── Get Lit Stars ── */
-    function getLitStars() {
+      var reducedMotion = localStorage.getItem('rivlum_motion') === '1';
+
+      function draw(time) {
+        ctx.clearRect(0, 0, c.width, c.height);
+        stars.forEach(function(s) {
+          var twinkle = reducedMotion ? s.alpha : s.alpha * (0.6 + 0.4 * Math.sin(time * s.speed + s.phase));
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(232,228,223,' + twinkle + ')';
+          ctx.fill();
+        });
+        if (!reducedMotion) {
+          requestAnimationFrame(draw);
+        }
+      }
+      requestAnimationFrame(draw);
+    })();
+
+    /* ========== CONSTELLATION DATA ========== */
+    var NODES = [
+      { key: 'prism', emoji: '☁️', name: 'Prism', x: 25, y: 12 },
+      { key: 'horizon', emoji: '🌅', name: 'Horizon', x: 70, y: 8 },
+      { key: 'mask', emoji: '🌙', name: 'Mask', x: 15, y: 42 },
+      { key: 'frame', emoji: '⚡', name: 'Frame', x: 55, y: 38 },
+      { key: 'grove', emoji: '🌿', name: 'Grove', x: 82, y: 45 },
+      { key: 'reel', emoji: '📼', name: 'Reel', x: 48, y: 72 }
+    ];
+
+    var EDGES = [
+      [0, 1], [0, 2], [1, 3], [2, 3], [3, 4], [2, 5], [3, 5], [4, 5]
+    ];
+
+    /* ========== LOAD STARS ========== */
+    function getUnlockedStars() {
       try {
         return JSON.parse(localStorage.getItem('rivlum_stars') || '[]');
-      } catch(e) { return []; }
-    }
-
-    /* ── Update Stats ── */
-    function updateStats() {
-      var lit = getLitStars();
-      var litCount = nodes.filter(function(n){ return lit.indexOf(n.key) !== -1; }).length;
-      document.getElementById('statLit').textContent = litCount;
-      document.getElementById('statPct').textContent = Math.round((litCount / nodes.length) * 100) + '%';
-    }
-
-    /* ── Draw Loop ── */
-    var t0 = 0;
-    function draw(timestamp) {
-      if (!timestamp) timestamp = 0;
-      ctx.clearRect(0, 0, W, H);
-
-      /* Background stars with twinkle */
-      bgStars.forEach(function(s) {
-        var alpha;
-        if (reducedMotion) {
-          alpha = s.a;
-        } else {
-          alpha = s.a * (0.5 + 0.5 * Math.sin(timestamp * s.speed + s.phase));
-        }
-        ctx.beginPath();
-        ctx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      var lit = getLitStars();
-
-      /* Constellation lines */
-      lines.forEach(function(pair) {
-        var a = nodes[pair[0]];
-        var b = nodes[pair[1]];
-        var aLit = lit.indexOf(a.key) !== -1;
-        var bLit = lit.indexOf(b.key) !== -1;
-        var ax = a.x * W, ay = a.y * H;
-        var bx = b.x * W, by = b.y * H;
-
-        ctx.beginPath();
-        ctx.strokeStyle = (aLit && bLit) ? 'rgba(242,201,76,0.4)' : 'rgba(255,255,255,0.08)';
-        ctx.lineWidth = (aLit && bLit) ? 1.4 : 0.8;
-        ctx.moveTo(ax, ay);
-        ctx.lineTo(bx, by);
-        ctx.stroke();
-      });
-
-      /* Nodes */
-      nodes.forEach(function(n) {
-        var isLit = lit.indexOf(n.key) !== -1;
-        var nx = n.x * W;
-        var ny = n.y * H;
-
-        if (isLit) {
-          /* Glow */
-          var glow = ctx.createRadialGradient(nx, ny, 0, nx, ny, 36);
-          glow.addColorStop(0, 'rgba(242,201,76,0.6)');
-          glow.addColorStop(1, 'rgba(242,201,76,0)');
-          ctx.fillStyle = glow;
-          ctx.beginPath();
-          ctx.arc(nx, ny, 36, 0, Math.PI * 2);
-          ctx.fill();
-
-          /* Pulse (reduced-motion skips) */
-          var pulse = reducedMotion ? 1 : (1 + 0.1 * Math.sin(timestamp * 0.002));
-          var baseR = 10 * pulse;
-
-          /* Core star */
-          ctx.fillStyle = '#F2C94C';
-          ctx.beginPath();
-          ctx.arc(nx, ny, baseR, 0, Math.PI * 2);
-          ctx.fill();
-
-          /* Inner highlight */
-          ctx.fillStyle = '#FFF6D6';
-          ctx.beginPath();
-          ctx.arc(nx - 2, ny - 2, baseR * 0.35, 0, Math.PI * 2);
-          ctx.fill();
-        } else {
-          /* Dim node */
-          ctx.fillStyle = 'rgba(255,255,255,0.25)';
-          ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-          ctx.lineWidth = 1.5;
-          ctx.beginPath();
-          ctx.arc(nx, ny, 8, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-        }
-
-        /* Emoji label */
-        ctx.font = '18px serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(n.emoji, nx, ny - 26);
-
-        /* Name label */
-        ctx.font = '600 11px "Atkinson Hyperlegible", sans-serif';
-        ctx.fillStyle = isLit ? 'rgba(255,246,214,0.95)' : 'rgba(255,255,255,0.55)';
-        ctx.fillText(n.name, nx, ny + 24);
-      });
-
-      if (!reducedMotion) {
-        requestAnimationFrame(draw);
+      } catch(e) {
+        return [];
       }
     }
 
-    /* ── Click Handler ── */
-    canvas.addEventListener('click', function(e) {
-      var rect = canvas.getBoundingClientRect();
-      var cx = e.clientX - rect.left;
-      var cy = e.clientY - rect.top;
+    /* ========== RENDER PILLS ========== */
+    function renderPills() {
+      var unlocked = getUnlockedStars();
+      var streak = parseInt(localStorage.getItem('rivlum_streak') || '0');
+      var drifts = [];
+      try { drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]'); } catch(e) {}
 
-      for (var i = 0; i < nodes.length; i++) {
-        var n = nodes[i];
-        var nx = n.x * W, ny = n.y * H;
-        var dx = cx - nx, dy = cy - ny;
-        if (Math.sqrt(dx*dx + dy*dy) < 28) {
-          showNodePanel(n);
-          return;
-        }
-      }
-    });
-
-    function showNodePanel(node) {
-      var lit = getLitStars();
-      var isLit = lit.indexOf(node.key) !== -1;
-      var panel = document.getElementById('nodePanel');
-
-      panel.innerHTML = '';
-      panel.classList.remove('hidden');
-
-      var card = document.createElement('div');
-      card.className = 'node-card';
-
-      var statusClass = isLit ? 'status-lit' : 'status-dim';
-      var statusText = isLit ? '⭐ Star Earned' : '🌙 Not yet lit';
-
-      card.innerHTML =
-        '<span class="node-emoji">' + node.emoji + '</span>' +
-        '<h3>' + node.name + '</h3>' +
-        '<div class="node-mood">' + node.mood + '</div>' +
-        '<span class="node-status ' + statusClass + '">' + statusText + '</span>' +
-        '<p>' + node.desc + '</p>' +
-        '<a href="challenge.html?c=' + node.key + '" class="btn btn-accent">' +
-          (isLit ? '🎨 Edit Again' : '✨ Start Challenge') +
-        '</a>';
-
-      panel.appendChild(card);
-      panel.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
+      var html = '<span class="sky-pill">⭐ ' + unlocked.length + '/6 stars</span>';
+      html += '<span class="sky-pill">📸 ' + drifts.length + ' drifts</span>';
+      if (streak > 0) html += '<span class="sky-pill gold">🔥 ' + streak + '-day chain</span>';
+      document.getElementById('skyPills').innerHTML = html;
     }
+    renderPills();
 
-    /* ── Init ── */
-    window.addEventListener('resize', function(){
-      resize();
-      if (reducedMotion) draw(0);
-    });
+    /* ========== RENDER CONSTELLATION ========== */
+    function renderConstellation() {
+      var unlocked = getUnlockedStars();
+      var map = document.getElementById('constellationMap');
+      var svg = document.getElementById('constellationLines');
 
-    resize();
-    updateStats();
+      /* Clear old nodes (keep SVG) */
+      var oldNodes = map.querySelectorAll('.star-node');
+      oldNodes.forEach(function(n) { n.remove(); });
 
-    if (reducedMotion) {
-      draw(0);
-    } else {
-      requestAnimationFrame(draw);
+      /* Draw edges */
+      var linesHtml = '';
+      EDGES.forEach(function(edge) {
+        var a = NODES[edge[0]];
+        var b = NODES[edge[1]];
+        var bothLit = unlocked.indexOf(a.key) !== -1 && unlocked.indexOf(b.key) !== -1;
+        var ax = a.x * 5, ay = a.y * 4.2 + 24;
+        var bx = b.x * 5, by = b.y * 4.2 + 24;
+        linesHtml += '<line x1="'+ax+'" y1="'+ay+'" x2="'+bx+'" y2="'+by+'" class="'+(bothLit ? 'lit' : '')+'">';
+      });
+      svg.innerHTML = linesHtml;
+
+      /* Draw nodes */
+      NODES.forEach(function(node) {
+        var isUnlocked = unlocked.indexOf(node.key) !== -1;
+        var el = document.createElement('a');
+        el.href = 'challenge.html?c=' + node.key;
+        el.className = 'star-node' + (isUnlocked ? ' unlocked' : '');
+        el.style.left = node.x + '%';
+        el.style.top = node.y + '%';
+        el.style.transform = 'translate(-50%, -50%)';
+
+        el.innerHTML =
+          '<div class="star-glow ' + (isUnlocked ? 'unlocked' : 'locked') + '">' +
+            node.emoji +
+          '</div>' +
+          '<span class="star-label">' + node.name + '</span>' +
+          '<span class="star-status">' + (isUnlocked ? '⭐ lit' : '○ locked') + '</span>';
+
+        map.appendChild(el);
+      });
+
+      /* Progress */
+      var pct = Math.round((unlocked.length / 6) * 100);
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressText').textContent = unlocked.length + ' of 6 stars lit' + (unlocked.length === 6 ? ' — complete constellation! 🎉' : '');
     }
+    renderConstellation();
   </script>
 
 </body>
