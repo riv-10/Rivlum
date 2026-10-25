@@ -3,586 +3,618 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RIVLUM — Eye Trainer</title>
+  <title>Compare · RIVLUM</title>
   <link rel="stylesheet" href="styles.css">
   <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Atkinson Hyperlegible', sans-serif; padding-bottom: 7rem; }
+
+    .compare-close {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 200;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 1.2rem;
+      box-shadow: 0 2px 10px var(--shadow);
+    }
+    .compare-close:active { transform: scale(0.95); }
+
     .compare-hero {
       text-align: center;
-      padding: 40px 20px 20px;
+      padding: 3.5rem 1.5rem 1.5rem;
+      background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%);
     }
-    .compare-hero h1 {
-      font-size: 2rem;
-      color: var(--text);
-      margin: 10px 0 6px;
-    }
-    .compare-hero .compare-script {
+    .compare-hero h2 {
       font-family: 'Caveat', cursive;
-      font-size: 1.4rem;
-      color: var(--script);
-      margin-bottom: 14px;
+      font-size: 2.2rem;
+      color: var(--accent);
+      margin: 0 0 0.25rem;
     }
     .compare-hero p {
       color: var(--muted);
-      max-width: 480px;
+      font-size: 0.92rem;
+      max-width: 440px;
       margin: 0 auto;
-      font-size: 0.95rem;
+      line-height: 1.6;
     }
-    .example-picker {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      padding: 16px;
-      max-width: 700px;
-      margin: 0 auto;
+
+    /* Swipe Compare */
+    .swipe-section {
+      max-width: 560px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
     }
-    .example-chip {
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: 1.5px solid var(--border);
-      background: var(--card);
-      font-family: 'Atkinson Hyperlegible', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 700;
+    .swipe-section h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
       color: var(--text);
-      cursor: pointer;
-      transition: all 0.2s ease;
+      margin: 0 0 0.75rem;
+      text-align: center;
     }
-    .example-chip:hover {
-      background: var(--bg2);
-      border-color: var(--accent);
-    }
-    .example-chip.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
-    .compare-stage {
-      max-width: 720px;
-      margin: 20px auto;
-      padding: 0 16px;
-    }
-    .compare-container {
+    .swipe-container {
       position: relative;
       width: 100%;
-      border-radius: 20px;
+      aspect-ratio: 16 / 10;
+      border-radius: 14px;
       overflow: hidden;
-      border: 1.5px solid var(--border);
-      box-shadow: 0 16px 40px var(--shadow);
+      box-shadow: 0 4px 20px var(--shadow);
+      cursor: ew-resize;
       touch-action: none;
       user-select: none;
-      -webkit-user-select: none;
-      background: #000;
-      aspect-ratio: 4 / 3;
+      background: var(--bg2);
     }
-    .compare-image {
+    .swipe-container canvas {
       position: absolute;
-      inset: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      display: block;
-      object-fit: cover;
     }
-    .compare-after-wrap {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      width: 50%;
+    .swipe-before {
+      z-index: 1;
+      clip-path: inset(0 50% 0 0);
     }
-    .compare-after-wrap canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
+    .swipe-after {
+      z-index: 0;
     }
-    .compare-handle {
+    .swipe-handle {
       position: absolute;
       top: 0;
       bottom: 0;
       left: 50%;
       width: 3px;
-      background: #FFFFFF;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
-      cursor: ew-resize;
-      z-index: 10;
+      background: white;
+      z-index: 5;
       transform: translateX(-50%);
+      pointer-events: none;
     }
-    .compare-handle-knob {
+    .swipe-handle::before {
+      content: '⟨  ⟩';
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 44px;
-      height: 44px;
+      width: 36px;
+      height: 36px;
+      background: white;
       border-radius: 50%;
-      background: var(--accent);
-      color: #FFFFFF;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      border: 3px solid #FFFFFF;
-    }
-    .compare-label {
-      position: absolute;
-      top: 12px;
-      padding: 5px 14px;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      z-index: 5;
-      background: rgba(255,255,255,0.95);
+      font-size: 0.7rem;
       color: var(--text);
-      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      letter-spacing: 2px;
     }
-    .compare-label.before { left: 12px; }
-    .compare-label.after { right: 12px; background: var(--accent); color: #FFFFFF; }
+    .swipe-label {
+      position: absolute;
+      bottom: 10px;
+      padding: 3px 10px;
+      background: rgba(45,49,46,0.7);
+      color: white;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      z-index: 6;
+      pointer-events: none;
+    }
+    .swipe-label.before { left: 10px; }
+    .swipe-label.after { right: 10px; }
+
+    /* Example Selector */
+    .example-chips {
+      display: flex;
+      gap: 0.4rem;
+      justify-content: center;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .example-chip {
+      padding: 0.35rem 0.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--text);
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: 'Atkinson Hyperlegible', sans-serif;
+      transition: border-color 0.15s;
+    }
+    .example-chip.active {
+      border-color: var(--accent);
+      background: var(--bg2);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Timeline */
     .timeline-section {
-      max-width: 640px;
-      margin: 32px auto;
-      padding: 0 20px;
+      max-width: 560px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
-    .timeline-heading {
-      text-align: center;
-      margin-bottom: 8px;
-    }
-    .timeline-heading h2 {
+    .timeline-section h3 {
+      font-family: 'Caveat', cursive;
       font-size: 1.4rem;
       color: var(--text);
-      margin-bottom: 4px;
-    }
-    .timeline-heading .script {
-      font-family: 'Caveat', cursive;
-      font-size: 1.15rem;
-      color: var(--script);
+      margin: 0 0 1rem;
+      text-align: center;
     }
     .timeline {
-      margin-top: 24px;
       position: relative;
+      padding-left: 2rem;
     }
     .timeline::before {
       content: '';
       position: absolute;
-      left: 22px;
-      top: 10px;
-      bottom: 10px;
+      left: 10px;
+      top: 0;
+      bottom: 0;
       width: 2px;
       background: var(--border);
+      border-radius: 1px;
     }
-    .timeline-item {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 18px;
-      align-items: flex-start;
-      animation: fadeIn 0.5s ease;
+    .timeline-step {
+      position: relative;
+      padding: 0 0 1.5rem 1rem;
     }
-    .timeline-number {
-      flex-shrink: 0;
-      width: 46px;
-      height: 46px;
+    .timeline-step:last-child { padding-bottom: 0; }
+    .timeline-dot {
+      position: absolute;
+      left: -1.65rem;
+      top: 0.2rem;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: var(--card);
       border: 2px solid var(--accent);
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 1rem;
-      z-index: 1;
-      box-shadow: 0 4px 12px var(--shadow);
     }
-    .timeline-content {
-      flex: 1;
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 14px 18px;
-      box-shadow: 0 6px 18px var(--shadow);
+    .timeline-step:first-child .timeline-dot {
+      background: var(--accent);
     }
-    .timeline-title {
-      font-weight: 700;
+    .timeline-step h4 {
       font-size: 0.95rem;
       color: var(--text);
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      margin: 0 0 0.2rem;
     }
-    .timeline-value {
-      display: inline-block;
-      padding: 1px 10px;
-      border-radius: 999px;
-      background: var(--gold-bg);
-      color: #8B7A2E;
-      font-size: 0.78rem;
-      font-weight: 700;
-      margin-left: 4px;
-    }
-    .timeline-value.neg {
-      background: rgba(108,142,164,0.15);
-      color: var(--cool);
-    }
-    .timeline-desc {
-      font-size: 0.85rem;
+    .timeline-step p {
+      font-size: 0.82rem;
       color: var(--muted);
-      line-height: 1.6;
+      margin: 0;
+      line-height: 1.5;
     }
-    .lesson-cta {
-      text-align: center;
-      max-width: 500px;
-      margin: 32px auto 20px;
-      padding: 24px;
-      background: var(--bg2);
-      border: 1.5px solid var(--border);
-      border-radius: 20px;
-    }
-    .lesson-cta p {
+    .timeline-step .step-num {
       font-family: 'Caveat', cursive;
-      font-size: 1.3rem;
-      color: var(--script);
-      margin-bottom: 14px;
+      font-size: 1.1rem;
+      color: var(--accent);
     }
-    .hint-text {
+
+    /* Upload Compare */
+    .upload-compare {
+      max-width: 560px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+    .upload-compare h3 {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      color: var(--text);
+      margin: 0 0 0.75rem;
       text-align: center;
-      font-size: 0.8rem;
+    }
+    .upload-row {
+      display: flex;
+      gap: 0.75rem;
+    }
+    .upload-slot {
+      flex: 1;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 0.5rem;
+      text-align: center;
+      background: var(--bg2);
+      cursor: pointer;
+      transition: border-color 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .upload-slot:hover { border-color: var(--accent); }
+    .upload-slot input { display: none; }
+    .upload-slot .slot-label {
+      font-size: 0.82rem;
       color: var(--muted);
-      margin: 8px 0;
-      font-style: italic;
+      display: block;
+      margin-top: 0.3rem;
+    }
+    .upload-slot .slot-emoji {
+      font-size: 1.5rem;
+      display: block;
+    }
+    .upload-slot img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .upload-slot .slot-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.8rem;
+      border-radius: 10px;
+    }
+    .upload-slot:hover .slot-overlay { display: flex; }
+
+    .compare-footer-spacer { height: 2rem; }
+
+    @media (max-width: 400px) {
+      .upload-row { flex-direction: column; }
     }
   </style>
 </head>
-<body data-theme="meadow">
-
-  <div class="toast" id="toast"></div>
-
-  <!-- ═══ Hero ═══ -->
-  <section class="compare-hero">
-    <span class="pill pill-accent">👁️ train your eye</span>
-    <h1>The Eye Trainer</h1>
-    <p class="compare-script">drag the handle, see the magic ✨</p>
-    <p>Great editing is invisible until you look twice. Slide the handle to see exactly what changed — then learn why.</p>
-  </section>
-
-  <!-- ═══ Example Picker ═══ -->
-  <div class="example-picker" id="examplePicker"></div>
-
-  <!-- ═══ Compare Stage ═══ -->
-  <div class="compare-stage">
-    <div class="compare-container" id="compareContainer">
-      <span class="compare-label before">BEFORE</span>
-      <span class="compare-label after">AFTER</span>
-      <img id="beforeImg" class="compare-image" src="" crossorigin="anonymous" alt="Before edit">
-      <div class="compare-after-wrap" id="afterWrap">
-        <canvas id="afterCanvas"></canvas>
-      </div>
-      <div class="compare-handle" id="compareHandle">
-        <div class="compare-handle-knob">◀▶</div>
-      </div>
-    </div>
-    <p class="hint-text">💡 Drag the knob left and right — or tap anywhere on the image</p>
-  </div>
-
-  <!-- ═══ Timeline ═══ -->
-  <section class="timeline-section">
-    <div class="timeline-heading">
-      <h2 id="timelineTitle">The Edit Breakdown</h2>
-      <p class="script" id="timelineScript">each change, step by step 🌊</p>
-    </div>
-    <div class="timeline" id="timeline"></div>
-  </section>
-
-  <!-- ═══ Lesson CTA ═══ -->
-  <div class="lesson-cta">
-    <p>now go make your own ✨</p>
-    <a href="free-edit.html" class="btn btn-accent">📸 Open Free Editor</a>
-  </div>
-
-  <!-- ═══ Pretty Footer ═══ -->
-  <footer class="pretty-footer">
-    <span class="footer-emoji">👁️</span>
-    <span class="footer-script">a trained eye sees the whole river</span>
-    <span class="footer-copy">© 2024 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
-  </footer>
-
-  <!-- ═══ Bottom Nav ═══ -->
-  <nav class="bottom-nav">
-    <a href="index.html"><span class="nav-icon">🏠</span><span>Home</span></a>
-    <a href="challenge.html"><span class="nav-icon">✨</span><span>Edit</span></a>
-    <a href="free-edit.html"><span class="nav-icon">📸</span><span>Free</span></a>
-    <a href="room.html"><span class="nav-icon">⚡</span><span>Room</span></a>
-    <a href="constellation.html"><span class="nav-icon">🌌</span><span>Sky</span></a>
-    <a href="about.html"><span class="nav-icon">💛</span><span>About</span></a>
-  </nav>
+<body>
 
   <script>
-    /* ══════════════════════════════════════════
-       RIVLUM Eye Trainer — Compare + Timeline
-       ══════════════════════════════════════════ */
-
     (function(){
       var t = localStorage.getItem('rivlum_theme') || 'meadow';
       document.body.setAttribute('data-theme', t);
       if (localStorage.getItem('rivlum_dys') === '1') document.body.classList.add('dyslexia-font');
       if (localStorage.getItem('rivlum_motion') === '1') document.body.classList.add('reduced-motion');
     })();
+  </script>
 
-    /* ── Examples ── */
-    var examples = [
-      {
-        key: 'golden',
-        name: '🌅 Golden Hour',
-        image: 'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=800&q=80',
-        edits: {exposure:20,contrast:10,highlights:-10,shadows:10,temperature:40,tint:5,saturation:15,vibrance:15,clarity:5,vignette:20},
-        blend: 'overlay',
-        steps: [
-          {label:'Exposure', val:20, desc:'Lifted the overall brightness to recreate that warm sun-washed glow.'},
-          {label:'Temperature', val:40, desc:'Pushed hard into warm amber tones — this is what makes golden hour feel golden.'},
-          {label:'Shadows', val:10, desc:'Opened up the darker areas slightly so no detail gets lost in silhouette.'},
-          {label:'Vibrance', val:15, desc:'Boosted the subtle colors without over-saturating skin tones.'},
-          {label:'Vignette', val:20, desc:'Added a soft dark halo at the edges to draw the eye to the center.'},
-          {label:'Blend: Overlay', val:0, desc:'Layered a warm wash across the whole image for cohesion.'}
-        ]
-      },
-      {
-        key: 'moody',
-        name: '🌙 Moody',
-        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80',
-        edits: {exposure:-20,contrast:30,highlights:-25,shadows:-30,temperature:-15,tint:-5,saturation:-10,vibrance:-5,clarity:20,vignette:35},
-        blend: 'multiply',
-        steps: [
-          {label:'Exposure', val:-20, desc:'Dropped the brightness to pull the image into shadow territory.'},
-          {label:'Contrast', val:30, desc:'Deepened the gap between lights and darks for drama.'},
-          {label:'Shadows', val:-30, desc:'Crushed the darks even further — this is where moody lives.'},
-          {label:'Temperature', val:-15, desc:'Cooled the color temperature slightly for a nighttime feel.'},
-          {label:'Clarity', val:20, desc:'Sharpened edges to make the atmosphere feel intentional, not soft.'},
-          {label:'Vignette', val:35, desc:'Heavy edge darkening — the eye tunnels toward the subject.'}
-        ]
-      },
-      {
-        key: 'vintage',
-        name: '📼 Vintage',
-        image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80',
-        edits: {exposure:5,contrast:-10,highlights:-15,shadows:10,temperature:20,tint:10,saturation:-30,vibrance:-15,clarity:-10,vignette:30},
-        blend: 'overlay',
-        steps: [
-          {label:'Contrast', val:-10, desc:'Flattened the tones to mimic old film stock.'},
-          {label:'Temperature', val:20, desc:'Warmed the whole image — old photos always drift amber over time.'},
-          {label:'Saturation', val:-30, desc:'Pulled out the vividness. Vintage never shouts.'},
-          {label:'Highlights', val:-15, desc:'Softened the brightest areas so nothing feels digital.'},
-          {label:'Clarity', val:-10, desc:'Slight softness — like the lens from your grandparent\'s camera.'},
-          {label:'Vignette', val:30, desc:'That classic darkened corner halo of pre-digital photography.'}
-        ]
+  <a href="index.html" class="compare-close" aria-label="Go home">✕</a>
+
+  <section class="compare-hero">
+    <h2>before & after 🔍</h2>
+    <p>see the difference a few sliders can make. swipe to compare, or upload your own before & after.</p>
+  </section>
+
+  <!-- Swipe Compare -->
+  <div class="swipe-section">
+    <h3>swipe to compare ✨</h3>
+    <div class="swipe-container" id="swipeContainer">
+      <canvas class="swipe-before" id="beforeCanvas"></canvas>
+      <canvas class="swipe-after" id="afterCanvas"></canvas>
+      <div class="swipe-handle" id="swipeHandle"></div>
+      <span class="swipe-label before">before</span>
+      <span class="swipe-label after">after</span>
+    </div>
+    <div class="example-chips">
+      <button class="example-chip active" data-example="golden">🌅 Golden</button>
+      <button class="example-chip" data-example="moody">🌙 Moody</button>
+      <button class="example-chip" data-example="vintage">📼 Vintage</button>
+    </div>
+  </div>
+
+  <!-- Upload Compare -->
+  <div class="upload-compare">
+    <h3>compare your own 📸</h3>
+    <div class="upload-row">
+      <label class="upload-slot" id="beforeSlot">
+        <input type="file" accept="image/*" id="beforeUpload">
+        <span class="slot-emoji">📷</span>
+        <span class="slot-label">before</span>
+        <div class="slot-overlay">tap to change</div>
+      </label>
+      <label class="upload-slot" id="afterSlot">
+        <input type="file" accept="image/*" id="afterUpload">
+        <span class="slot-emoji">✨</span>
+        <span class="slot-label">after</span>
+        <div class="slot-overlay">tap to change</div>
+      </label>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline-section">
+    <h3>how an edit comes together 🌿</h3>
+    <div class="timeline">
+      <div class="timeline-step">
+        <div class="timeline-dot"></div>
+        <h4><span class="step-num">1.</span> Start with the light</h4>
+        <p>Exposure and contrast set the foundation. Think of it like choosing what time of day your photo was taken.</p>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot"></div>
+        <h4><span class="step-num">2.</span> Shape the shadows</h4>
+        <p>Highlights and shadows let you rescue details in the bright sky or dark corners. Pull shadows up to reveal hidden textures.</p>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot"></div>
+        <h4><span class="step-num">3.</span> Find the color story</h4>
+        <p>Temperature shifts warm ↔ cool. Tint adds green or magenta. Saturation and vibrance control how loud the colors speak.</p>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot"></div>
+        <h4><span class="step-num">4.</span> Add texture & mood</h4>
+        <p>Clarity sharpens or softens details. Vignette darkens the edges to draw the eye inward. Grain adds that analog film feeling.</p>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-dot"></div>
+        <h4><span class="step-num">5.</span> Make it yours</h4>
+        <p>Stickers, text overlays, rotation, and blend modes are the finishing touches. There are no rules here — just your vision.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-footer-spacer"></div>
+
+  <footer class="pretty-footer">
+    <span class="footer-emoji">🌿</span>
+    <span class="footer-script">every edit is a before & after story</span>
+    <span class="footer-copy">© 2026 RIVLUM · <a href="privacy.html">Privacy Oath</a></span>
+  </footer>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a>
+    <a href="challenge.html" class="nav-item"><span class="nav-icon">✨</span><span class="nav-label">Edit</span></a>
+    <a href="free-edit.html" class="nav-item"><span class="nav-icon">📸</span><span class="nav-label">Free</span></a>
+    <a href="room.html" class="nav-item"><span class="nav-icon">⚡</span><span class="nav-label">Room</span></a>
+    <a href="constellation.html" class="nav-item"><span class="nav-icon">🌌</span><span class="nav-label">Sky</span></a>
+    <a href="about.html" class="nav-item"><span class="nav-icon">💛</span><span class="nav-label">About</span></a>
+  </nav>
+
+  <script>
+    /* ========== GRAIN TEXTURE ========== */
+    var grainCanvas = (function() {
+      var c = document.createElement('canvas');
+      c.width = 256; c.height = 256;
+      var cx = c.getContext('2d');
+      var d = cx.createImageData(256, 256);
+      for (var i = 0; i < d.data.length; i += 4) {
+        var v = Math.random() * 255;
+        d.data[i] = v; d.data[i+1] = v; d.data[i+2] = v; d.data[i+3] = 255;
       }
-    ];
-
-    /* ── State ── */
-    var currentIdx = 0;
-    var canvas = document.getElementById('afterCanvas');
-    var ctx = canvas.getContext('2d');
-    var beforeImg = document.getElementById('beforeImg');
-    var sourceImg = new Image();
-    sourceImg.crossOrigin = 'anonymous';
-
-    /* ── Render Picker ── */
-    (function renderPicker() {
-      var picker = document.getElementById('examplePicker');
-      examples.forEach(function(ex, i) {
-        var btn = document.createElement('button');
-        btn.className = 'example-chip' + (i === 0 ? ' active' : '');
-        btn.textContent = ex.name;
-        btn.onclick = function() {
-          document.querySelectorAll('.example-chip').forEach(function(c){ c.classList.remove('active'); });
-          btn.classList.add('active');
-          currentIdx = i;
-          loadExample(ex);
-        };
-        picker.appendChild(btn);
-      });
+      cx.putImageData(d, 0, 0);
+      return c;
     })();
 
-    /* ── Load Example ── */
-    function loadExample(ex) {
-      beforeImg.src = ex.image;
-      sourceImg = new Image();
-      sourceImg.crossOrigin = 'anonymous';
-      sourceImg.onload = function() {
-        canvas.width = sourceImg.naturalWidth;
-        canvas.height = sourceImg.naturalHeight;
-        renderAfter(ex);
-      };
-      sourceImg.onerror = function() {
-        showToast('⚠️ Could not load image');
-      };
-      sourceImg.src = ex.image;
-      renderTimeline(ex);
-      resetHandle();
-    }
+    /* ========== EXAMPLES ========== */
+    var EXAMPLES = {
+      golden: {
+        img: 'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=800&q=80',
+        before: { exposure: 0, contrast: 0, highlights: 0, shadows: 0, temperature: 0, tint: 0, saturation: 0, vibrance: 0, clarity: 0, vignette: 0, grain: 0 },
+        after: { exposure: 15, contrast: 20, highlights: -10, shadows: 15, temperature: 45, tint: -5, saturation: 20, vibrance: 30, clarity: 10, vignette: 20, grain: 8 }
+      },
+      moody: {
+        img: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80',
+        before: { exposure: 0, contrast: 0, highlights: 0, shadows: 0, temperature: 0, tint: 0, saturation: 0, vibrance: 0, clarity: 0, vignette: 0, grain: 0 },
+        after: { exposure: -15, contrast: 40, highlights: -30, shadows: 45, temperature: -25, tint: -10, saturation: -15, vibrance: 5, clarity: 35, vignette: 45, grain: 22 }
+      },
+      vintage: {
+        img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80',
+        before: { exposure: 0, contrast: 0, highlights: 0, shadows: 0, temperature: 0, tint: 0, saturation: 0, vibrance: 0, clarity: 0, vignette: 0, grain: 0 },
+        after: { exposure: -5, contrast: -15, highlights: -20, shadows: -10, temperature: 25, tint: 8, saturation: -25, vibrance: -5, clarity: -10, vignette: 30, grain: 35 }
+      }
+    };
 
-    /* ── Render AFTER (edited) canvas ── */
-    function renderAfter(ex) {
-      var sv = ex.edits;
+    /* ========== RENDER ENGINE ========== */
+    function applyEdits(ctx, canvas, img, s) {
+      if (!img.complete || !img.naturalWidth) return;
       var w = canvas.width, h = canvas.height;
       ctx.clearRect(0, 0, w, h);
+      ctx.save();
 
-      var brightness = 100 + sv.exposure;
-      var contrast = 100 + sv.contrast;
-      var saturate = 100 + sv.saturation + Math.round(sv.vibrance * 0.5);
-      var blur = sv.clarity < 0 ? Math.abs(sv.clarity) * 0.03 : 0;
-      var hueShift = sv.tint;
-      var sepia = sv.temperature > 0 ? sv.temperature * 0.4 : 0;
+      if (s.rotation && s.rotation !== 0) {
+        ctx.translate(w/2, h/2);
+        ctx.rotate(s.rotation * Math.PI / 180);
+        ctx.translate(-w/2, -h/2);
+      }
 
-      ctx.filter = 'brightness('+brightness+'%) contrast('+contrast+'%) saturate('+saturate+'%) blur('+blur+'px) hue-rotate('+hueShift+'deg) sepia('+sepia+'%)';
-      ctx.drawImage(sourceImg, 0, 0, w, h);
+      var brightness = 1 + (s.exposure / 100) * 0.5;
+      var contrast = 1 + (s.contrast / 100) * 0.5;
+      var saturate = 1 + (s.saturation / 100) * 0.8;
+      var hueRotate = (s.temperature / 100) * 30;
+      var blur = Math.abs(s.clarity) > 50 ? (Math.abs(s.clarity) - 50) / 100 : 0;
+      var fs = 'brightness('+brightness+') contrast('+contrast+') saturate('+saturate+') hue-rotate('+hueRotate+'deg)';
+      if (blur > 0) fs += ' blur('+blur+'px)';
+      ctx.filter = fs;
+      ctx.drawImage(img, 0, 0, w, h);
       ctx.filter = 'none';
 
-      if (sv.highlights !== 0 || sv.shadows !== 0) {
-        var d = ctx.getImageData(0, 0, w, h);
-        var p = d.data;
-        for (var i = 0; i < p.length; i += 4) {
-          var lum = p[i]*0.299 + p[i+1]*0.587 + p[i+2]*0.114;
-          if (lum > 170 && sv.highlights !== 0) {
-            var hf = sv.highlights * 0.5;
-            p[i]=Math.min(255,Math.max(0,p[i]+hf));
-            p[i+1]=Math.min(255,Math.max(0,p[i+1]+hf));
-            p[i+2]=Math.min(255,Math.max(0,p[i+2]+hf));
-          }
-          if (lum < 85 && sv.shadows !== 0) {
-            var sf = sv.shadows * 0.5;
-            p[i]=Math.min(255,Math.max(0,p[i]+sf));
-            p[i+1]=Math.min(255,Math.max(0,p[i+1]+sf));
-            p[i+2]=Math.min(255,Math.max(0,p[i+2]+sf));
-          }
-        }
-        ctx.putImageData(d, 0, 0);
-      }
-
-      if (sv.temperature < 0) {
+      if (Math.abs(s.tint) > 2) {
         ctx.globalCompositeOperation = 'overlay';
-        ctx.fillStyle = 'rgba(60,130,200,' + (Math.abs(sv.temperature) * 0.003) + ')';
+        ctx.globalAlpha = Math.abs(s.tint) / 100 * 0.3;
+        ctx.fillStyle = s.tint > 0 ? '#ff66cc' : '#66ff99';
         ctx.fillRect(0, 0, w, h);
-        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
       }
-
-      if (ex.blend && ex.blend !== 'normal') {
-        ctx.globalCompositeOperation = ex.blend;
-        var warm = sv.temperature > 0 ? sv.temperature : 0;
-        ctx.fillStyle = 'rgba('+(180+warm)+','+(140+Math.round(warm*0.5))+',80,0.08)';
+      if (s.highlights > 5) {
+        ctx.globalCompositeOperation = 'screen';
+        ctx.globalAlpha = s.highlights / 100 * 0.25;
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, w, h);
-        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
       }
-
-      if (sv.clarity > 0) {
-        ctx.globalCompositeOperation = 'overlay';
-        ctx.fillStyle = 'rgba(128,128,128,' + (sv.clarity * 0.002) + ')';
+      if (s.shadows > 5) {
+        ctx.globalCompositeOperation = 'multiply';
+        ctx.globalAlpha = s.shadows / 100 * 0.3;
+        ctx.fillStyle = '#1a1a2e';
         ctx.fillRect(0, 0, w, h);
-        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
       }
-
-      if (sv.vignette > 0) {
+      if (Math.abs(s.vibrance) > 5) {
+        ctx.globalCompositeOperation = 'saturation';
+        ctx.globalAlpha = Math.abs(s.vibrance) / 100 * 0.3;
+        ctx.fillStyle = s.vibrance > 0 ? '#808080' : '#404040';
+        ctx.fillRect(0, 0, w, h);
+        ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+      }
+      if (s.vignette > 2) {
+        var vA = s.vignette / 100 * 0.7;
         var g = ctx.createRadialGradient(w/2, h/2, w*0.25, w/2, h/2, w*0.75);
         g.addColorStop(0, 'rgba(0,0,0,0)');
-        g.addColorStop(1, 'rgba(0,0,0,' + (sv.vignette * 0.008) + ')');
+        g.addColorStop(1, 'rgba(0,0,0,'+vA+')');
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, w, h);
       }
+      if (s.grain > 2) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'overlay';
+        ctx.globalAlpha = (s.grain / 100) * 0.3;
+        ctx.fillStyle = ctx.createPattern(grainCanvas, 'repeat');
+        ctx.fillRect(0, 0, w, h);
+        ctx.restore();
+      }
+
+      ctx.restore();
     }
 
-    /* ── Render Timeline ── */
-    function renderTimeline(ex) {
-      var tl = document.getElementById('timeline');
-      tl.innerHTML = '';
-      document.getElementById('timelineTitle').textContent = ex.name.replace(/^[^\s]+\s/, '') + ' — Step by Step';
+    /* ========== SWIPE COMPARE ========== */
+    var beforeCanvas = document.getElementById('beforeCanvas');
+    var afterCanvas = document.getElementById('afterCanvas');
+    var beforeCtx = beforeCanvas.getContext('2d');
+    var afterCtx = afterCanvas.getContext('2d');
+    var baseImg = new Image();
+    baseImg.crossOrigin = 'anonymous';
+    var currentExample = 'golden';
 
-      ex.steps.forEach(function(step, i) {
-        var item = document.createElement('div');
-        item.className = 'timeline-item';
-
-        var num = document.createElement('div');
-        num.className = 'timeline-number';
-        num.textContent = (i + 1);
-        item.appendChild(num);
-
-        var content = document.createElement('div');
-        content.className = 'timeline-content';
-
-        var title = document.createElement('div');
-        title.className = 'timeline-title';
-        title.innerHTML = step.label;
-        if (step.val !== undefined && step.val !== 0) {
-          var vt = document.createElement('span');
-          vt.className = 'timeline-value' + (step.val < 0 ? ' neg' : '');
-          vt.textContent = (step.val > 0 ? '+' : '') + step.val;
-          title.appendChild(vt);
-        }
-        content.appendChild(title);
-
-        var desc = document.createElement('div');
-        desc.className = 'timeline-desc';
-        desc.textContent = step.desc;
-        content.appendChild(desc);
-
-        item.appendChild(content);
-        tl.appendChild(item);
+    function loadExample(key) {
+      currentExample = key;
+      var ex = EXAMPLES[key];
+      document.querySelectorAll('.example-chip').forEach(function(c) {
+        c.classList.toggle('active', c.getAttribute('data-example') === key);
       });
+
+      baseImg.onload = function() {
+        beforeCanvas.width = baseImg.naturalWidth;
+        beforeCanvas.height = baseImg.naturalHeight;
+        afterCanvas.width = baseImg.naturalWidth;
+        afterCanvas.height = baseImg.naturalHeight;
+
+        applyEdits(beforeCtx, beforeCanvas, baseImg, ex.before);
+        applyEdits(afterCtx, afterCanvas, baseImg, ex.after);
+
+        requestAnimationFrame(function() {
+          applyEdits(beforeCtx, beforeCanvas, baseImg, ex.before);
+          applyEdits(afterCtx, afterCanvas, baseImg, ex.after);
+        });
+        setTimeout(function() {
+          applyEdits(beforeCtx, beforeCanvas, baseImg, ex.before);
+          applyEdits(afterCtx, afterCanvas, baseImg, ex.after);
+        }, 100);
+      };
+      baseImg.src = ex.img;
     }
 
-    /* ── Compare Slider Interaction ── */
-    var container = document.getElementById('compareContainer');
-    var handle = document.getElementById('compareHandle');
-    var afterWrap = document.getElementById('afterWrap');
-    var dragging = false;
+    document.querySelectorAll('.example-chip').forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        loadExample(this.getAttribute('data-example'));
+      });
+    });
 
-    function setSplit(pct) {
-      pct = Math.max(0, Math.min(100, pct));
-      handle.style.left = pct + '%';
-      afterWrap.style.width = pct + '%';
+    /* Swipe Logic */
+    var swipeContainer = document.getElementById('swipeContainer');
+    var swipeHandle = document.getElementById('swipeHandle');
+    var isDragging = false;
+
+    function setSwipePosition(x) {
+      var rect = swipeContainer.getBoundingClientRect();
+      var pct = Math.max(0, Math.min(100, ((x - rect.left) / rect.width) * 100));
+      beforeCanvas.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+      swipeHandle.style.left = pct + '%';
     }
 
-    function resetHandle() {
-      setSplit(50);
-    }
-
-    function handleMove(clientX) {
-      var rect = container.getBoundingClientRect();
-      var x = clientX - rect.left;
-      var pct = (x / rect.width) * 100;
-      setSplit(pct);
-    }
-
-    container.addEventListener('mousedown', function(e) {
-      dragging = true;
-      handleMove(e.clientX);
-      e.preventDefault();
+    swipeContainer.addEventListener('mousedown', function(e) {
+      isDragging = true;
+      setSwipePosition(e.clientX);
     });
     window.addEventListener('mousemove', function(e) {
-      if (dragging) handleMove(e.clientX);
+      if (isDragging) setSwipePosition(e.clientX);
     });
-    window.addEventListener('mouseup', function() { dragging = false; });
+    window.addEventListener('mouseup', function() { isDragging = false; });
 
-    container.addEventListener('touchstart', function(e) {
-      dragging = true;
-      if (e.touches[0]) handleMove(e.touches[0].clientX);
+    swipeContainer.addEventListener('touchstart', function(e) {
+      isDragging = true;
+      setSwipePosition(e.touches[0].clientX);
     }, { passive: true });
-    container.addEventListener('touchmove', function(e) {
-      if (dragging && e.touches[0]) handleMove(e.touches[0].clientX);
+    swipeContainer.addEventListener('touchmove', function(e) {
+      if (isDragging) setSwipePosition(e.touches[0].clientX);
     }, { passive: true });
-    container.addEventListener('touchend', function() { dragging = false; });
+    swipeContainer.addEventListener('touchend', function() { isDragging = false; });
 
-    /* ── Toast ── */
-    function showToast(msg) {
-      var t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      clearTimeout(t._timeout);
-      t._timeout = setTimeout(function(){ t.classList.remove('show'); }, 2500);
-    }
+    /* ========== USER UPLOAD COMPARE ========== */
+    var userBeforeImg = null;
+    var userAfterImg = null;
 
-    /* ── Init ── */
-    loadExample(examples[0]);
+    document.getElementById('beforeUpload').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        var img = new Image();
+        img.onload = function() {
+          userBeforeImg = img;
+          var slot = document.getElementById('beforeSlot');
+          var existing = slot.querySelector('img');
+          if (existing) existing.remove();
+          var preview = document.createElement('img');
+          preview.src = ev.target.result;
+          slot.insertBefore(preview, slot.firstChild);
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('afterUpload').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        var img = new Image();
+        img.onload = function() {
+          userAfterImg = img;
+          var slot = document.getElementById('afterSlot');
+          var existing = slot.querySelector('img');
+          if (existing) existing.remove();
+          var preview = document.createElement('img');
+          preview.src = ev.target.result;
+          slot.insertBefore(preview, slot.firstChild);
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    /* ========== INIT ========== */
+    loadExample('golden');
   </script>
 
 </body>
