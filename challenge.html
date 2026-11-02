@@ -2,184 +2,232 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Challenge · RIVLUM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
-.challenge-hero {
-  background: linear-gradient(135deg, var(--bg2) 0%, var(--bg) 100%);
-  padding: 2rem 1.25rem 1.5rem;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-}
-.challenge-hero h1 {
-  font-family: 'Caveat', cursive;
-  font-size: 2.2rem;
-  color: var(--accent);
-  margin: 0 0 0.25rem;
-}
-.challenge-hero p {
-  color: var(--muted);
-  font-size: 0.9rem;
+html, body {
   margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+}
+.editor-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+.editor-header {
+  flex: 0 0 auto;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0.4rem 0.6rem 0.3rem;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 0.3rem;
+}
+.header-title {
+  font-family: 'Caveat', cursive;
+  font-size: 1.25rem;
+  color: var(--accent);
+  margin: 0;
+  white-space: nowrap;
+}
+.header-pills {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+.streak-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  background: var(--gold-bg);
+  color: #b8860b;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
 }
 .close-btn {
-  position: fixed;
-  top: 0.75rem;
-  right: 0.75rem;
-  z-index: 100;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 1.8rem;
+  height: 1.8rem;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--text);
-  font-size: 1.1rem;
+  font-size: 0.85rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px var(--shadow);
-  transition: transform 0.2s;
+  flex-shrink: 0;
+  transition: transform 0.15s;
 }
 .close-btn:hover { transform: scale(1.1); }
-.streak-pill {
-  display: inline-flex;
-  align-items: center;
+.chip-scroll {
+  display: flex;
   gap: 0.3rem;
-  background: var(--gold-bg);
-  color: #b8860b;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-  margin-top: 0.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.2rem;
 }
-.challenge-picker {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-  padding: 1rem 1.25rem;
-}
+.chip-scroll::-webkit-scrollbar { display: none; }
 .challenge-chip {
+  flex-shrink: 0;
   background: var(--card);
-  border: 2px solid var(--border);
-  border-radius: 0.75rem;
-  padding: 0.6rem 0.25rem;
-  text-align: center;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   color: var(--text);
+  font-weight: 700;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
 }
 .challenge-chip:hover, .challenge-chip.active {
   border-color: var(--accent);
   background: var(--bg2);
-  box-shadow: 0 2px 12px var(--shadow);
-}
-.challenge-chip .chip-emoji {
-  font-size: 1.4rem;
-  display: block;
-  margin-bottom: 0.2rem;
+  color: var(--accent);
 }
 .challenge-chip .chip-star {
   color: var(--gold);
+  font-size: 0.6rem;
+}
+.upload-inline {
+  flex-shrink: 0;
+  background: var(--card);
+  border: 1.5px dashed var(--border);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
   font-size: 0.7rem;
+  color: var(--muted);
+  font-weight: 700;
+  white-space: nowrap;
+  transition: border-color 0.2s;
 }
-.canvas-wrap {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: var(--bg);
-  padding: 0.75rem 1.25rem;
+.upload-inline:hover { border-color: var(--accent); }
+.upload-inline input { display: none; }
+.canvas-area {
+  flex: 0 0 38vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg2);
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 4px 16px var(--shadow);
+  overflow: hidden;
+  padding: 0.4rem;
+  position: relative;
 }
-.canvas-wrap canvas {
-  width: 100%;
-  max-width: 480px;
-  display: block;
-  margin: 0 auto;
-  border-radius: 0.75rem;
+.canvas-area canvas {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 0.5rem;
   background: #e8e4de;
+  box-shadow: 0 2px 12px var(--shadow);
 }
-.controls {
-  padding: 1rem 1.25rem 6rem;
+.canvas-hint {
+  position: absolute;
+  bottom: 0.4rem;
+  right: 0.6rem;
+  font-size: 0.6rem;
+  color: var(--muted);
+  opacity: 0.6;
+  pointer-events: none;
+}
+.controls-area {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.6rem 0.75rem 5rem;
+  background: var(--bg);
 }
 .control-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.9rem;
 }
 .control-group-title {
   font-family: 'Caveat', cursive;
-  font-size: 1.15rem;
+  font-size: 1rem;
   color: var(--accent);
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.3rem;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
 }
 .slider-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
 }
 .slider-row label {
-  width: 5.5rem;
-  font-size: 0.8rem;
+  width: 4.8rem;
+  font-size: 0.72rem;
   color: var(--muted);
   flex-shrink: 0;
 }
 .slider-row input[type="range"] {
   flex: 1;
   accent-color: var(--accent);
-  height: 6px;
+  height: 5px;
 }
 .slider-row .slider-val {
-  width: 2.2rem;
+  width: 2rem;
   text-align: right;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   color: var(--text);
   font-weight: 700;
 }
 .blend-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 .blend-row label {
-  width: 5.5rem;
-  font-size: 0.8rem;
+  width: 4.8rem;
+  font-size: 0.72rem;
   color: var(--muted);
   flex-shrink: 0;
 }
 .blend-row select {
   flex: 1;
-  padding: 0.4rem 0.5rem;
+  padding: 0.3rem 0.4rem;
   border: 1px solid var(--border);
-  border-radius: 0.5rem;
+  border-radius: 0.4rem;
   background: var(--card);
   color: var(--text);
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
 }
 .sticker-row {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.3rem;
   flex-wrap: wrap;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 .sticker-btn {
-  width: 2.2rem;
-  height: 2.2rem;
-  border-radius: 0.5rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 0.4rem;
   border: 1px solid var(--border);
   background: var(--card);
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -193,25 +241,25 @@
 }
 .text-overlay-row {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.3rem;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   flex-wrap: wrap;
 }
 .text-overlay-row input[type="text"] {
   flex: 1;
-  min-width: 8rem;
-  padding: 0.4rem 0.6rem;
+  min-width: 6rem;
+  padding: 0.3rem 0.5rem;
   border: 1px solid var(--border);
-  border-radius: 0.5rem;
+  border-radius: 0.4rem;
   background: var(--card);
   color: var(--text);
   font-family: 'Caveat', cursive;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 .color-dot {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.3rem;
+  height: 1.3rem;
   border-radius: 50%;
   border: 2px solid var(--border);
   cursor: pointer;
@@ -223,44 +271,44 @@
 }
 .action-row {
   display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
   flex-wrap: wrap;
 }
 .btn-primary {
   flex: 1;
-  min-width: 7rem;
-  padding: 0.7rem 1rem;
+  min-width: 5.5rem;
+  padding: 0.55rem 0.6rem;
   border: none;
-  border-radius: 0.75rem;
+  border-radius: 0.6rem;
   background: var(--accent);
   color: #fff;
   font-family: inherit;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: opacity 0.2s;
 }
 .btn-primary:hover { opacity: 0.85; }
 .btn-secondary {
   flex: 1;
-  min-width: 7rem;
-  padding: 0.7rem 1rem;
+  min-width: 5.5rem;
+  padding: 0.55rem 0.6rem;
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border-radius: 0.6rem;
   background: var(--card);
   color: var(--text);
   font-family: inherit;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 .btn-secondary:hover { border-color: var(--accent); }
 .drift-result {
-  margin-top: 1rem;
-  padding: 1rem;
-  border-radius: 0.75rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.6rem;
   background: var(--gold-bg);
   border: 1px solid var(--gold);
   text-align: center;
@@ -269,24 +317,24 @@
 .drift-result h3 {
   font-family: 'Caveat', cursive;
   color: #b8860b;
-  margin: 0 0 0.25rem;
-  font-size: 1.3rem;
+  margin: 0 0 0.15rem;
+  font-size: 1.1rem;
 }
 .drift-result p {
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   margin: 0;
 }
 .toast {
   position: fixed;
-  bottom: 5rem;
+  bottom: 4.5rem;
   left: 50%;
   transform: translateX(-50%) translateY(2rem);
   background: var(--text);
   color: var(--bg);
-  padding: 0.6rem 1.2rem;
+  padding: 0.5rem 1rem;
   border-radius: 999px;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 700;
   opacity: 0;
   transition: all 0.35s;
@@ -298,93 +346,104 @@
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
-.upload-zone {
-  text-align: center;
-  padding: 0.75rem;
-}
-.upload-zone label {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border: 2px dashed var(--border);
-  border-radius: 0.75rem;
+.sub-label {
+  font-size: 0.7rem;
   color: var(--muted);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: border-color 0.2s;
+  margin-bottom: 0.2rem;
 }
-.upload-zone label:hover { border-color: var(--accent); }
-.upload-zone input { display: none; }
+@media (min-width: 768px) {
+  .editor-layout {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .editor-header {
+    width: 100%;
+    flex: 0 0 auto;
+    padding: 0.5rem 1rem 0.4rem;
+  }
+  .canvas-area {
+    flex: 1 1 50%;
+    height: calc(100vh - 4.5rem);
+  }
+  .controls-area {
+    flex: 1 1 50%;
+    height: calc(100vh - 4.5rem);
+    padding: 1rem 1.5rem 5rem;
+  }
+  .slider-row label { width: 5.5rem; font-size: 0.8rem; }
+  .slider-row .slider-val { font-size: 0.75rem; }
+}
 </style>
 </head>
 <body>
-<button class="close-btn" onclick="window.location.href='index.html'" aria-label="Close">✕</button>
-
-<div class="challenge-hero">
-  <h1>✨ Daily Challenge</h1>
-  <p>pick a mood, edit the light, find your drift</p>
-  <div class="streak-pill" id="streakPill">🔥 <span id="streakCount">0</span> day streak</div>
-</div>
-
-<div class="challenge-picker" id="challengePicker"></div>
-
-<div class="upload-zone">
-  <label>📁 upload your own photo<input type="file" id="fileInput" accept="image/*"></label>
-</div>
-
-<div class="canvas-wrap">
-  <canvas id="editorCanvas" width="800" height="600"></canvas>
-</div>
-
-<div class="controls">
-  <div class="control-group">
-    <div class="control-group-title">☀️ Light</div>
-    <div class="slider-row"><label>Exposure</label><input type="range" id="exposure" min="-100" max="100" value="0"><span class="slider-val" id="exposureVal">0</span></div>
-    <div class="slider-row"><label>Contrast</label><input type="range" id="contrast" min="-100" max="100" value="0"><span class="slider-val" id="contrastVal">0</span></div>
-    <div class="slider-row"><label>Highlights</label><input type="range" id="highlights" min="-100" max="100" value="0"><span class="slider-val" id="highlightsVal">0</span></div>
-    <div class="slider-row"><label>Shadows</label><input type="range" id="shadows" min="-100" max="100" value="0"><span class="slider-val" id="shadowsVal">0</span></div>
-  </div>
-
-  <div class="control-group">
-    <div class="control-group-title">🎨 Color</div>
-    <div class="slider-row"><label>Temperature</label><input type="range" id="temperature" min="-100" max="100" value="0"><span class="slider-val" id="temperatureVal">0</span></div>
-    <div class="slider-row"><label>Tint</label><input type="range" id="tint" min="-100" max="100" value="0"><span class="slider-val" id="tintVal">0</span></div>
-    <div class="slider-row"><label>Saturation</label><input type="range" id="saturation" min="-100" max="100" value="0"><span class="slider-val" id="saturationVal">0</span></div>
-    <div class="slider-row"><label>Vibrance</label><input type="range" id="vibrance" min="-100" max="100" value="0"><span class="slider-val" id="vibranceVal">0</span></div>
-    <div class="blend-row"><label>Blend Mode</label><select id="blendMode"><option value="normal">Normal</option><option value="multiply">Multiply</option><option value="screen">Screen</option><option value="overlay">Overlay</option><option value="soft-light">Soft Light</option><option value="hard-light">Hard Light</option><option value="color-dodge">Color Dodge</option><option value="color-burn">Color Burn</option><option value="hue">Hue</option><option value="luminosity">Luminosity</option></select></div>
-  </div>
-
-  <div class="control-group">
-    <div class="control-group-title">🖌️ Texture</div>
-    <div class="slider-row"><label>Clarity</label><input type="range" id="clarity" min="-100" max="100" value="0"><span class="slider-val" id="clarityVal">0</span></div>
-    <div class="slider-row"><label>Vignette</label><input type="range" id="vignette" min="0" max="100" value="0"><span class="slider-val" id="vignetteVal">0</span></div>
-    <div class="slider-row"><label>Grain</label><input type="range" id="grain" min="0" max="100" value="0"><span class="slider-val" id="grainVal">0</span></div>
-  </div>
-
-  <div class="control-group">
-    <div class="control-group-title">🎭 Extras</div>
-    <div class="slider-row"><label>Rotation</label><input type="range" id="rotation" min="-180" max="180" value="0"><span class="slider-val" id="rotationVal">0°</span></div>
-    <div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.3rem;">Stickers (tap to place)</div>
-    <div class="sticker-row" id="stickerRow"></div>
-    <div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.3rem;">Text overlay</div>
-    <div class="text-overlay-row">
-      <input type="text" id="textOverlay" placeholder="type something pretty...">
-      <div class="color-dot active" data-color="#FFFFFF" style="background:#FFFFFF"></div>
-      <div class="color-dot" data-color="#2D312E" style="background:#2D312E"></div>
-      <div class="color-dot" data-color="#F2C94C" style="background:#F2C94C"></div>
-      <div class="color-dot" data-color="#5B8266" style="background:#5B8266"></div>
-      <div class="color-dot" data-color="#D07251" style="background:#D07251"></div>
+<div class="editor-layout">
+  <header class="editor-header">
+    <div class="header-top">
+      <h1 class="header-title">✨ Daily Challenge</h1>
+      <div class="header-pills">
+        <span class="streak-pill">🔥 <span id="streakCount">0</span></span>
+        <button class="close-btn" onclick="window.location.href='index.html'" aria-label="Close">✕</button>
+      </div>
     </div>
+    <div class="chip-scroll" id="challengePicker"></div>
+  </header>
+
+  <div class="canvas-area">
+    <canvas id="editorCanvas" width="800" height="600"></canvas>
+    <span class="canvas-hint">tap canvas to place stickers</span>
   </div>
 
-  <div class="action-row">
-    <button class="btn-primary" id="saveDrift">💾 Save Drift</button>
-    <button class="btn-secondary" id="exportBtn">📤 Export</button>
-    <button class="btn-secondary" id="resetBtn">↩️ Reset</button>
-  </div>
+  <div class="controls-area">
+    <div class="control-group">
+      <div class="control-group-title">☀️ Light</div>
+      <div class="slider-row"><label>Exposure</label><input type="range" id="exposure" min="-100" max="100" value="0"><span class="slider-val" id="exposureVal">0</span></div>
+      <div class="slider-row"><label>Contrast</label><input type="range" id="contrast" min="-100" max="100" value="0"><span class="slider-val" id="contrastVal">0</span></div>
+      <div class="slider-row"><label>Highlights</label><input type="range" id="highlights" min="-100" max="100" value="0"><span class="slider-val" id="highlightsVal">0</span></div>
+      <div class="slider-row"><label>Shadows</label><input type="range" id="shadows" min="-100" max="100" value="0"><span class="slider-val" id="shadowsVal">0</span></div>
+    </div>
 
-  <div class="drift-result" id="driftResult">
-    <h3 id="driftTitle"></h3>
-    <p id="driftMsg"></p>
+    <div class="control-group">
+      <div class="control-group-title">🎨 Color</div>
+      <div class="slider-row"><label>Temperature</label><input type="range" id="temperature" min="-100" max="100" value="0"><span class="slider-val" id="temperatureVal">0</span></div>
+      <div class="slider-row"><label>Tint</label><input type="range" id="tint" min="-100" max="100" value="0"><span class="slider-val" id="tintVal">0</span></div>
+      <div class="slider-row"><label>Saturation</label><input type="range" id="saturation" min="-100" max="100" value="0"><span class="slider-val" id="saturationVal">0</span></div>
+      <div class="slider-row"><label>Vibrance</label><input type="range" id="vibrance" min="-100" max="100" value="0"><span class="slider-val" id="vibranceVal">0</span></div>
+      <div class="blend-row"><label>Blend Mode</label><select id="blendMode"><option value="normal">Normal</option><option value="multiply">Multiply</option><option value="screen">Screen</option><option value="overlay">Overlay</option><option value="soft-light">Soft Light</option><option value="hard-light">Hard Light</option><option value="color-dodge">Color Dodge</option><option value="color-burn">Color Burn</option><option value="hue">Hue</option><option value="luminosity">Luminosity</option></select></div>
+    </div>
+
+    <div class="control-group">
+      <div class="control-group-title">🖌️ Texture</div>
+      <div class="slider-row"><label>Clarity</label><input type="range" id="clarity" min="-100" max="100" value="0"><span class="slider-val" id="clarityVal">0</span></div>
+      <div class="slider-row"><label>Vignette</label><input type="range" id="vignette" min="0" max="100" value="0"><span class="slider-val" id="vignetteVal">0</span></div>
+      <div class="slider-row"><label>Grain</label><input type="range" id="grain" min="0" max="100" value="0"><span class="slider-val" id="grainVal">0</span></div>
+    </div>
+
+    <div class="control-group">
+      <div class="control-group-title">🎭 Extras</div>
+      <div class="slider-row"><label>Rotation</label><input type="range" id="rotation" min="-180" max="180" value="0"><span class="slider-val" id="rotationVal">0°</span></div>
+      <div class="sub-label">Stickers (tap one, then tap the photo)</div>
+      <div class="sticker-row" id="stickerRow"></div>
+      <div class="sub-label">Text overlay</div>
+      <div class="text-overlay-row">
+        <input type="text" id="textOverlay" placeholder="type something pretty...">
+        <div class="color-dot active" data-color="#FFFFFF" style="background:#FFFFFF"></div>
+        <div class="color-dot" data-color="#2D312E" style="background:#2D312E"></div>
+        <div class="color-dot" data-color="#F2C94C" style="background:#F2C94C"></div>
+        <div class="color-dot" data-color="#5B8266" style="background:#5B8266"></div>
+        <div class="color-dot" data-color="#D07251" style="background:#D07251"></div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" id="saveDrift">💾 Save</button>
+      <button class="btn-secondary" id="exportBtn">📤 Export</button>
+      <button class="btn-secondary" id="resetBtn">↩️ Reset</button>
+    </div>
+
+    <div class="drift-result" id="driftResult">
+      <h3 id="driftTitle"></h3>
+      <p id="driftMsg"></p>
+    </div>
   </div>
 </div>
 
@@ -409,7 +468,7 @@
 
 var challenges = [
   { key: 'prism', emoji: '☁️', name: 'Dreamy', img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80', target: { exposure: 20, contrast: -15, highlights: 30, shadows: 25, temperature: 10, tint: 5, saturation: -20, vibrance: 15, clarity: -10, vignette: 15, grain: 20 } },
-  { key: 'horizon', emoji: '🌅', name: 'Golden Hour', img: 'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=800&q=80', target: { exposure: 15, contrast: 10, highlights: 20, shadows: -10, temperature: 45, tint: 5, saturation: 25, vibrance: 20, clarity: 10, vignette: 25, grain: 10 } },
+  { key: 'horizon', emoji: '🌅', name: 'Golden', img: 'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=800&q=80', target: { exposure: 15, contrast: 10, highlights: 20, shadows: -10, temperature: 45, tint: 5, saturation: 25, vibrance: 20, clarity: 10, vignette: 25, grain: 10 } },
   { key: 'mask', emoji: '🌙', name: 'Moody', img: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80', target: { exposure: -20, contrast: 30, highlights: -15, shadows: -30, temperature: -15, tint: 10, saturation: -10, vibrance: -5, clarity: 20, vignette: 50, grain: 30 } },
   { key: 'frame', emoji: '⚡', name: 'Electric', img: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=800&q=80', target: { exposure: 10, contrast: 40, highlights: 10, shadows: 10, temperature: -10, tint: 25, saturation: 50, vibrance: 40, clarity: 35, vignette: 10, grain: 5 } },
   { key: 'grove', emoji: '🌿', name: 'Nature', img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80', target: { exposure: 5, contrast: 10, highlights: 5, shadows: 15, temperature: -5, tint: -10, saturation: 30, vibrance: 25, clarity: 15, vignette: 20, grain: 10 } },
@@ -460,8 +519,7 @@ function buildGrainTexture() {
 buildGrainTexture();
 
 function updateStreak() {
-  var streak = parseInt(localStorage.getItem('rivlum_streak') || '0');
-  document.getElementById('streakCount').textContent = streak;
+  document.getElementById('streakCount').textContent = localStorage.getItem('rivlum_streak') || '0';
 }
 updateStreak();
 
@@ -473,7 +531,7 @@ function buildPicker() {
     var chip = document.createElement('div');
     chip.className = 'challenge-chip' + (i === activeChallenge ? ' active' : '');
     var starred = stars.indexOf(c.key) !== -1;
-    chip.innerHTML = '<span class="chip-emoji">' + c.emoji + '</span>' + c.name + (starred ? '<br><span class="chip-star">⭐</span>' : '');
+    chip.innerHTML = c.emoji + ' ' + c.name + (starred ? ' <span class="chip-star">⭐</span>' : '');
     chip.onclick = function() {
       activeChallenge = i;
       buildPicker();
@@ -481,6 +539,29 @@ function buildPicker() {
     };
     picker.appendChild(chip);
   });
+  var uploadLabel = document.createElement('label');
+  uploadLabel.className = 'upload-inline';
+  uploadLabel.innerHTML = '📁 Upload<input type="file" id="fileInput" accept="image/*">';
+  picker.appendChild(uploadLabel);
+  document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+}
+
+function handleFileUpload(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    baseImg = new Image();
+    baseImg.onload = function() {
+      canvas.width = baseImg.width;
+      canvas.height = baseImg.height;
+      requestAnimationFrame(renderCanvas);
+      setTimeout(renderCanvas, 50);
+      setTimeout(renderCanvas, 200);
+    };
+    baseImg.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 function buildStickers() {
@@ -504,9 +585,7 @@ canvas.addEventListener('click', function(e) {
   var rect = canvas.getBoundingClientRect();
   var scaleX = canvas.width / rect.width;
   var scaleY = canvas.height / rect.height;
-  var x = (e.clientX - rect.left) * scaleX;
-  var y = (e.clientY - rect.top) * scaleY;
-  placedStickers.push({ emoji: activeSticker, x: x, y: y });
+  placedStickers.push({ emoji: activeSticker, x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY });
   renderCanvas();
 });
 
@@ -531,24 +610,6 @@ function loadChallengeImage() {
   baseImg.src = challenges[activeChallenge].img;
 }
 
-document.getElementById('fileInput').addEventListener('change', function(e) {
-  var file = e.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    baseImg = new Image();
-    baseImg.onload = function() {
-      canvas.width = baseImg.width;
-      canvas.height = baseImg.height;
-      requestAnimationFrame(renderCanvas);
-      setTimeout(renderCanvas, 50);
-      setTimeout(renderCanvas, 200);
-    };
-    baseImg.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
 function getSlider(id) { return parseFloat(document.getElementById(id).value); }
 
 function renderCanvas() {
@@ -556,16 +617,13 @@ function renderCanvas() {
   var w = canvas.width, h = canvas.height;
   ctx.clearRect(0, 0, w, h);
   ctx.save();
-
   var rot = getSlider('rotation') * Math.PI / 180;
   if (rot !== 0) {
     ctx.translate(w / 2, h / 2);
     ctx.rotate(rot);
     ctx.translate(-w / 2, -h / 2);
   }
-
   ctx.drawImage(baseImg, 0, 0, w, h);
-
   var imgData = ctx.getImageData(0, 0, w, h);
   var d = imgData.data;
   var exposure = getSlider('exposure') / 100;
@@ -577,68 +635,50 @@ function renderCanvas() {
   var saturation = getSlider('saturation') / 100;
   var vibrance = getSlider('vibrance') / 100;
   var clarity = getSlider('clarity') / 100;
-
   var expMul = Math.pow(2, exposure * 1.5);
   var conMul = 1 + contrast * 1.2;
-
   for (var i = 0; i < d.length; i += 4) {
     var r = d[i], g = d[i+1], b = d[i+2];
-
     r *= expMul; g *= expMul; b *= expMul;
-
     r = ((r / 255 - 0.5) * conMul + 0.5) * 255;
     g = ((g / 255 - 0.5) * conMul + 0.5) * 255;
     b = ((b / 255 - 0.5) * conMul + 0.5) * 255;
-
     var lum = (r * 0.299 + g * 0.587 + b * 0.114) / 255;
     if (lum > 0.5) {
-      var hFactor = highlights * (lum - 0.5) * 2;
-      r += hFactor * 80; g += hFactor * 80; b += hFactor * 80;
+      var hF = highlights * (lum - 0.5) * 2;
+      r += hF * 80; g += hF * 80; b += hF * 80;
     } else {
-      var sFactor = shadows * (0.5 - lum) * 2;
-      r += sFactor * 80; g += sFactor * 80; b += sFactor * 80;
+      var sF = shadows * (0.5 - lum) * 2;
+      r += sF * 80; g += sF * 80; b += sF * 80;
     }
-
-    r += temperature * 30;
-    b -= temperature * 30;
-    g += tint * 20;
-
+    r += temperature * 30; b -= temperature * 30; g += tint * 20;
     var gray = 0.299 * r + 0.587 * g + 0.114 * b;
     var satMul = 1 + saturation;
     r = gray + (r - gray) * satMul;
     g = gray + (g - gray) * satMul;
     b = gray + (b - gray) * satMul;
-
-    var maxC = Math.max(r, g, b);
-    var minC = Math.min(r, g, b);
-    var chroma = maxC - minC;
-    var vibMul = 1 + vibrance * (1 - chroma / 255);
+    var maxC = Math.max(r, g, b), minC = Math.min(r, g, b);
+    var vibMul = 1 + vibrance * (1 - (maxC - minC) / 255);
     r = gray + (r - gray) * vibMul;
     g = gray + (g - gray) * vibMul;
     b = gray + (b - gray) * vibMul;
-
     if (clarity !== 0) {
-      var mid = 128;
-      var cFactor = clarity * 0.5;
-      r = r + (r - mid) * cFactor;
-      g = g + (g - mid) * cFactor;
-      b = b + (b - mid) * cFactor;
+      var cF = clarity * 0.5;
+      r = r + (r - 128) * cF;
+      g = g + (g - 128) * cF;
+      b = b + (b - 128) * cF;
     }
-
     d[i] = Math.max(0, Math.min(255, r));
     d[i+1] = Math.max(0, Math.min(255, g));
     d[i+2] = Math.max(0, Math.min(255, b));
   }
-
   ctx.putImageData(imgData, 0, 0);
-
   var blend = document.getElementById('blendMode').value;
   if (blend !== 'normal') {
     ctx.globalCompositeOperation = blend;
     ctx.drawImage(baseImg, 0, 0, w, h);
     ctx.globalCompositeOperation = 'source-over';
   }
-
   var vigVal = getSlider('vignette') / 100;
   if (vigVal > 0) {
     var grad = ctx.createRadialGradient(w/2, h/2, w * 0.25, w/2, h/2, w * 0.75);
@@ -647,27 +687,23 @@ function renderCanvas() {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
   }
-
   var grainVal = getSlider('grain') / 100;
   if (grainVal > 0 && grainCanvas) {
     ctx.globalCompositeOperation = 'overlay';
     ctx.globalAlpha = grainVal * 0.3;
-    var pat = ctx.createPattern(grainCanvas, 'repeat');
-    ctx.fillStyle = pat;
+    ctx.fillStyle = ctx.createPattern(grainCanvas, 'repeat');
     ctx.fillRect(0, 0, w, h);
     ctx.globalAlpha = 1;
     ctx.globalCompositeOperation = 'source-over';
   }
-
   placedStickers.forEach(function(s) {
     ctx.font = Math.round(w * 0.06) + 'px serif';
     ctx.fillText(s.emoji, s.x, s.y);
   });
-
   var txt = document.getElementById('textOverlay').value;
   if (txt) {
-    var fontSize = Math.round(w * 0.05);
-    ctx.font = '700 ' + fontSize + 'px Caveat, cursive';
+    var fs = Math.round(w * 0.05);
+    ctx.font = '700 ' + fs + 'px Caveat, cursive';
     ctx.fillStyle = textColor;
     ctx.shadowColor = 'rgba(0,0,0,0.5)';
     ctx.shadowBlur = 6;
@@ -676,30 +712,23 @@ function renderCanvas() {
     ctx.shadowBlur = 0;
     ctx.textAlign = 'start';
   }
-
   ctx.restore();
 }
 
 var sliderIds = ['exposure','contrast','highlights','shadows','temperature','tint','saturation','vibrance','clarity','vignette','grain','rotation'];
 sliderIds.forEach(function(id) {
-  var el = document.getElementById(id);
-  el.addEventListener('input', function() {
-    var val = el.value;
-    var display = document.getElementById(id + 'Val');
-    display.textContent = id === 'rotation' ? val + '°' : val;
+  document.getElementById(id).addEventListener('input', function() {
+    document.getElementById(id + 'Val').textContent = id === 'rotation' ? this.value + '°' : this.value;
     renderCanvas();
   });
 });
-
 document.getElementById('blendMode').addEventListener('change', renderCanvas);
 document.getElementById('textOverlay').addEventListener('input', renderCanvas);
 
 document.getElementById('resetBtn').addEventListener('click', function() {
   sliderIds.forEach(function(id) {
-    var el = document.getElementById(id);
-    el.value = id === 'vignette' || id === 'grain' ? 0 : 0;
-    var display = document.getElementById(id + 'Val');
-    display.textContent = id === 'rotation' ? '0°' : '0';
+    document.getElementById(id).value = 0;
+    document.getElementById(id + 'Val').textContent = id === 'rotation' ? '0°' : '0';
   });
   document.getElementById('blendMode').value = 'normal';
   document.getElementById('textOverlay').value = '';
@@ -713,32 +742,20 @@ document.getElementById('saveDrift').addEventListener('click', function() {
   var c = challenges[activeChallenge];
   var sliders = {};
   sliderIds.forEach(function(id) { sliders[id] = getSlider(id); });
-
-  var variance = 0;
-  var count = 0;
+  var variance = 0, count = 0;
   Object.keys(c.target).forEach(function(k) {
-    if (sliders[k] !== undefined) {
-      variance += Math.abs(sliders[k] - c.target[k]);
-      count++;
-    }
+    if (sliders[k] !== undefined) { variance += Math.abs(sliders[k] - c.target[k]); count++; }
   });
   var avgVar = count > 0 ? variance / count : 0;
-
   var driftResult = document.getElementById('driftResult');
   var driftTitle = document.getElementById('driftTitle');
   var driftMsg = document.getElementById('driftMsg');
   driftResult.style.display = 'block';
-
   var stars = JSON.parse(localStorage.getItem('rivlum_stars') || '[]');
-
   if (avgVar < 25) {
     driftTitle.textContent = '⭐ Star Unlocked!';
     driftMsg.textContent = 'You nailed the ' + c.name + ' look — your eye is incredible.';
-    if (stars.indexOf(c.key) === -1) {
-      stars.push(c.key);
-      localStorage.setItem('rivlum_stars', JSON.stringify(stars));
-      buildPicker();
-    }
+    if (stars.indexOf(c.key) === -1) { stars.push(c.key); localStorage.setItem('rivlum_stars', JSON.stringify(stars)); buildPicker(); }
   } else if (avgVar > 60) {
     driftTitle.textContent = '🌀 Creative Drift Discovered!';
     driftMsg.textContent = 'You went your own way — and honestly? That\'s the best kind of edit.';
@@ -746,44 +763,21 @@ document.getElementById('saveDrift').addEventListener('click', function() {
     driftTitle.textContent = '🌱 Getting Closer';
     driftMsg.textContent = 'You\'re in the neighborhood. Tweak the light and color a bit more!';
   }
-
   var drifts = JSON.parse(localStorage.getItem('rivlum_drifts') || '[]');
-  drifts.push({
-    date: new Date().toISOString(),
-    challenge: c.key,
-    sliders: sliders,
-    blendMode: document.getElementById('blendMode').value,
-    stickers: placedStickers.slice(),
-    textOverlay: document.getElementById('textOverlay').value,
-    textColor: textColor,
-    rotation: getSlider('rotation'),
-    grain: getSlider('grain')
-  });
+  drifts.push({ date: new Date().toISOString(), challenge: c.key, sliders: sliders, blendMode: document.getElementById('blendMode').value, stickers: placedStickers.slice(), textOverlay: document.getElementById('textOverlay').value, textColor: textColor, rotation: getSlider('rotation'), grain: getSlider('grain') });
   localStorage.setItem('rivlum_drifts', JSON.stringify(drifts));
-
   var today = new Date().toDateString();
   var lastEdit = localStorage.getItem('rivlum_last_edit');
   var streak = parseInt(localStorage.getItem('rivlum_streak') || '0');
   if (lastEdit !== today) {
     var yesterday = new Date(Date.now() - 86400000).toDateString();
-    if (lastEdit === yesterday) {
-      streak++;
-    } else if (!lastEdit) {
-      streak = 1;
-    } else {
-      streak = 1;
-    }
+    streak = (lastEdit === yesterday) ? streak + 1 : 1;
     localStorage.setItem('rivlum_streak', String(streak));
     localStorage.setItem('rivlum_last_edit', today);
     updateStreak();
   }
-
-  if (!localStorage.getItem('rivlum_born')) {
-    localStorage.setItem('rivlum_born', String(Date.now()));
-  }
-
-  var comp = compliments[Math.floor(Math.random() * compliments.length)];
-  showToast(comp);
+  if (!localStorage.getItem('rivlum_born')) localStorage.setItem('rivlum_born', String(Date.now()));
+  showToast(compliments[Math.floor(Math.random() * compliments.length)]);
 });
 
 function showToast(msg) {
@@ -794,35 +788,21 @@ function showToast(msg) {
 }
 
 document.getElementById('exportBtn').addEventListener('click', function() {
-  var exportCanvas = document.createElement('canvas');
-  exportCanvas.width = canvas.width;
-  exportCanvas.height = canvas.height;
-  var ectx = exportCanvas.getContext('2d');
+  var ec = document.createElement('canvas');
+  ec.width = canvas.width; ec.height = canvas.height;
+  var ectx = ec.getContext('2d');
   ectx.drawImage(canvas, 0, 0);
-
   ectx.globalAlpha = 0.6;
-  var pillText = '✨ Made with RIVLUM';
+  var pt = '✨ Made with RIVLUM';
   ectx.font = '700 16px Atkinson Hyperlegible, sans-serif';
-  var tw = ectx.measureText(pillText).width;
-  var px = exportCanvas.width - tw - 28;
-  var py = exportCanvas.height - 36;
-
-  if (ectx.roundRect) {
-    ectx.fillStyle = '#2D312E';
-    ectx.beginPath();
-    ectx.roundRect(px - 8, py - 14, tw + 16, 24, 12);
-    ectx.fill();
-  } else {
-    ectx.fillStyle = '#2D312E';
-    ectx.fillRect(px - 8, py - 14, tw + 16, 24);
-  }
-  ectx.globalAlpha = 1;
-  ectx.fillStyle = '#FFFFFF';
-  ectx.fillText(pillText, px, py);
-
+  var tw = ectx.measureText(pt).width;
+  var px = ec.width - tw - 28, py = ec.height - 36;
+  if (ectx.roundRect) { ectx.fillStyle = '#2D312E'; ectx.beginPath(); ectx.roundRect(px - 8, py - 14, tw + 16, 24, 12); ectx.fill(); }
+  else { ectx.fillStyle = '#2D312E'; ectx.fillRect(px - 8, py - 14, tw + 16, 24); }
+  ectx.globalAlpha = 1; ectx.fillStyle = '#FFFFFF'; ectx.fillText(pt, px, py);
   var link = document.createElement('a');
   link.download = 'rivlum-drift-' + Date.now() + '.png';
-  link.href = exportCanvas.toDataURL('image/png');
+  link.href = ec.toDataURL('image/png');
   link.click();
   showToast('📤 exported! go share something beautiful');
 });
